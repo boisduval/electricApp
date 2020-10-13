@@ -10,7 +10,9 @@ import {
 
 import baseStyles from '../assets/baseStyles';
 import * as baseConstant from '../assets/baseConstant';
+// import I18n from '../../locales/I18n';
 import I18n from '../../locales';
+import useLanguageUpdate from '../hooks/userLanguageUpdate';
 
 import Push from './settings/Push';
 import Language from './settings/Language';
@@ -33,7 +35,7 @@ class Home extends React.Component {
               size={20}
               color="#666"
               onPress={() => {
-                this.props.navigation.navigate(I18n.t('nav.settings'));
+                this.props.navigation.navigate('settings');
               }}
             />
           }
@@ -61,49 +63,53 @@ class Home extends React.Component {
 }
 
 // 设置
-class Settings extends React.Component {
-  render() {
-    const list = [
-      {
-        name: I18n.t('nav.push'),
-      },
-      {
-        name: I18n.t('nav.lang'),
-      },
-      {
-        name: I18n.t('nav.password'),
-      },
-      {
-        name: I18n.t('nav.storage'),
-      },
-      {
-        name: I18n.t('nav.about'),
-      },
-    ];
-    return (
-      <View style={{marginTop: 20, justifyContent: 'space-between', flex: 1}}>
-        <View>
-          {list.map((v, i) => (
-            <ListItem
-              key={i}
-              bottomDivider
-              onPress={() => {
-                this.props.navigation.navigate(v.name);
-              }}>
-              <ListItem.Content>
-                <ListItem.Title>{v.name}</ListItem.Title>
-              </ListItem.Content>
-              <ListItem.Chevron />
-            </ListItem>
-          ))}
-        </View>
-        <Button
-          title="退出登录"
-          buttonStyle={{marginHorizontal: 20, marginBottom: 20}}
-        />
+function Settings(props) {
+  useLanguageUpdate();
+  const list = [
+    {
+      name: I18n.t('nav.push'),
+      route: 'push',
+    },
+    {
+      name: I18n.t('nav.lang'),
+      route: 'lang',
+    },
+    {
+      name: I18n.t('nav.password'),
+      route: 'password',
+    },
+    {
+      name: I18n.t('nav.storage'),
+      route: 'storage',
+    },
+    {
+      name: I18n.t('nav.about'),
+      route: 'about',
+    },
+  ];
+  return (
+    <View style={{marginTop: 20, justifyContent: 'space-between', flex: 1}}>
+      <View>
+        {list.map((v, i) => (
+          <ListItem
+            key={i}
+            bottomDivider
+            onPress={() => {
+              props.navigation.navigate(v.route);
+            }}>
+            <ListItem.Content>
+              <ListItem.Title>{v.name}</ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron />
+          </ListItem>
+        ))}
       </View>
-    );
-  }
+      <Button
+        title="退出登录"
+        buttonStyle={{marginHorizontal: 20, marginBottom: 20}}
+      />
+    </View>
+  );
 }
 
 // 头部右
@@ -125,7 +131,7 @@ class HeaderRight extends React.Component {
             size={20}
             color="#666"
             onPress={() => {
-              this.props.navigate('扫描二维码');
+              this.props.navigate('scan');
             }}
           />
           {/*</Button>*/}
@@ -185,7 +191,7 @@ class MyService extends React.Component {
               fontSize: 14,
             }}
             onPress={() => {
-              this.props.navigate('服务记录');
+              this.props.navigate('serviceLog');
             }}>
             服务记录&ensp;
             <FontAwesome name="angle-right" size={16} />
@@ -374,7 +380,7 @@ class Agreements extends React.Component {
         <Text
           style={[styles.agreements]}
           onPress={() => {
-            this.props.navigate('用户协议');
+            this.props.navigate('agreement');
           }}>
           用户协议
         </Text>
@@ -382,7 +388,7 @@ class Agreements extends React.Component {
         <Text
           style={[styles.agreements]}
           onPress={() => {
-            this.props.navigate('隐私政策');
+            this.props.navigate('privacy');
           }}>
           隐私政策
         </Text>
@@ -406,34 +412,66 @@ class Privacy extends React.Component {
 }
 
 // 导航
-class User extends React.Component {
-  render() {
-    return (
-      <Stack.Navigator
-        initialRouteName={I18n.t('nav.my')}
-        screenOptions={{
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}>
-        <Stack.Screen
-          name={I18n.t('nav.my')}
-          component={Home}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen name={I18n.t('nav.settings')} component={Settings} />
-        <Stack.Screen name={I18n.t('nav.push')} component={Push} />
-        <Stack.Screen name={I18n.t('nav.lang')} component={Language} />
-        <Stack.Screen name={I18n.t('nav.password')} component={Password} />
-        <Stack.Screen name={I18n.t('nav.storage')} component={Storage} />
-        <Stack.Screen name={I18n.t('nav.about')} component={About} />
-        <Stack.Screen name={I18n.t('nav.serviceLog')} component={ServiceLog} />
-        <Stack.Screen
-          name={I18n.t('nav.agreement')}
-          component={UserAgreement}
-        />
-        <Stack.Screen name={I18n.t('nav.privacy')} component={Privacy} />
-      </Stack.Navigator>
-    );
-  }
+function User() {
+  useLanguageUpdate();
+  return (
+    <Stack.Navigator
+      initialRouteName="mine"
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}>
+      <Stack.Screen
+        name="mine"
+        component={Home}
+        options={{headerShown: false, title: I18n.t('nav.mine')}}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.settings')}}
+        name="settings"
+        component={Settings}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.push')}}
+        name="push"
+        component={Push}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.lang')}}
+        name="lang"
+        component={Language}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.password')}}
+        name="password"
+        component={Password}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.storage')}}
+        name="storage"
+        component={Storage}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.about')}}
+        name="about"
+        component={About}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.serviceLog')}}
+        name="serviceLog"
+        component={ServiceLog}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.agreement')}}
+        name="agreement"
+        component={UserAgreement}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.privacy')}}
+        name="privacy"
+        component={Privacy}
+      />
+    </Stack.Navigator>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -15,71 +15,95 @@ import Community from './components/Community';
 import UserScreen from './components/User';
 import ScanQRCodeScreen from './components/ScanQRCode';
 import * as baseConstant from './assets/baseConstant';
+// import I18n from '../locales/I18n';
+import I18n from '../locales';
+import useLanguageUpdate from './hooks/userLanguageUpdate';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-class Home extends React.Component {
-  render() {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Home"
-            component={HomeTabs}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name="扫描二维码" component={ScanQRCodeScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
+function Home() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={HomeTabs}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          options={{title: '扫描二维码'}}
+          name="scan"
+          component={ScanQRCodeScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
-class HomeTabs extends React.Component {
-  render() {
-    return (
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({color, size}) => {
-            let iconName;
+function HomeTabs() {
+  useLanguageUpdate();
+  return (
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({color, size}) => {
+          let iconName;
 
-            switch (route.name) {
-              case '车况':
-                iconName = 'motorcycle';
-                break;
-              case '电量':
-                iconName = 'battery';
-                break;
-              case '仪表':
-                iconName = 'tachometer';
-                break;
-              case '社区':
-                iconName = 'comments';
-                break;
-              case '我的':
-                iconName = 'user';
-                break;
-            }
+          switch (route.name) {
+            case 'bicycle':
+              iconName = 'motorcycle';
+              break;
+            case 'battery':
+              iconName = 'battery';
+              break;
+            case 'dashboard':
+              iconName = 'tachometer';
+              break;
+            case 'communication':
+              iconName = 'comments';
+              break;
+            case 'mine':
+              iconName = 'user';
+              break;
+          }
 
-            // You can return any component that you like here!
-            return <FontAwesome name={iconName} size={size} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: baseConstant.blue,
-          inactiveTintColor: 'gray',
-        }}>
-        <Tab.Screen name="车况" component={Motorcycle} />
-        <Tab.Screen name="电量" component={Battery} />
-        <Tab.Screen name="仪表" component={Dashboard} />
-        <Tab.Screen name="社区" component={Community} />
-        <Tab.Screen name="我的" component={UserScreen} />
-      </Tab.Navigator>
-    );
-  }
+          // You can return any component that you like here!
+          return <FontAwesome name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: baseConstant.blue,
+        inactiveTintColor: 'gray',
+      }}>
+      <Tab.Screen
+        options={{title: I18n.t('tab.bicycle')}}
+        name="bicycle"
+        component={Motorcycle}
+      />
+      <Tab.Screen
+        options={{title: I18n.t('tab.battery')}}
+        name="battery"
+        component={Battery}
+      />
+      <Tab.Screen
+        options={{title: I18n.t('tab.dashboard')}}
+        name="dashboard"
+        component={Dashboard}
+      />
+      <Tab.Screen
+        options={{title: I18n.t('tab.communication')}}
+        name="communication"
+        component={Community}
+      />
+      <Tab.Screen
+        options={{title: I18n.t('tab.my')}}
+        name="mine"
+        component={UserScreen}
+      />
+    </Tab.Navigator>
+  );
 }
 
 export default class App extends React.Component {

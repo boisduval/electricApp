@@ -1,8 +1,11 @@
 // import * as RNLocalize from 'react-native-localize';
 import I18n from 'i18n-js';
+import {I18nManager} from 'react-native';
 import store from '../src/redux';
 import en from './en';
 import zh from './zh';
+
+I18nManager.allowRTL(false);
 
 const userSetLanguage = store.getState();
 console.log(userSetLanguage);

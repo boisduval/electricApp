@@ -12,4 +12,11 @@ export default {
     privacy: '隐私政策',
     my: '我的',
   },
+  tab: {
+    bicycle: '车况',
+    battery: '电量',
+    dashboard: '仪表盘',
+    communication: '社区',
+    my: '我的',
+  },
 };

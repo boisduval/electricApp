@@ -12,4 +12,11 @@ export default {
     privacy: 'Privacy',
     my: 'My',
   },
+  tab: {
+    bicycle: 'bicycle',
+    battery: 'battery',
+    dashboard: 'dashboard',
+    communication: 'communication',
+    my: 'my',
+  },
 };
