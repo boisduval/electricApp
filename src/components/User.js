@@ -9,7 +9,8 @@ import {
 } from '@react-navigation/stack';
 
 import baseStyles from '../assets/baseStyles';
-import I18n from '../../locales/I18n';
+import * as baseConstant from '../assets/baseConstant';
+import I18n from '../../locales';
 
 import Push from './settings/Push';
 import Language from './settings/Language';
@@ -64,19 +65,19 @@ class Settings extends React.Component {
   render() {
     const list = [
       {
-        name: '推送设置',
+        name: I18n.t('nav.push'),
       },
       {
-        name: '语言设置',
+        name: I18n.t('nav.lang'),
       },
       {
-        name: '修改密码',
+        name: I18n.t('nav.password'),
       },
       {
-        name: '清空缓存',
+        name: I18n.t('nav.storage'),
       },
       {
-        name: '关于',
+        name: I18n.t('nav.about'),
       },
     ];
     return (
@@ -339,11 +340,11 @@ class MyBicycle extends React.Component {
                     type="outline"
                     disabled
                     disabledTitleStyle={{
-                      color: '#2488DC',
+                      color: baseConstant.blue,
                       fontSize: 10,
                     }}
                     disabledStyle={{
-                      borderColor: '#2488DC',
+                      borderColor: baseConstant.blue,
                       paddingVertical: 0,
                     }}
                   />
@@ -409,24 +410,27 @@ class User extends React.Component {
   render() {
     return (
       <Stack.Navigator
-        initialRouteName="我的"
+        initialRouteName={I18n.t('nav.my')}
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}>
         <Stack.Screen
-          name="我的"
+          name={I18n.t('nav.my')}
           component={Home}
           options={{headerShown: false}}
         />
         <Stack.Screen name={I18n.t('nav.settings')} component={Settings} />
-        <Stack.Screen name="推送设置" component={Push} />
-        <Stack.Screen name="语言设置" component={Language} />
-        <Stack.Screen name="修改密码" component={Password} />
-        <Stack.Screen name="清空缓存" component={Storage} />
-        <Stack.Screen name="关于" component={About} />
-        <Stack.Screen name="服务记录" component={ServiceLog} />
-        <Stack.Screen name="用户协议" component={UserAgreement} />
-        <Stack.Screen name="隐私政策" component={Privacy} />
+        <Stack.Screen name={I18n.t('nav.push')} component={Push} />
+        <Stack.Screen name={I18n.t('nav.lang')} component={Language} />
+        <Stack.Screen name={I18n.t('nav.password')} component={Password} />
+        <Stack.Screen name={I18n.t('nav.storage')} component={Storage} />
+        <Stack.Screen name={I18n.t('nav.about')} component={About} />
+        <Stack.Screen name={I18n.t('nav.serviceLog')} component={ServiceLog} />
+        <Stack.Screen
+          name={I18n.t('nav.agreement')}
+          component={UserAgreement}
+        />
+        <Stack.Screen name={I18n.t('nav.privacy')} component={Privacy} />
       </Stack.Navigator>
     );
   }
@@ -444,7 +448,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   agreements: {
-    color: '#2488DC',
+    color: baseConstant.blue,
     fontSize: 12,
   },
 });

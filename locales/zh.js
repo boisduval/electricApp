@@ -10,5 +10,6 @@ export default {
     serviceLog: '服务记录',
     agreement: '用户协议',
     privacy: '隐私政策',
+    my: '我的',
   },
 };

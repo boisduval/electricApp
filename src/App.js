@@ -4,6 +4,8 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
+import {Provider} from 'react-redux';
+import store from './redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Motorcycle from './components/Motorcycle';
@@ -12,11 +14,12 @@ import Dashboard from './components/Dashboard';
 import Community from './components/Community';
 import UserScreen from './components/User';
 import ScanQRCodeScreen from './components/ScanQRCode';
+import * as baseConstant from './assets/baseConstant';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-export default class App extends React.Component {
+class Home extends React.Component {
   render() {
     return (
       <NavigationContainer>
@@ -66,7 +69,7 @@ class HomeTabs extends React.Component {
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
+          activeTintColor: baseConstant.blue,
           inactiveTintColor: 'gray',
         }}>
         <Tab.Screen name="车况" component={Motorcycle} />
@@ -75,6 +78,16 @@ class HomeTabs extends React.Component {
         <Tab.Screen name="社区" component={Community} />
         <Tab.Screen name="我的" component={UserScreen} />
       </Tab.Navigator>
+    );
+  }
+}
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Home />
+      </Provider>
     );
   }
 }
