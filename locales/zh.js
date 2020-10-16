@@ -11,6 +11,7 @@ export default {
     agreement: '用户协议',
     privacy: '隐私政策',
     mine: '我的',
+    message: '我的消息',
   },
   tab: {
     bicycle: '车况',

@@ -11,6 +11,7 @@ export default {
     agreement: 'User Agreement',
     privacy: 'Privacy',
     mine: 'mine',
+    message: 'My messages',
   },
   tab: {
     bicycle: 'bicycle',

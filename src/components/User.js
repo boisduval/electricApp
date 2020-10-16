@@ -19,6 +19,8 @@ import Password from './settings/Password';
 import Storage from './settings/Storage';
 import About from './settings/About';
 
+import MyMessages from './MyMessages';
+
 const Stack = createStackNavigator();
 
 class Home extends React.Component {
@@ -122,7 +124,14 @@ class HeaderRight extends React.Component {
           flexDirection: 'row',
         }}>
         <View>
-          <Icon name="chatbubble-ellipses-outline" size={20} color="#666" />
+          <Icon
+            name="chatbubble-ellipses-outline"
+            size={20}
+            color="#666"
+            onPress={() => {
+              this.props.navigate('message');
+            }}
+          />
         </View>
         <View style={{marginLeft: 10}}>
           <Icon
@@ -171,7 +180,7 @@ class UserInfo extends React.Component {
 }
 
 // 我的服务
-function MyService() {
+function MyService(props) {
   useLanguageUpdate();
   return (
     <View>
@@ -190,7 +199,7 @@ function MyService() {
             fontSize: 14,
           }}
           onPress={() => {
-            this.props.navigate('serviceLog');
+            props.navigate('serviceLog');
           }}>
           {I18n.t('myService.log')}&ensp;
           <FontAwesome name="angle-right" size={16} />
@@ -476,6 +485,11 @@ function User() {
         options={{title: I18n.t('nav.privacy')}}
         name="privacy"
         component={Privacy}
+      />
+      <Stack.Screen
+        options={{title: I18n.t('nav.message')}}
+        name="message"
+        component={MyMessages}
       />
     </Stack.Navigator>
   );
