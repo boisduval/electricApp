@@ -9,4 +9,14 @@ const setLanguage = (languageCode) => {
   };
 };
 
-export {setLanguage};
+const setPushNotification = (state, name) => {
+  return {
+    type: actionType.PUSH_NOTIFICATION_SETTINGS,
+    payload: {
+      state,
+      name,
+    },
+  };
+};
+
+export {setLanguage, setPushNotification};

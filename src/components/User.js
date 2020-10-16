@@ -10,7 +10,6 @@ import {
 
 import baseStyles from '../assets/baseStyles';
 import * as baseConstant from '../assets/baseConstant';
-// import I18n from '../../locales/I18n';
 import I18n from '../../locales';
 import useLanguageUpdate from '../hooks/userLanguageUpdate';
 
@@ -105,7 +104,7 @@ function Settings(props) {
         ))}
       </View>
       <Button
-        title="退出登录"
+        title={I18n.t('logout')}
         buttonStyle={{marginHorizontal: 20, marginBottom: 20}}
       />
     </View>
@@ -172,57 +171,65 @@ class UserInfo extends React.Component {
 }
 
 // 我的服务
-class MyService extends React.Component {
-  render() {
-    return (
-      <View>
-        {/*头部*/}
-        <View
+function MyService() {
+  useLanguageUpdate();
+  return (
+    <View>
+      {/*头部*/}
+      <View
+        style={{
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'baseline',
+          marginVertical: 10,
+        }}>
+        <Text style={[styles.headerTitle]}>{I18n.t('myService.title')}</Text>
+        <Text
           style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'baseline',
-            marginVertical: 10,
+            color: '#666',
+            fontSize: 14,
+          }}
+          onPress={() => {
+            this.props.navigate('serviceLog');
           }}>
-          <Text style={[styles.headerTitle]}>我的服务</Text>
-          <Text
-            style={{
-              color: '#666',
-              fontSize: 14,
-            }}
-            onPress={() => {
-              this.props.navigate('serviceLog');
-            }}>
-            服务记录&ensp;
-            <FontAwesome name="angle-right" size={16} />
-          </Text>
-        </View>
-        {/*options*/}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 20,
-          }}>
-          <Option icon="construct-outline" text="在线报修" />
-          <Option icon="book-outline" text="使用手册" />
-          <Option icon="document-text-outline" text="自检手册" />
-          <Option icon="location-outline" text="服务网点" />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 20,
-          }}>
-          <Option icon="notifications-outline" text="失窃上报" />
-          <Option icon="person-outline" text="在线客服" />
-          <Option />
-          <Option />
-        </View>
+          {I18n.t('myService.log')}&ensp;
+          <FontAwesome name="angle-right" size={16} />
+        </Text>
       </View>
-    );
-  }
+      {/*options*/}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: 20,
+        }}>
+        <Option icon="construct-outline" text={I18n.t('myService.repair')} />
+        <Option icon="book-outline" text={I18n.t('myService.instruction')} />
+        <Option
+          icon="document-text-outline"
+          text={I18n.t('myService.selfCheck')}
+        />
+        <Option icon="location-outline" text={I18n.t('myService.place')} />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: 20,
+        }}>
+        <Option
+          icon="notifications-outline"
+          text={I18n.t('myService.report')}
+        />
+        <Option
+          icon="person-outline"
+          text={I18n.t('myService.customerService')}
+        />
+        <Option />
+        <Option />
+      </View>
+    </View>
+  );
 }
 
 // 服务记录
@@ -318,83 +325,83 @@ class Option extends React.Component {
 }
 
 // 我的设备
-class MyBicycle extends React.Component {
-  render() {
-    const list = [
-      {
-        name: '我的V3神车',
-        active: true,
-      },
-      {
-        name: '我的V2神车',
-        active: false,
-      },
-    ];
-    return (
-      <View style={{marginTop: 30}}>
-        <Text style={[styles.headerTitle, {marginBottom: 10}]}>我的设备</Text>
-        {list.map((v, i) => (
-          <ListItem key={i} containerStyle={[styles.listItem]}>
-            <ListItem.Content>
-              <ListItem.Title style={{fontSize: 14}}>{v.name}</ListItem.Title>
-            </ListItem.Content>
-            {(() => {
-              if (v.active) {
-                return (
-                  <Button
-                    title="当前"
-                    type="outline"
-                    disabled
-                    disabledTitleStyle={{
-                      color: baseConstant.blue,
-                      fontSize: 10,
-                    }}
-                    disabledStyle={{
-                      borderColor: baseConstant.blue,
-                      paddingVertical: 0,
-                    }}
-                  />
-                );
-              }
-            })()}
-            <ListItem.Chevron />
-          </ListItem>
-        ))}
-        <Button
-          type="outline"
-          title="绑定神车"
-          buttonStyle={[styles.listItem, {padding: 8}]}
-          titleStyle={{fontSize: 14}}
-          containerStyle={{borderRadius: 5}}
-        />
-      </View>
-    );
-  }
+function MyBicycle() {
+  useLanguageUpdate();
+  const list = [
+    {
+      name: '我的V3神车',
+      active: true,
+    },
+    {
+      name: '我的V2神车',
+      active: false,
+    },
+  ];
+  return (
+    <View style={{marginTop: 30}}>
+      <Text style={[styles.headerTitle, {marginBottom: 10}]}>
+        {I18n.t('myDevice.title')}
+      </Text>
+      {list.map((v, i) => (
+        <ListItem key={i} containerStyle={[styles.listItem]}>
+          <ListItem.Content>
+            <ListItem.Title style={{fontSize: 14}}>{v.name}</ListItem.Title>
+          </ListItem.Content>
+          {(() => {
+            if (v.active) {
+              return (
+                <Button
+                  title={I18n.t('myDevice.current')}
+                  type="outline"
+                  disabled
+                  disabledTitleStyle={{
+                    color: baseConstant.blue,
+                    fontSize: 10,
+                  }}
+                  disabledStyle={{
+                    borderColor: baseConstant.blue,
+                    paddingVertical: 0,
+                  }}
+                />
+              );
+            }
+          })()}
+          <ListItem.Chevron />
+        </ListItem>
+      ))}
+      <Button
+        type="outline"
+        title={I18n.t('myDevice.button')}
+        buttonStyle={[styles.listItem, {padding: 8}]}
+        titleStyle={{fontSize: 14}}
+        containerStyle={{borderRadius: 5}}
+      />
+    </View>
+  );
 }
 
 // 底部协议
-class Agreements extends React.Component {
-  render() {
-    return (
-      <View style={{marginBottom: 10, flexDirection: 'row'}}>
-        <Text
-          style={[styles.agreements]}
-          onPress={() => {
-            this.props.navigate('agreement');
-          }}>
-          用户协议
-        </Text>
-        <Text style={[styles.agreements]}>&ensp;|&ensp;</Text>
-        <Text
-          style={[styles.agreements]}
-          onPress={() => {
-            this.props.navigate('privacy');
-          }}>
-          隐私政策
-        </Text>
-      </View>
-    );
-  }
+function Agreements() {
+  useLanguageUpdate();
+  return (
+    <View style={{marginBottom: 10, flexDirection: 'row'}}>
+      <Text
+        style={[styles.agreements]}
+        onPress={() => {
+          this.props.navigate('agreement');
+        }}>
+        {I18n.t('nav.agreement')}
+      </Text>
+      <Text style={[styles.agreements]}>&ensp;|&ensp;</Text>
+      <Text
+        style={[styles.agreements]}
+        onPress={() => {
+          this.props.navigate('privacy');
+        }}>
+        {I18n.t('nav.privacy')}
+      </Text>
+    </View>
+  );
 }
 
 // 用户协议

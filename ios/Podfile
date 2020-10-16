@@ -11,6 +11,8 @@ target 'electricApp' do
 
   pod 'RNI18n', :path => '../node_modules/react-native-i18n'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   target 'electricAppTests' do
     inherit! :complete
     # Pods for testing

@@ -7,18 +7,17 @@ import zh from './zh';
 
 I18nManager.allowRTL(false);
 
-const userSetLanguage = store.getState();
-console.log(userSetLanguage);
-if (userSetLanguage) {
-  I18n.locale = userSetLanguage.toString();
+const state = store.getState();
+if (state) {
+  I18n.locale = state.userSetLanguage;
 } else {
   I18n.locale = 'zh';
 }
 
 store.subscribe(() => {
   const {userSetLanguage: newUserSetLanguage} = store.getState();
-  if (newUserSetLanguage && newUserSetLanguage !== userSetLanguage) {
-    I18n.locale = newUserSetLanguage.toString();
+  if (newUserSetLanguage) {
+    I18n.locale = newUserSetLanguage;
   }
 });
 // const locales = RNLocalize.getLocales();

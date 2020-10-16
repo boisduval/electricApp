@@ -1,17 +1,13 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-import {ListItem, Icon} from 'react-native-elements';
+import {ListItem} from 'react-native-elements';
 import {connect} from 'react-redux';
-// import I18n from '../../../locales/i18n';
 import I18n from 'i18n-js';
 
 import baseStyles from '../../assets/baseStyles';
 import * as baseConstant from '../../assets/baseConstant';
 
 import * as actionCreator from '../../redux/actionCreators';
-
-// 默认英文
-let currentKey = 1;
 
 class Language extends Component {
   languageCodeToKey(languageCode) {
@@ -34,6 +30,7 @@ class Language extends Component {
         break;
     }
   }
+
   render() {
     const currentLanguageKey = this.languageCodeToKey(
       this.props.userSetLanguage,
@@ -67,7 +64,6 @@ class Language extends Component {
             </ListItem>
           );
         })}
-        <Text>{I18n.t('nav.my')}</Text>
       </View>
     );
   }
