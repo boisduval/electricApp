@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {Header, Avatar, ListItem, Text, Button} from 'react-native-elements';
+import {connect} from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
@@ -13,6 +14,8 @@ import * as baseConstant from '../assets/baseConstant';
 import I18n from '../../locales';
 import useLanguageUpdate from '../hooks/userLanguageUpdate';
 
+import store from '../redux';
+
 import Push from './settings/Push';
 import Language from './settings/Language';
 import Password from './settings/Password';
@@ -20,11 +23,13 @@ import Storage from './settings/Storage';
 import About from './settings/About';
 
 import MyMessages from './MyMessages';
+import {setUserInformation} from '../redux/actionCreators';
 
 const Stack = createStackNavigator();
 
 class Home extends React.Component {
   render() {
+    console.log(this.props);
     return (
       <View style={[baseStyles.tabViewBox]}>
         <Header
@@ -47,7 +52,7 @@ class Home extends React.Component {
         <View
           style={[baseStyles.contentBox, {justifyContent: 'space-between'}]}>
           <View>
-            <UserInfo />
+            <UserInfo information={this.props.userInformation} />
             <MyService navigate={this.props.navigation.navigate} />
             <MyBicycle />
           </View>
@@ -152,28 +157,22 @@ class HeaderRight extends React.Component {
 // 用户资料
 class UserInfo extends React.Component {
   render() {
-    const list = [
-      {
-        name: 'AF',
-        subtitle: 'Vice President',
-      },
-    ];
     return (
       <View>
-        {list.map((l, i) => (
-          <ListItem key={i} containerStyle={{paddingHorizontal: 0}}>
-            <Avatar
-              size="medium"
-              rounded
-              title={l.name}
-              overlayContainerStyle={{backgroundColor: '#BCBEC1'}}
-            />
-            <ListItem.Content>
-              <ListItem.Title>{l.name}</ListItem.Title>
-              <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
-            </ListItem.Content>
-          </ListItem>
-        ))}
+        <ListItem containerStyle={{paddingHorizontal: 0}}>
+          <Avatar
+            size="medium"
+            rounded
+            title={this.props.information.username}
+            overlayContainerStyle={{backgroundColor: '#BCBEC1'}}
+          />
+          <ListItem.Content>
+            <ListItem.Title>{this.props.information.username}</ListItem.Title>
+            <ListItem.Subtitle>
+              {this.props.information.signature}
+            </ListItem.Subtitle>
+          </ListItem.Content>
+        </ListItem>
       </View>
     );
   }
@@ -438,7 +437,7 @@ function User() {
       }}>
       <Stack.Screen
         name="mine"
-        component={Home}
+        component={ReduxHome}
         options={{headerShown: false, title: I18n.t('nav.mine')}}
       />
       <Stack.Screen
@@ -494,6 +493,18 @@ function User() {
     </Stack.Navigator>
   );
 }
+
+const mapStateToProps = (state) => {
+  const {userInformation} = state;
+  return {userInformation};
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  setUserInformation: (setUserInformationAction) =>
+    dispatch(setUserInformationAction),
+});
+
+const ReduxHome = connect(mapStateToProps, mapDispatchToProps)(Home);
 
 const styles = StyleSheet.create({
   headerTitle: {
