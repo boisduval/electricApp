@@ -19,6 +19,8 @@ export default {
     dashboard: '仪表盘',
     communication: '社区',
     mine: '我的',
+    powerConsumption: '耗电量概况',
+    chargeAndDischarge: '充放电概况',
   },
   myService: {
     title: '我的服务',

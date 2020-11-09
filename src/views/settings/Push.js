@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import baseStyles from '../../assets/baseStyles';
 
-import I18n from '../../../locales/index';
+import I18n from '../../../locales';
 import store from '../../redux';
 import {setPushNotification} from '../../redux/actionCreators';
 

@@ -12,6 +12,12 @@ const initialState = {
     feedbackNotificationOn: true,
     activityNotificationOn: true,
   },
+  userInformation: {
+    url: '',
+    username: 'AF',
+    signature: '洁净能源 情节世界',
+    uid: '123456',
+  },
 };
 
 const publicReducer = (store = initialState, action) => {
@@ -32,6 +38,12 @@ const publicReducer = (store = initialState, action) => {
       return {
         ...store,
         pushNotificationSettings: newPushNotificationSettings,
+      };
+    case actionType.USER_INFORMATION:
+      const {information} = payload;
+      return {
+        ...store,
+        userInformation: information,
       };
     default:
       return store;

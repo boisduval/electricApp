@@ -4,6 +4,8 @@ import baseStyles from '../assets/baseStyles';
 import {ScrollView, Text, View} from 'react-native';
 import {ListItem, Avatar} from 'react-native-elements';
 
+import UserAvatar from '../components/UserAvatar';
+
 class MyMessages extends React.Component {
   getMessageList() {
     this.setState({
@@ -68,12 +70,7 @@ class MyMessages extends React.Component {
         <ScrollView>
           {this.state.list.map((v, i) => (
             <ListItem bottomDivider key={i}>
-              <Avatar
-                size="small"
-                rounded
-                title="AF"
-                overlayContainerStyle={{backgroundColor: '#BCBEC1'}}
-              />
+              <UserAvatar size="small" />
               <ListItem.Content>
                 <ListItem.Title>{v.title}</ListItem.Title>
                 <ListItem.Subtitle>{v.content}</ListItem.Subtitle>

@@ -24,12 +24,12 @@ import About from './settings/About';
 
 import MyMessages from './MyMessages';
 import {setUserInformation} from '../redux/actionCreators';
+import UserAvatar from '../components/UserAvatar';
 
 const Stack = createStackNavigator();
 
 class Home extends React.Component {
   render() {
-    console.log(this.props);
     return (
       <View style={[baseStyles.tabViewBox]}>
         <Header
@@ -160,12 +160,7 @@ class UserInfo extends React.Component {
     return (
       <View>
         <ListItem containerStyle={{paddingHorizontal: 0}}>
-          <Avatar
-            size="medium"
-            rounded
-            title={this.props.information.username}
-            overlayContainerStyle={{backgroundColor: '#BCBEC1'}}
-          />
+          <UserAvatar />
           <ListItem.Content>
             <ListItem.Title>{this.props.information.username}</ListItem.Title>
             <ListItem.Subtitle>
@@ -245,31 +240,26 @@ class ServiceLog extends React.Component {
   render() {
     const list = [
       {
-        name: 'AF',
         title: '面板色差',
         time: '2020.09.20',
         content: '更换具有色差的面板，更换之后得到解决。',
       },
       {
-        name: 'AF',
         title: '面板色差',
         time: '2020.09.20',
         content: '更换具有色差的面板，更换之后得到解决。',
       },
       {
-        name: 'AF',
         title: '面板色差',
         time: '2020.09.20',
         content: '更换具有色差的面板，更换之后得到解决。',
       },
       {
-        name: 'AF',
         title: '面板色差',
         time: '2020.09.20',
         content: '更换具有色差的面板，更换之后得到解决。',
       },
       {
-        name: 'AF',
         title: '面板色差',
         time: '2020.09.20',
         content: '更换具有色差的面板，更换之后得到解决。',
@@ -280,12 +270,7 @@ class ServiceLog extends React.Component {
         <View style={[baseStyles.contentBox, {marginVertical: 10}]}>
           {list.map((v, i) => (
             <ListItem key={i} containerStyle={{borderRadius: 5, marginTop: 10}}>
-              <Avatar
-                size="small"
-                rounded
-                title={v.name}
-                overlayContainerStyle={{backgroundColor: '#BCBEC1'}}
-              />
+              <UserAvatar size="small" />
               <ListItem.Content>
                 <ListItem.Title style={{fontSize: 14}}>
                   {v.title}&ensp;

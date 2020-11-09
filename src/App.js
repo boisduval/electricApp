@@ -10,11 +10,11 @@ import {persistor} from './redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import Motorcycle from './components/Motorcycle';
-import Battery from './components/Battery';
-import Dashboard from './components/Dashboard';
-import Community from './components/Community';
-import UserScreen from './components/User';
+import Motorcycle from './views/Motorcycle';
+import Battery from './views/Battery';
+import Dashboard from './views/Dashboard';
+import Community from './views/Community';
+import UserScreen from './views/User';
 import ScanQRCodeScreen from './components/ScanQRCode';
 import * as baseConstant from './assets/baseConstant';
 import I18n from '../locales';

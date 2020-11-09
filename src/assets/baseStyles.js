@@ -6,7 +6,7 @@ const baseStyles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   contentBox: {
-    marginHorizontal: 30,
+    marginHorizontal: 20,
     flex: 1,
     // marginVertical: 10,
   },

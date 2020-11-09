@@ -19,4 +19,11 @@ const setPushNotification = (state, name) => {
   };
 };
 
-export {setLanguage, setPushNotification};
+const setUserInformation = (information) => {
+  return {
+    type: actionType.USER_INFORMATION,
+    payload: {information},
+  };
+};
+
+export {setLanguage, setPushNotification, setUserInformation};
