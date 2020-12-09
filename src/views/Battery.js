@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {StatusBar, Text, View} from 'react-native';
 import {Tab, Tabs, TabHeading} from 'native-base';
 import {Header} from 'react-native-elements';
 
@@ -24,24 +24,24 @@ export default class Battery extends Component {
     ];
     return (
       <View style={[baseStyles.tabViewBox]}>
-        <Header
-          centerComponent={{
-            text: I18n.t('tab.battery'),
-            style: {color: '#fff'},
-          }}
-          containerStyle={{
-            backgroundColor: baseConstant.blue,
-            justifyContent: 'space-around',
-          }}
-        />
-        <Tabs tabBarUnderlineStyle={{backgroundColor: '#eeeeee'}}>
+        {/*<Header*/}
+        {/*  centerComponent={{*/}
+        {/*    text: I18n.t('tab.battery'),*/}
+        {/*    style: {color: baseConstant.blue, fontWeight: 'bold', fontSize: 16},*/}
+        {/*  }}*/}
+        {/*  containerStyle={{*/}
+        {/*    backgroundColor: '#fff',*/}
+        {/*    justifyContent: 'space-around',*/}
+        {/*  }}*/}
+        {/*/>*/}
+        <Tabs tabBarUnderlineStyle={{backgroundColor: baseConstant.blue}}>
           {headerList.map((v, i) => (
             <Tab
               key={i}
               tabStyle={{backgroundColor: '#fff'}}
               activeTabStyle={{backgroundColor: '#fff'}}
-              textStyle={{color: 'gray'}}
-              activeTextStyle={{color: baseConstant.blue}}
+              textStyle={{color: '#666'}}
+              activeTextStyle={{color: 'black'}}
               heading={I18n.t('tab.' + v.name)}>
               {v.component}
             </Tab>

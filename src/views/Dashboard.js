@@ -1,238 +1,208 @@
 import React, {Component} from 'react';
-
 import {
-  SafeAreaView,
+  FlatList,
   StyleSheet,
-  ScrollView,
-  View,
   Text,
-  StatusBar,
-  Button,
-  Dimensions,
-  NativeModules,
+  View,
+  PermissionsAndroid,
+  Platform,
 } from 'react-native';
+import {MapView} from 'react-native-amap3d';
+import {Card} from 'react-native-elements';
+import {Echarts, echarts} from 'react-native-secharts';
 
-import {
-  BaiduMapManager,
-  MapView,
-  MapTypes,
-  Geolocation,
-  Overlay,
-  MapApp,
-} from 'react-native-baidu-map';
+export default class EventsExample extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      lat: 30.2722931,
+      log: 120.136559,
+      points: [],
+    };
+  }
 
-const {height, width} = Dimensions.get('window');
+  async componentDidMount() {
+    await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+    ]);
+    await fetch(
+      'http://192.168.0.162:8086/conn/api/Vehicle/GetPositionings?AutoSystemID=1&VehicleSystemID=1&TravelAutoID=1',
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          points: responseJson.data,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
-export default class Dashboard extends Component<Props> {
-  state = {
-    location: {},
-    center: {longitude: 113.950453, latitude: 22.546045},
-    markers: [
-      {
-        location: {
-          longitude: 113.960453,
-          latitude: 22.546045,
-        },
-      },
-      {
-        location: {
-          longitude: 113.961453,
-          latitude: 22.547045,
-        },
-      },
-      {
-        location: {
-          longitude: 113.962453,
-          latitude: 22.548045,
-        },
-      },
-      {
-        location: {
-          longitude: 113.963453,
-          latitude: 22.545045,
-        },
-      },
-      {
-        location: {
-          longitude: 113.964453,
-          latitude: 22.544045,
-        },
-      },
-    ],
+  _logLocationEvent = (data) => {
+    if (data.latitude === '0' || data.longitude === '0') {
+      return null;
+    } else {
+      // this.setState({
+      //   lat: Number(data.latitude),
+      //   log: Number(data.longitude),
+      // });
+    }
   };
 
-  getCurrentPosition() {
-    Geolocation.getCurrentPosition().then((data) => {
-      console.log(data);
-      this.setState({location: data, center: data});
-    });
-  }
-
-  openTransitRoute() {
-    const startPoint = {
-      longitude: 113.904453,
-      latitude: 22.544045,
-      name: '地点1',
-    };
-    const endPoint = {
-      longitude: 113.994453,
-      latitude: 22.544045,
-      name: '地点2',
-    };
-    MapApp.openTransitRoute(startPoint, endPoint);
-  }
-
-  openDrivingRoute() {
-    const startPoint = {
-      longitude: 113.904453,
-      latitude: 22.544045,
-      name: '地点1',
-    };
-    const endPoint = {
-      longitude: 113.994453,
-      latitude: 22.544045,
-      name: '地点2',
-    };
-    MapApp.openDrivingRoute(startPoint, endPoint);
-  }
-
-  startLocating() {
-    Geolocation.startLocating((resp) => {
-      console.warn(resp);
-    });
-  }
-
-  stopLocating() {
-    Geolocation.stopLocating();
-  }
-
-  componentDidMount() {}
-
   render() {
-    const {location, center} = this.state;
+    const leftList = [
+      {
+        name: '电池健康·%',
+        value: '99.9',
+      },
+      {
+        name: '电池健康·%',
+        value: '99.9',
+      },
+      {
+        name: '电池健康·%',
+        value: '99.9',
+      },
+    ];
+    const rightList = [
+      {
+        name: '电池健康·%',
+        value: '99.9',
+      },
+      {
+        name: '电池健康·%',
+        value: '99.9',
+      },
+      {
+        name: '电池健康·%',
+        value: '99.9',
+      },
+    ];
+    const centerText = {
+      name: '电池健康·%',
+      value: '99.9',
+    };
+    const option = {
+      series: [
+        {
+          name: '业务指标',
+          type: 'gauge',
+          detail: {
+            formatter: '{value}Km/h',
+            fontSize: 20,
+            offsetCenter: ['0', '70%'],
+          },
+          data: [{value: 50, name: '完成率'}],
+          radius: '100%',
+          splitNumber: 8,
+          min: 0,
+          max: 80,
+          startAngle: 220,
+          endAngle: -40,
+          title: {
+            show: false,
+          },
+          splitLine: {
+            length: 6,
+            show: false,
+          },
+          axisLine: {
+            // 坐标轴线
+            lineStyle: {
+              // 属性lineStyle控制线条样式
+              width: 5, //半径
+            },
+          },
+          axisTick: {
+            length: 30,
+            show: false,
+          },
+          pointer: {
+            length: '60%',
+            width: 6,
+          },
+        },
+      ],
+    };
     return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <View style={styles.body}>
-              <MapView
-                showsUserLocation={true}
-                locationData={location}
-                width={width}
-                height={400}
-                zoom={18}
-                trafficEnabled={true}
-                zoomControlsVisible={true}
-                mapType={MapTypes.NORMAL}
-                center={center}>
-                <Overlay.Marker
-                  rotate={45}
-                  icon={{
-                    uri:
-                      'https://mapopen-website-wiki.cdn.bcebos.com/homePage/images/logox1.png',
-                  }}
-                  location={{longitude: 113.975453, latitude: 22.510045}}
-                />
-                <Overlay.Cluster>
-                  <Overlay.Marker
-                    location={{longitude: 113.969453, latitude: 22.530045}}
-                  />
-                  <Overlay.Marker
-                    location={{longitude: 113.968453, latitude: 22.531045}}
-                  />
-                  <Overlay.Marker
-                    location={{longitude: 113.967453, latitude: 22.532045}}
-                  />
-                  <Overlay.Marker
-                    location={{longitude: 113.966453, latitude: 22.533045}}
-                  />
-                  <Overlay.Marker
-                    location={{longitude: 113.965453, latitude: 22.534045}}
-                  />
-                  <Overlay.Marker
-                    location={{longitude: 113.965453, latitude: 22.535045}}
-                  />
-                </Overlay.Cluster>
-                <Overlay.Cluster>
-                  {this.state.markers.map((marker, index) => (
-                    <Overlay.Marker
-                      key={`marker-` + index}
-                      location={marker.location}
-                    />
-                  ))}
-                </Overlay.Cluster>
-                <Overlay.Polyline
-                  longitude={113.960453}
-                  latitude={22.546045}
-                  points={[
-                    {longitude: 113.960453, latitude: 22.546145},
-                    {longitude: 113.961453, latitude: 22.547045},
-                    {longitude: 113.962453, latitude: 22.54045},
-                  ]}
-                />
-                <Overlay.Arc
-                  longitude={113.960453}
-                  latitude={22.546045}
-                  points={[
-                    {longitude: 113.960453, latitude: 22.546045},
-                    {longitude: 113.960453, latitude: 22.546145},
-                    {longitude: 113.960453, latitude: 22.546245},
-                  ]}
-                />
-              </MapView>
-              <View style={styles.buttonGroup}>
-                <View style={styles.button}>
-                  <Button
-                    onPress={() => this.getCurrentPosition()}
-                    title="Locate Once"
-                  />
-                </View>
-                <View style={styles.button}>
-                  <Button
-                    onPress={() => this.openTransitRoute()}
-                    title="Transit Route"
-                  />
-                </View>
-                <View style={styles.button}>
-                  <Button
-                    onPress={() => this.openDrivingRoute()}
-                    title="Drive Route"
-                  />
-                </View>
+      <View style={{flex: 1}}>
+        {/*<MapView*/}
+        {/*  center={{*/}
+        {/*    latitude: this.state.lat,*/}
+        {/*    longitude: this.state.log,*/}
+        {/*  }}*/}
+        {/*  locationEnabled*/}
+        {/*  locationInterval={10000}*/}
+        {/*  distanceFilter={10}*/}
+        {/*  zoomLevel={16}*/}
+        {/*  onLocation={this._logLocationEvent.bind(this)}*/}
+        {/*  style={{flex: 1}}>*/}
+        {/*  <MapView.Polyline*/}
+        {/*    width={5}*/}
+        {/*    color="rgba(255, 0, 0, 0.5)"*/}
+        {/*    coordinates={this.state.points}*/}
+        {/*  />*/}
+        {/*</MapView>*/}
+
+        <View style={styles.board}>
+          <Card>
+            <View style={styles.boardBox}>
+              <View style={styles.textBox}>
+                {leftList.map((v, i) => (
+                  <TextBox item={v} key={i} />
+                ))}
               </View>
-              {this.state.location.address ? (
-                <View style={styles.location}>
-                  <Text>当前位置：{this.state.location.address}</Text>
-                </View>
-              ) : null}
+              <View style={{justifyContent: 'space-between'}}>
+                <Echarts option={option} height={130} width={130} />
+                <TextBox item={centerText} />
+              </View>
+              <View style={styles.textBox}>
+                {rightList.map((v, i) => (
+                  <TextBox item={v} key={i} />
+                ))}
+              </View>
             </View>
-          </ScrollView>
-        </SafeAreaView>
-      </>
+          </Card>
+        </View>
+      </View>
+    );
+  }
+}
+
+class TextBox extends React.Component {
+  render() {
+    return (
+      <View style={{alignItems: 'center'}}>
+        <Text style={styles.fontMedium}>{this.props.item.value}</Text>
+        <Text style={styles.fontSmall}>{this.props.item.name}</Text>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+  board: {
+    position: 'absolute',
+    bottom: 10,
+    left: 0,
+    width: '100%',
   },
-  scrollView: {},
-  location: {
-    padding: 16,
-  },
-  buttonGroup: {
-    padding: 16,
+  boardBox: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    height: 170,
   },
-  button: {
-    width: 80,
-    margin: 8,
+  textBox: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  fontMedium: {
+    fontWeight: '300',
+    fontSize: 18,
+  },
+  fontSmall: {
+    fontSize: 12,
   },
 });

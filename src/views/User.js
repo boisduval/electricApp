@@ -1,6 +1,14 @@
 import * as React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
-import {Header, Avatar, ListItem, Text, Button} from 'react-native-elements';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  TouchableHighlight,
+} from 'react-native';
+import {ListItem, Text, Button} from 'react-native-elements';
+import {Header, Left, Body, Right} from 'native-base';
 import {connect} from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -14,17 +22,16 @@ import * as baseConstant from '../assets/baseConstant';
 import I18n from '../../locales';
 import useLanguageUpdate from '../hooks/userLanguageUpdate';
 
-import store from '../redux';
-
 import Push from './settings/Push';
 import Language from './settings/Language';
 import Password from './settings/Password';
 import Storage from './settings/Storage';
 import About from './settings/About';
-
+import OnlineRepair from './service/OnlineRepair';
+import OnlineService from './service/OnlineService';
 import MyMessages from './MyMessages';
-import {setUserInformation} from '../redux/actionCreators';
 import UserAvatar from '../components/UserAvatar';
+import PurchaseHistory from './PurchaseHistory';
 
 const Stack = createStackNavigator();
 
@@ -32,10 +39,9 @@ class Home extends React.Component {
   render() {
     return (
       <View style={[baseStyles.tabViewBox]}>
-        <Header
-          backgroundColor="rgba(0,0,0,0)"
-          placement="left"
-          leftComponent={
+        <Header style={{backgroundColor: '#fff'}} androidStatusBarColor="#fff">
+          <StatusBar barStyle="dark-content" />
+          <Left>
             <Icon
               name="settings-outline"
               size={20}
@@ -44,17 +50,18 @@ class Home extends React.Component {
                 this.props.navigation.navigate('settings');
               }}
             />
-          }
-          rightComponent={
+          </Left>
+          <Body />
+          <Right>
             <HeaderRight navigate={this.props.navigation.navigate} />
-          }
-        />
+          </Right>
+        </Header>
         <View
           style={[baseStyles.contentBox, {justifyContent: 'space-between'}]}>
           <View>
             <UserInfo information={this.props.userInformation} />
             <MyService navigate={this.props.navigation.navigate} />
-            <MyBicycle />
+            <MyBicycle navigate={this.props.navigation.navigate} />
           </View>
           <View
             style={{
@@ -206,8 +213,18 @@ function MyService(props) {
           justifyContent: 'space-between',
           marginTop: 20,
         }}>
-        <Option icon="construct-outline" text={I18n.t('myService.repair')} />
-        <Option icon="book-outline" text={I18n.t('myService.instruction')} />
+        <Option
+          icon="construct-outline"
+          text={I18n.t('myService.repair')}
+          navigate={props.navigate}
+          path="onlineRepair"
+        />
+        <Option
+          icon="book-outline"
+          text={I18n.t('myService.instruction')}
+          navigate={props.navigate}
+          path="manual"
+        />
         <Option
           icon="document-text-outline"
           text={I18n.t('myService.selfCheck')}
@@ -227,6 +244,8 @@ function MyService(props) {
         <Option
           icon="person-outline"
           text={I18n.t('myService.customerService')}
+          navigate={props.navigate}
+          path="onlineService"
         />
         <Option />
         <Option />
@@ -303,22 +322,27 @@ class ServiceLog extends React.Component {
 class Option extends React.Component {
   render() {
     return (
-      <View
-        style={{
-          width: 60,
-          height: 60,
-          justifyContent: 'space-between',
-          alignItems: 'center',
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigate(this.props.path);
         }}>
-        <Icon name={this.props.icon} color="#666" size={38} />
-        <Text style={{fontSize: 12, color: '#666'}}>{this.props.text}</Text>
-      </View>
+        <View
+          style={{
+            width: 60,
+            height: 60,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Icon name={this.props.icon} color="#666" size={38} />
+          <Text style={{fontSize: 12, color: '#666'}}>{this.props.text}</Text>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
 
 // 我的设备
-function MyBicycle() {
+function MyBicycle(props) {
   useLanguageUpdate();
   const list = [
     {
@@ -336,31 +360,36 @@ function MyBicycle() {
         {I18n.t('myDevice.title')}
       </Text>
       {list.map((v, i) => (
-        <ListItem key={i} containerStyle={[styles.listItem]}>
-          <ListItem.Content>
-            <ListItem.Title style={{fontSize: 14}}>{v.name}</ListItem.Title>
-          </ListItem.Content>
-          {(() => {
-            if (v.active) {
-              return (
-                <Button
-                  title={I18n.t('myDevice.current')}
-                  type="outline"
-                  disabled
-                  disabledTitleStyle={{
-                    color: baseConstant.blue,
-                    fontSize: 10,
-                  }}
-                  disabledStyle={{
-                    borderColor: baseConstant.blue,
-                    paddingVertical: 0,
-                  }}
-                />
-              );
-            }
-          })()}
-          <ListItem.Chevron />
-        </ListItem>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigate('purchaseHistory', {id: '123'});
+          }}>
+          <ListItem key={i} containerStyle={[styles.listItem]}>
+            <ListItem.Content>
+              <ListItem.Title style={{fontSize: 14}}>{v.name}</ListItem.Title>
+            </ListItem.Content>
+            {(() => {
+              if (v.active) {
+                return (
+                  <Button
+                    title={I18n.t('myDevice.current')}
+                    type="outline"
+                    disabled
+                    disabledTitleStyle={{
+                      color: baseConstant.blue,
+                      fontSize: 10,
+                    }}
+                    disabledStyle={{
+                      borderColor: baseConstant.blue,
+                      paddingVertical: 0,
+                    }}
+                  />
+                );
+              }
+            })()}
+            <ListItem.Chevron />
+          </ListItem>
+        </TouchableOpacity>
       ))}
       <Button
         type="outline"
@@ -374,14 +403,14 @@ function MyBicycle() {
 }
 
 // 底部协议
-function Agreements() {
+function Agreements(props) {
   useLanguageUpdate();
   return (
     <View style={{marginBottom: 10, flexDirection: 'row'}}>
       <Text
         style={[styles.agreements]}
         onPress={() => {
-          this.props.navigate('agreement');
+          props.navigate('agreement');
         }}>
         {I18n.t('nav.agreement')}
       </Text>
@@ -389,7 +418,7 @@ function Agreements() {
       <Text
         style={[styles.agreements]}
         onPress={() => {
-          this.props.navigate('privacy');
+          props.navigate('privacy');
         }}>
         {I18n.t('nav.privacy')}
       </Text>
@@ -475,6 +504,21 @@ function User() {
         name="message"
         component={MyMessages}
       />
+      <Stack.Screen
+        name="purchaseHistory"
+        component={PurchaseHistory}
+        options={{title: I18n.t('nav.purchaseHistory')}}
+      />
+      {/*<Stack.Screen*/}
+      {/*  options={{title: I18n.t('nav.onlineRepair')}}*/}
+      {/*  name="onlineRepair"*/}
+      {/*  component={OnlineRepair}*/}
+      {/*/>*/}
+      {/*<Stack.Screen*/}
+      {/*  options={{title: I18n.t('myService.customerService')}}*/}
+      {/*  name="onlineService"*/}
+      {/*  component={OnlineService}*/}
+      {/*/>*/}
     </Stack.Navigator>
   );
 }

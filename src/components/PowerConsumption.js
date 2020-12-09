@@ -114,7 +114,7 @@ class PowerConsumption extends React.Component {
 
   render() {
     return (
-      <View style={[baseStyles.contentBox, {marginTop: 20}]}>
+      <View>
         <ScrollView>
           {/* 圆环进度条*/}
           <Card>
@@ -137,60 +137,53 @@ class PowerConsumption extends React.Component {
             </CardItem>
           </Card>
           {/* 图表 */}
-          <Card>
-            <CardItem>
-              <VictoryChart
-                height={300}
-                width={Dimensions.get('window').width - 80}
-                // width={350}
-                // height={200}
-                // animate={{duration: 1000}}
-                domainPadding={{x: 20}}
-                padding={{right: 10, left: 40, top: 60, bottom: 40}}
-                containerComponent={
-                  <VictoryVoronoiContainer
-                    labels={({datum}) => `剩余电量 ${datum.earnings}`}
-                    labelComponent={
-                      <VictoryTooltip
-                        flyoutPadding={{
-                          top: 10,
-                          bottom: 10,
-                          left: 20,
-                          right: 20,
-                        }}
-                      />
-                    }
-                  />
-                }>
-                <VictoryLabel
-                  x={5}
-                  y={20}
-                  text={'剩余电量统计'}
-                  style={{fontSize: 16, fontWeight: 'bold'}}
+          <View style={{alignItems: 'center'}}>
+            <VictoryChart
+              height={300}
+              width={Dimensions.get('window').width - 40}
+              domainPadding={{x: 20}}
+              padding={{right: 10, left: 40, top: 60, bottom: 40}}
+              containerComponent={
+                <VictoryVoronoiContainer
+                  labels={({datum}) => `剩余电量 ${datum.earnings}`}
+                  labelComponent={
+                    <VictoryTooltip
+                      flyoutPadding={{
+                        top: 10,
+                        bottom: 10,
+                        left: 20,
+                        right: 20,
+                      }}
+                    />
+                  }
                 />
-                <VictoryBar
-                  data={data}
-                  x="quarter"
-                  y="earnings"
-                  barRatio={0.6}
-                  style={{data: {fill: baseConstant.blue}}}
-                />
-              </VictoryChart>
-            </CardItem>
-          </Card>
+              }>
+              <VictoryLabel
+                x={5}
+                y={20}
+                text={'剩余电量统计'}
+                style={{fontSize: 16, fontWeight: 'bold'}}
+              />
+              <VictoryBar
+                data={data}
+                x="quarter"
+                y="earnings"
+                barRatio={0.6}
+                style={{data: {fill: baseConstant.blue}}}
+              />
+            </VictoryChart>
+          </View>
           {/* 列表 */}
           <View>
             {this.state.list.map((v, i) => (
-              <Card>
-                <ListItem key={2000 + i}>
-                  <UserAvatar size="small" />
-                  <ListItem.Content>
-                    <ListItem.Title>{v.title}</ListItem.Title>
-                    <ListItem.Subtitle>{v.content}</ListItem.Subtitle>
-                  </ListItem.Content>
-                  <Text>{v.time}</Text>
-                </ListItem>
-              </Card>
+              <ListItem key={2000 + i} bottomDivider>
+                <UserAvatar size="small" />
+                <ListItem.Content>
+                  <ListItem.Title>{v.title}</ListItem.Title>
+                  <ListItem.Subtitle>{v.content}</ListItem.Subtitle>
+                </ListItem.Content>
+                <Text>{v.time}</Text>
+              </ListItem>
             ))}
           </View>
         </ScrollView>

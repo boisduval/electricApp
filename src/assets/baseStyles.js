@@ -8,7 +8,7 @@ const baseStyles = StyleSheet.create({
   contentBox: {
     marginHorizontal: 20,
     flex: 1,
-    // marginVertical: 10,
+    marginVertical: 10,
   },
 });
 
