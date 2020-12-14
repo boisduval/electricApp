@@ -4,6 +4,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import I18n from '../../locales';
 
@@ -16,10 +17,30 @@ import VehiclePositioning from './VehiclePositioning';
 
 import CubeItem from '../components/CubeItem';
 import {Icon} from 'react-native-elements';
+import useLanguageUpdate from '../hooks/userLanguageUpdate';
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
+import store from '../redux';
 
 const Stack = createStackNavigator();
 
 class Home extends Component {
+  componentDidMount() {
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetVehicleTrafficInfo`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          VehicleSystemID: store.getState().currentVehicle,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
     const img = require('../assets/img/bicycle.png');
     const list = [
@@ -75,52 +96,70 @@ class Home extends Component {
   }
 }
 
-class Options extends React.Component {
-  render() {
-    const list = [
-      {
-        title: I18n.t('nav.purchaseHistory'),
-        subtitle: '456',
-        icon: 'home',
-        path: 'purchaseHistory',
-      },
-      {
-        title: I18n.t('nav.drivingSituation'),
-        subtitle: '456',
-        icon: 'home',
-        path: 'drivingSituation',
-      },
-      {
-        title: I18n.t('nav.batteryOverview'),
-        subtitle: '456',
-        icon: 'home',
-        path: 'batteryOverview',
-      },
-      {
-        title: I18n.t('nav.safetyCheckup'),
-        subtitle: '456',
-        icon: 'home',
-        path: 'safetyCheckup',
-      },
-    ];
-    return (
-      <View>
-        <View style={styles.optionsRow}>
-          {list.map((v, i) => (
-            <View style={styles.optionSize} key={i}>
-              <CubeItem
-                title={v.title}
-                subtitle={v.subtitle}
-                icon={v.icon}
-                path={v.path}
-                navigate={this.props.navigate}
-              />
-            </View>
-          ))}
-        </View>
+function Options(props) {
+  useLanguageUpdate();
+  const list = [
+    {
+      title: I18n.t('nav.purchaseHistory'),
+      subtitle: '456',
+      icon: 'document-text-outline',
+      type: 'ionicon',
+      path: 'purchaseHistory',
+    },
+    {
+      title: I18n.t('nav.historicalTrack'),
+      subtitle: '456',
+      icon: 'walk-outline',
+      type: 'ionicon',
+      path: 'historicalTrack',
+    },
+    {
+      title: I18n.t('nav.batteryOverview'),
+      subtitle: '456',
+      type: 'ionicon',
+      icon: 'battery-dead-outline',
+      path: 'batteryOverview',
+    },
+    {
+      title: I18n.t('nav.drivingSituation'),
+      subtitle: '456',
+      icon: 'bicycle-outline',
+      type: 'ionicon',
+      path: 'drivingSituation',
+    },
+    {
+      title: I18n.t('nav.safetyCheckup'),
+      subtitle: '456',
+      icon: 'shield-checkmark-outline',
+      type: 'ionicon',
+      path: 'safetyCheckup',
+    },
+    {
+      title: I18n.t('nav.vehicleHealth'),
+      subtitle: '456',
+      icon: 'fitness-outline',
+      type: 'ionicon',
+      path: 'vehicleHealth',
+    },
+  ];
+  return (
+    <View>
+      <View style={styles.optionsRow}>
+        {list.map((v, i) => (
+          <View style={styles.optionSize} key={i}>
+            <CubeItem
+              title={v.title}
+              subtitle={v.subtitle}
+              icon={v.icon}
+              type={v.type}
+              path={v.path}
+              navigate={props.navigate}
+            />
+          </View>
+        ))}
       </View>
-    );
-  }
+    </View>
+  );
 }
 
 export default class Motorcycle extends React.Component {

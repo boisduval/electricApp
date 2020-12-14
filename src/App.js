@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import * as React from 'react';
 // import {Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from './RootNavigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   CardStyleInterpolators,
@@ -13,6 +14,8 @@ import {persistor} from './redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Root} from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
+import {RootSiblingParent} from 'react-native-root-siblings';
 
 import Login from './views/Login';
 import Motorcycle from './views/Motorcycle';
@@ -28,24 +31,25 @@ import {StatusBar} from 'react-native';
 import OnlineRepair from './views/service/OnlineRepair';
 import Manual from './views/service/Manual';
 import OnlineService from './views/service/OnlineService';
+import Settings from './views/Settings';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function Home() {
+  let isLoggedIn = null;
+  AsyncStorage.getItem('AutoSystemID').then((res) => {
+    isLoggedIn = res;
+  });
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         screenOptions={{
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}>
+        }}
+        initialRouteName={isLoggedIn ? 'main' : 'login'}>
         <Stack.Screen
-          name="login"
-          component={Login}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Main"
+          name="main"
           component={HomeTabs}
           options={{headerShown: false}}
         />
@@ -68,6 +72,16 @@ function Home() {
           options={{title: I18n.t('nav.manual')}}
           name="manual"
           component={Manual}
+        />
+        <Stack.Screen
+          name="settings"
+          component={Settings}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="login"
+          component={Login}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -108,7 +122,11 @@ function HomeTabs() {
         activeTintColor: baseConstant.blue,
         inactiveTintColor: 'gray',
       }}>
-      <Tab.Screen name="bicycle" component={Motorcycle} />
+      <Tab.Screen
+        name="bicycle"
+        component={Motorcycle}
+        options={{title: I18n.t('tab.bicycle')}}
+      />
       <Tab.Screen
         options={{
           title: I18n.t('tab.battery'),
@@ -145,14 +163,16 @@ function HomeTabs() {
 export default class App extends React.Component {
   render() {
     return (
-      <Root>
-        <Provider store={store}>
-          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-          <PersistGate loading={null} persistor={persistor}>
-            <Home />
-          </PersistGate>
-        </Provider>
-      </Root>
+      <RootSiblingParent>
+        <Root>
+          <Provider store={store}>
+            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+            <PersistGate loading={null} persistor={persistor}>
+              <Home />
+            </PersistGate>
+          </Provider>
+        </Root>
+      </RootSiblingParent>
     );
   }
 }

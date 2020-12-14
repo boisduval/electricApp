@@ -21,6 +21,8 @@ export default {
     batteryOverview: 'Battery Overview',
     safetyCheckup: 'Safety Checkup',
     vehiclePositioning: 'Vehicle Positioning',
+    historicalTrack: 'Historical Track',
+    vehicleHealth: 'Vehicle Health',
   },
   tab: {
     bicycle: 'bicycle',

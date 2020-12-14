@@ -16,6 +16,8 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
+import {NavigationActions} from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import baseStyles from '../assets/baseStyles';
 import * as baseConstant from '../assets/baseConstant';
@@ -73,56 +75,6 @@ class Home extends React.Component {
       </View>
     );
   }
-}
-
-// 设置
-function Settings(props) {
-  useLanguageUpdate();
-  const list = [
-    {
-      name: I18n.t('nav.push'),
-      route: 'push',
-    },
-    {
-      name: I18n.t('nav.lang'),
-      route: 'lang',
-    },
-    {
-      name: I18n.t('nav.password'),
-      route: 'password',
-    },
-    {
-      name: I18n.t('nav.storage'),
-      route: 'storage',
-    },
-    {
-      name: I18n.t('nav.about'),
-      route: 'about',
-    },
-  ];
-  return (
-    <View style={{marginTop: 20, justifyContent: 'space-between', flex: 1}}>
-      <View>
-        {list.map((v, i) => (
-          <ListItem
-            key={i}
-            bottomDivider
-            onPress={() => {
-              props.navigation.navigate(v.route);
-            }}>
-            <ListItem.Content>
-              <ListItem.Title>{v.name}</ListItem.Title>
-            </ListItem.Content>
-            <ListItem.Chevron />
-          </ListItem>
-        ))}
-      </View>
-      <Button
-        title={I18n.t('logout')}
-        buttonStyle={{marginHorizontal: 20, marginBottom: 20}}
-      />
-    </View>
-  );
 }
 
 // 头部右
@@ -363,8 +315,9 @@ function MyBicycle(props) {
         <TouchableOpacity
           onPress={() => {
             props.navigate('purchaseHistory', {id: '123'});
-          }}>
-          <ListItem key={i} containerStyle={[styles.listItem]}>
+          }}
+          key={i}>
+          <ListItem containerStyle={[styles.listItem]}>
             <ListItem.Content>
               <ListItem.Title style={{fontSize: 14}}>{v.name}</ListItem.Title>
             </ListItem.Content>
@@ -454,36 +407,7 @@ function User() {
         component={ReduxHome}
         options={{headerShown: false, title: I18n.t('nav.mine')}}
       />
-      <Stack.Screen
-        options={{title: I18n.t('nav.settings')}}
-        name="settings"
-        component={Settings}
-      />
-      <Stack.Screen
-        options={{title: I18n.t('nav.push')}}
-        name="push"
-        component={Push}
-      />
-      <Stack.Screen
-        options={{title: I18n.t('nav.lang')}}
-        name="lang"
-        component={Language}
-      />
-      <Stack.Screen
-        options={{title: I18n.t('nav.password')}}
-        name="password"
-        component={Password}
-      />
-      <Stack.Screen
-        options={{title: I18n.t('nav.storage')}}
-        name="storage"
-        component={Storage}
-      />
-      <Stack.Screen
-        options={{title: I18n.t('nav.about')}}
-        name="about"
-        component={About}
-      />
+
       <Stack.Screen
         options={{title: I18n.t('nav.serviceLog')}}
         name="serviceLog"

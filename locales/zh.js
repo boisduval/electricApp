@@ -21,6 +21,8 @@ export default {
     batteryOverview: '电池概况',
     safetyCheckup: '安全体检',
     vehiclePositioning: '车辆定位',
+    historicalTrack: '历史轨迹',
+    vehicleHealth: '车辆健康',
   },
   tab: {
     bicycle: '车况',

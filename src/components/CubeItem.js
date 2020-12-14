@@ -17,6 +17,8 @@ export default class CubeItem extends React.Component {
             backgroundColor: '#ccc',
             borderRadius: 4,
             borderWidth: 0,
+            paddingVertical: 8,
+            paddingHorizontal: 8,
           }}
           onPress={() => {
             this.props.navigate(this.props.path);
@@ -26,12 +28,17 @@ export default class CubeItem extends React.Component {
               <Text style={{fontSize: 16, color: '#666'}}>
                 {this.props.title}
               </Text>
-              <Text style={{fontSize: 14, color: '#666'}}>
+              <Text style={{fontSize: 12, color: '#666'}}>
                 {this.props.subtitle}
               </Text>
             </View>
             <View style={[styles.cardSize, styles.cardItemRight]}>
-              <Icon name={this.props.icon} size={52} color="#fff" />
+              <Icon
+                name={this.props.icon}
+                type={this.props.type}
+                size={48}
+                color="#fff"
+              />
             </View>
           </View>
         </ListItem>

@@ -18,6 +18,7 @@ const initialState = {
     signature: '洁净能源 情节世界',
     uid: '123456',
   },
+  loggedStatus: false,
 };
 
 const publicReducer = (store = initialState, action) => {
@@ -44,6 +45,18 @@ const publicReducer = (store = initialState, action) => {
       return {
         ...store,
         userInformation: information,
+      };
+    case actionType.CURRENT_VEHICLE:
+      const {vehicleId} = payload;
+      return {
+        ...store,
+        currentVehicle: vehicleId,
+      };
+    case actionType.USER_ID:
+      const {userId} = payload;
+      return {
+        ...store,
+        userId: userId,
       };
     default:
       return store;

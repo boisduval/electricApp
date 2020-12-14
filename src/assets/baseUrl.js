@@ -1,5 +1,6 @@
 const url1 = 'http://dmsb.hresys.hresysdms.cloud:8086/conn/api';
 
-export default {
+const baseUrl = {
   url1,
 };
+export default baseUrl;

@@ -3,15 +3,57 @@ import {Text, View, StyleSheet, Image} from 'react-native';
 
 import baseStyles from '../assets/baseStyles';
 import * as baseConstant from '../assets/baseConstant';
+import baseUrl from '../assets/baseUrl';
+import axios from '../assets/util/http';
+import store from '../redux';
 
 export default class PurchaseHistory extends React.Component {
+  componentDidMount() {
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetVehiclePurchasing`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          VehicleSystemID: store.getState().currentVehicle,
+        },
+      })
+      .then((res) => {
+        const {
+          data: {data},
+        } = res;
+        this.setState({data});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {},
+    };
+  }
   render() {
     const list = [
-      '客户姓名  方XX',
-      '购车时间  2020-01-16',
-      '质保时间  2023-01-17',
-      '车辆编号  HCEBV1523682CE216',
-      '电池编号  BMS12345678912345',
+      {
+        label: '车辆名称',
+        value: this.state.data.VName,
+      },
+      {
+        label: '购车时间',
+        value: this.state.data.VPurchasingTime,
+      },
+      {
+        label: '质保时间',
+        value: this.state.data.VWarrantyPeriod,
+      },
+      {
+        label: '车辆编号',
+        value: this.state.data.VIN,
+      },
+      {
+        label: '电池编号',
+        value: this.state.data.BatteryCode,
+      },
     ];
     const img = require('../assets/img/bicycle.png');
     return (
@@ -20,7 +62,7 @@ export default class PurchaseHistory extends React.Component {
           <View style={styles.board}>
             {list.map((v, i) => (
               <Text style={styles.text} key={i}>
-                {v}
+                {v.label}&emsp;{v.value}
               </Text>
             ))}
           </View>
@@ -36,13 +78,13 @@ export default class PurchaseHistory extends React.Component {
 const styles = StyleSheet.create({
   board: {
     borderRadius: 8,
-    backgroundColor: baseConstant.blue,
+    backgroundColor: baseConstant.darkBlue,
     padding: 16,
     marginTop: 10,
   },
   text: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontSize: 15,
     paddingVertical: 2,
   },
   bicycle: {

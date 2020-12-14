@@ -26,4 +26,24 @@ const setUserInformation = (information) => {
   };
 };
 
-export {setLanguage, setPushNotification, setUserInformation};
+const setCurrentVehicle = (vehicleId) => {
+  return {
+    type: actionType.CURRENT_VEHICLE,
+    payload: {vehicleId},
+  };
+};
+
+const setUserId = (userId) => {
+  return {
+    type: actionType.USER_ID,
+    payload: {userId},
+  };
+};
+
+export {
+  setLanguage,
+  setPushNotification,
+  setUserInformation,
+  setCurrentVehicle,
+  setUserId,
+};
