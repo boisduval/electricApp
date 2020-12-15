@@ -11,7 +11,7 @@ import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 
 export default class Motorcycle extends Component {
-  componentDidMount() {
+  getData() {
     axios
       .get(`${baseUrl.url1}/Vehicle/GetVehicleTrafficInfo`, {
         params: {
@@ -40,6 +40,10 @@ export default class Motorcycle extends Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  componentDidMount() {
+    this.getData();
   }
 
   constructor(props) {

@@ -19,7 +19,7 @@ const initialState = {
     uid: '123456',
   },
   loggedStatus: false,
-  userId: '4954804876516686611',
+  userId: '4723265381156014680',
   vehicleId: '637423527883000005',
   batteryId: '636963862212534194',
 };

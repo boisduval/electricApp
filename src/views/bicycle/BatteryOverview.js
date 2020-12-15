@@ -9,7 +9,7 @@ import store from '../../redux';
 import I18n from '../../../locales';
 
 export default class BatteryOverview extends React.Component {
-  componentDidMount() {
+  getData() {
     axios
       .get(`${baseUrl.url1}/Vehicle/GetBatterySummary`, {
         params: {
@@ -32,6 +32,9 @@ export default class BatteryOverview extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+  componentDidMount() {
+    this.getData();
   }
 
   constructor(props) {

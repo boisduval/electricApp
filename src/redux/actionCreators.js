@@ -26,17 +26,17 @@ const setUserInformation = (information) => {
   };
 };
 
-const setCurrentVehicle = (vehicleId) => {
+const setCurrentVehicle = (VehicleSystemID) => {
   return {
     type: actionType.CURRENT_VEHICLE,
-    payload: {vehicleId},
+    payload: {VehicleSystemID},
   };
 };
 
-const setUserId = (userId) => {
+const setUserId = (AutoSystemID) => {
   return {
     type: actionType.USER_ID,
-    payload: {userId},
+    payload: {AutoSystemID},
   };
 };
 

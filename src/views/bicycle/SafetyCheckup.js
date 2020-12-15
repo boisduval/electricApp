@@ -5,37 +5,63 @@ import baseStyles from '../../assets/baseStyles';
 import {Button, ListItem} from 'react-native-elements';
 import UserAvatar from '../../components/UserAvatar';
 import * as baseConstant from '../../assets/baseConstant';
+import axios from '../../assets/util/http';
+import baseUrl from '../../assets/baseUrl';
+import store from '../../redux';
 
 export default class SafetyCheckup extends React.Component {
+  getData() {
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetSafetyCheckup`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          VehicleSystemID: store.getState().vehicleId,
+        },
+      })
+      .then((res) => {
+        // res
+        const {
+          data: {data},
+        } = res;
+        console.log(data);
+        this.setState({
+          QuestionNumber: data.QuestionNumber,
+          HealthExamination: data.HealthExamination,
+          list: data.Items,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      QuestionNumber: {},
+      HealthExamination: {},
+      list: [],
+    };
+  }
+
   render() {
-    const list = [
-      {
-        title: '落锁告警',
-        subtitle: '检测到一个安全风险',
-        content: '监测到您的爱车未落锁，请确认是否安全',
-        description: '如果您在行车，友情提醒，骑行时注意安全！',
-        operation: 'lock',
-      },
-      {
-        title: '落锁告警',
-        subtitle: '检测到一个安全风险',
-        content: '监测到您的爱车未落锁，请确认是否安全',
-        description: '如果您在行车，友情提醒，骑行时注意安全！',
-        operation: null,
-      },
-    ];
     return (
       <ScrollView style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
-          <Box />
-          {list.map((v, i) => (
+          <Box
+            QuestionNumber={this.state.QuestionNumber}
+            HealthExamination={this.state.HealthExamination}
+          />
+          {this.state.list.map((v, i) => (
             <Item
               key={i}
-              title={v.title}
-              subtitle={v.subtitle}
-              content={v.content}
-              description={v.description}
-              operation={v.operation}
+              Title={v.Title}
+              RiskTitle={v.RiskTitle}
+              SubItems={v.SubItems}
             />
           ))}
         </View>
@@ -50,10 +76,16 @@ class Box extends React.Component {
       <ListItem containerStyle={styles.list}>
         <UserAvatar size="medium" />
         <ListItem.Content>
-          <ListItem.Title style={{color: '#666'}}>问题数量 1</ListItem.Title>
-          <ListItem.Subtitle style={{color: '#666'}}>
-            体检分数 98分
-          </ListItem.Subtitle>
+          <ListItem.Title style={{color: '#666'}}>
+            {this.props.QuestionNumber.name}&emsp;
+            {this.props.QuestionNumber.value}
+            {this.props.QuestionNumber.unit}
+          </ListItem.Title>
+          <ListItem.Title style={{color: '#666'}}>
+            {this.props.HealthExamination.name}&emsp;
+            {this.props.HealthExamination.value}
+            {this.props.HealthExamination.unit}
+          </ListItem.Title>
         </ListItem.Content>
         {/*<View>*/}
         {/*  <Text>1234</Text>*/}
@@ -65,33 +97,60 @@ class Box extends React.Component {
 }
 
 class Item extends React.Component {
+  handlePress(prop) {
+    if (prop.method === 'Post') {
+      axios
+        .post(`${baseUrl.url1 + prop.url}`, this.arrToParam(prop.datas))
+        .then((res) => {
+          //  do sth
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+  arrToParam(arr) {
+    let string = '';
+    let temp = arr.map((v) => {
+      return '"' + v.name + '"' + ':' + '"' + v.value + '"';
+    });
+    string = temp.join(',');
+    string = '{' + string + '}';
+    return JSON.parse(string);
+  }
   render() {
     return (
       <View style={styles.item}>
         <View style={styles.title}>
-          <Text style={styles.titleText}>{this.props.title}</Text>
-          <Text style={styles.subTitleText}>{this.props.subtitle}</Text>
+          <Text style={styles.titleText}>{this.props.Title}</Text>
+          <Text style={styles.subTitleText}>{this.props.RiskTitle}</Text>
         </View>
-        <View style={styles.content}>
-          <View>
-            <Text style={styles.contentText}>{this.props.content}</Text>
-            <Text style={styles.descriptionText}>{this.props.description}</Text>
+        {this.props.SubItems.map((v, i) => (
+          <View style={styles.content} key={i}>
+            <View>
+              <Text style={styles.contentText}>{v.title}</Text>
+              <Text style={styles.descriptionText}>{v.name}</Text>
+            </View>
+            {(() => {
+              if (v.request) {
+                return (
+                  <View style={{justifyContent: 'center'}}>
+                    <Button
+                      title={v.request.btnname}
+                      type="outline"
+                      buttonStyle={styles.button}
+                      titleStyle={styles.buttonTitle}
+                      onPress={() => {
+                        this.handlePress(v.request);
+                      }}
+                    />
+                  </View>
+                );
+              }
+            })()}
           </View>
-          {(() => {
-            if (this.props.operation && this.props.operation === 'lock') {
-              return (
-                <View style={{justifyContent: 'center'}}>
-                  <Button
-                    title="落锁"
-                    type="outline"
-                    buttonStyle={styles.button}
-                    titleStyle={styles.buttonTitle}
-                  />
-                </View>
-              );
-            }
-          })()}
-        </View>
+        ))}
       </View>
     );
   }

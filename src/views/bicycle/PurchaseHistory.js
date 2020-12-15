@@ -9,7 +9,7 @@ import store from '../../redux';
 import I18n from '../../../locales';
 
 export default class PurchaseHistory extends React.Component {
-  componentDidMount() {
+  getData() {
     axios
       .get(`${baseUrl.url1}/Vehicle/GetVehiclePurchasing`, {
         params: {
@@ -26,6 +26,9 @@ export default class PurchaseHistory extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+  componentDidMount() {
+    this.getData();
   }
   constructor(props) {
     super(props);

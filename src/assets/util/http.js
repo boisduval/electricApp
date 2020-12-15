@@ -17,6 +17,17 @@ axios.defaults.timeout = 10000; // 超时时间
 axios.interceptors.response.use(
   (response) => {
     if (response.data.code === 0) {
+      // if (response.config.method === 'post') {
+      //   Toast.show(response.data.msg, {
+      //     duration: Toast.durations.SHORT,
+      //     position: Toast.positions.CENTER,
+      //     shadow: true,
+      //     animation: true,
+      //     hideOnPress: true,
+      //     delay: 0,
+      //   });
+      // }
+      console.log(response);
       // Message.success(response.data.msg)
       // 返回 错误代码-1 清除ticket信息并跳转到登录页面
       //      cookie.del("ticket")
@@ -25,7 +36,7 @@ axios.interceptors.response.use(
     } else {
       if (response.data.code === 2) {
         // 跳转登录页
-        RootNavigation.navigate('login');
+        // RootNavigation.navigate('login');
         // localStorage.removeItem('AutoSystemID')
       } else if (response.data.code === 1) {
         Toast.show(response.data.msg, {
