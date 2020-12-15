@@ -40,10 +40,18 @@ const setUserId = (userId) => {
   };
 };
 
+const setBatteryId = (batteryId) => {
+  return {
+    type: actionType.BATTERY_ID,
+    payload: {batteryId},
+  };
+};
+
 export {
   setLanguage,
   setPushNotification,
   setUserInformation,
   setCurrentVehicle,
   setUserId,
+  setBatteryId,
 };

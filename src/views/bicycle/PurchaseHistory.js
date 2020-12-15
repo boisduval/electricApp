@@ -1,11 +1,12 @@
 import React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 
-import baseStyles from '../assets/baseStyles';
-import * as baseConstant from '../assets/baseConstant';
-import baseUrl from '../assets/baseUrl';
-import axios from '../assets/util/http';
-import store from '../redux';
+import baseStyles from '../../assets/baseStyles';
+import * as baseConstant from '../../assets/baseConstant';
+import baseUrl from '../../assets/baseUrl';
+import axios from '../../assets/util/http';
+import store from '../../redux';
+import I18n from '../../../locales';
 
 export default class PurchaseHistory extends React.Component {
   componentDidMount() {
@@ -35,27 +36,27 @@ export default class PurchaseHistory extends React.Component {
   render() {
     const list = [
       {
-        label: '车辆名称',
+        label: I18n.t('purchaseHistory.vehicleName'),
         value: this.state.data.VName,
       },
       {
-        label: '购车时间',
+        label: I18n.t('purchaseHistory.carTime'),
         value: this.state.data.VPurchasingTime,
       },
       {
-        label: '质保时间',
+        label: I18n.t('purchaseHistory.warrantyTime'),
         value: this.state.data.VWarrantyPeriod,
       },
       {
-        label: '车辆编号',
+        label: I18n.t('purchaseHistory.vehicleNumber'),
         value: this.state.data.VIN,
       },
       {
-        label: '电池编号',
+        label: I18n.t('purchaseHistory.batteryNumber'),
         value: this.state.data.BatteryCode,
       },
     ];
-    const img = require('../assets/img/bicycle.png');
+    const img = require('../../assets/img/bicycle.png');
     return (
       <View style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>

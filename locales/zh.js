@@ -62,4 +62,30 @@ export default {
     system: '系统通知',
     active: '活动',
   },
+  motorcycle: {
+    info: {
+      beidou: '北斗',
+      singleBatteryLife: '单次续航',
+      totalMileage: '总共里程',
+      remainBattery: '剩余电量',
+      batteryHealth: '电池健康',
+      unit: '条',
+    },
+  },
+  battery: {
+    remainBattery: '剩余电量',
+    estimatedMileage: '预计里程',
+  },
+  purchaseHistory: {
+    vehicleName: '车辆名称',
+    carTime: '购车时间',
+    warrantyTime: '质保时间',
+    vehicleNumber: '车辆编号',
+    batteryNumber: '电池编号',
+  },
+  login: {
+    tab: ['账号密码登录', '验证码登录'],
+    placeholder: ['账号', '密码'],
+  },
+  vehicleHealth: ['购车时间', '质保时间'],
 };

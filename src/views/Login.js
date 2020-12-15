@@ -11,6 +11,7 @@ import * as baseConstant from '../assets/baseConstant';
 import baseUrl from '../assets/baseUrl';
 import {connect} from 'react-redux';
 import * as actionCreator from '../redux/actionCreators';
+import I18n from '../../locales';
 
 class Login extends React.Component {
   login() {
@@ -26,9 +27,12 @@ class Login extends React.Component {
           const data = res.data.data;
           console.log(res.data.data);
           AsyncStorage.setItem('AutoSystemID', data.AtuoSystemID);
-          this.props.setUserId(actionCreator.setUserId(data.AtuoSystemID));
-          this.props.setCurrentVehicle(
+          this.props.setStoreState(actionCreator.setUserId(data.AtuoSystemID));
+          this.props.setStoreState(
             actionCreator.setCurrentVehicle(data.CurrentVehicle),
+          );
+          this.props.setStoreState(
+            actionCreator.setBatteryId(data.BatterySystemID),
           );
           Toast.show(res.data.msg, {
             duration: Toast.durations.SHORT,
@@ -69,7 +73,7 @@ class Login extends React.Component {
                   }>
                   <Text
                     style={{color: '#666', fontSize: 20, fontWeight: 'bold'}}>
-                    账号密码登录
+                    {I18n.t('login.tab')[0]}
                   </Text>
                 </View>
               </TouchableNativeFeedback>
@@ -89,7 +93,7 @@ class Login extends React.Component {
                   }>
                   <Text
                     style={{color: '#666', fontSize: 20, fontWeight: 'bold'}}>
-                    验证码登录
+                    {I18n.t('login.tab')[1]}
                   </Text>
                 </View>
               </TouchableNativeFeedback>
@@ -97,7 +101,7 @@ class Login extends React.Component {
           </View>
           <Form style={{marginTop: 40}}>
             <Item floatingLabel>
-              <Label>Username</Label>
+              <Label>{I18n.t('login.placeholder')[0]}</Label>
               <Input
                 onChangeText={(text) => {
                   this.setState({name: text});
@@ -105,7 +109,7 @@ class Login extends React.Component {
               />
             </Item>
             <Item floatingLabel last>
-              <Label>Password</Label>
+              <Label>{I18n.t('login.placeholder')[1]}</Label>
               <Input
                 secureTextEntry
                 onChangeText={(text) => {
@@ -136,14 +140,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const {userId, currentVehicle} = state;
-  return {userId, currentVehicle};
+  const {userId, currentVehicle, batteryId} = state;
+  return {userId, currentVehicle, batteryId};
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  setUserId: (setUserIdAction) => dispatch(setUserIdAction),
-  setCurrentVehicle: (setCurrentVehicleAction) =>
-    dispatch(setCurrentVehicleAction),
+  setStoreState: (setUserIdAction) => dispatch(setUserIdAction),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

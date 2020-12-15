@@ -3,10 +3,10 @@ import {Text, View, StyleSheet, ScrollView} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ListItem} from 'react-native-elements';
 
-import baseStyles from '../assets/baseStyles';
-import * as baseConstant from '../assets/baseConstant';
-import I18n from '../../locales';
-import UserAvatar from '../components/UserAvatar';
+import baseStyles from '../../assets/baseStyles';
+import * as baseConstant from '../../assets/baseConstant';
+import I18n from '../../../locales';
+import UserAvatar from '../../components/UserAvatar';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -90,7 +90,7 @@ class Month extends React.Component {
   }
 }
 
-export default class PurchaseHistory extends React.Component {
+export default class HistoricalTrack extends React.Component {
   render() {
     return (
       <Tab.Navigator>

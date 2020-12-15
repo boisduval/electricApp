@@ -33,7 +33,7 @@ import OnlineRepair from './service/OnlineRepair';
 import OnlineService from './service/OnlineService';
 import MyMessages from './MyMessages';
 import UserAvatar from '../components/UserAvatar';
-import PurchaseHistory from './PurchaseHistory';
+import PurchaseHistory from './bicycle/PurchaseHistory';
 
 const Stack = createStackNavigator();
 

@@ -8,7 +8,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['userSetLanguage', 'pushNotificationSettings'],
+  whitelist: [
+    'userSetLanguage',
+    'pushNotificationSettings',
+    'userId',
+    'batteryId',
+    'vehicleId',
+  ],
 };
 const myPersistReducer = persistReducer(persistConfig, reducers);
 const middlewares = [thunk];

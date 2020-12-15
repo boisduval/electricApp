@@ -32,15 +32,106 @@ import OnlineRepair from './views/service/OnlineRepair';
 import Manual from './views/service/Manual';
 import OnlineService from './views/service/OnlineService';
 import Settings from './views/Settings';
+import PurchaseHistory from './views/bicycle/PurchaseHistory';
+import DrivingSituation from './views/bicycle/DrivingSituation';
+import BatteryOverview from './views/bicycle/BatteryOverview';
+import SafetyCheckup from './views/bicycle/SafetyCheckup';
+import VehiclePositioning from './views/VehiclePositioning';
+import HistoricalTrack from './views/bicycle/HistoricalTrack';
+import VehicleHealth from './views/bicycle/VehicleHealth';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function Home() {
-  let isLoggedIn = null;
+  let isLoggedIn = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let id = await AsyncStorage.getItem('AutoSystemID');
+        resolve(id);
+      } catch (error) {
+        reject(
+          new Error('Error getting items from AsyncStorage: ' + error.message),
+        );
+      }
+    });
+  };
   AsyncStorage.getItem('AutoSystemID').then((res) => {
     isLoggedIn = res;
+    console.log(isLoggedIn);
   });
+  let navList = [
+    {
+      name: 'main',
+      title: '',
+      component: HomeTabs,
+      headShown: false,
+    },
+    {
+      name: 'scan',
+      title: I18n.t('nav.scan'),
+      component: ScanQRCodeScreen,
+    },
+    {
+      name: 'onlineRepair',
+      title: I18n.t('nav.onlineRepair'),
+      component: OnlineRepair,
+    },
+    {
+      name: 'onlineService',
+      title: I18n.t('myService.customerService'),
+      component: OnlineService,
+    },
+    {
+      name: 'manual',
+      title: I18n.t('nav.manual'),
+      component: Manual,
+    },
+    {
+      name: 'settings',
+      title: '',
+      component: Settings,
+      headShown: false,
+    },
+    {
+      name: 'login',
+      title: '',
+      component: Login,
+      headShown: false,
+    },
+    //  车况子页面
+    {
+      name: 'purchaseHistory',
+      title: I18n.t('nav.purchaseHistory'),
+      component: PurchaseHistory,
+    },
+    {
+      name: 'drivingSituation',
+      title: I18n.t('nav.drivingSituation'),
+      component: DrivingSituation,
+      headShown: true,
+    },
+    {
+      name: 'batteryOverview',
+      title: I18n.t('nav.batteryOverview'),
+      component: BatteryOverview,
+    },
+    {
+      name: 'safetyCheckup',
+      title: I18n.t('nav.safetyCheckup'),
+      component: SafetyCheckup,
+    },
+    // {
+    //   name: 'historicalTrack',
+    //   title: I18n.t('nav.historicalTrack'),
+    //   component: HistoricalTrack,
+    // },
+    {
+      name: 'vehicleHealth',
+      title: I18n.t('nav.vehicleHealth'),
+      component: VehicleHealth,
+    },
+  ];
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
@@ -48,41 +139,14 @@ function Home() {
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
         initialRouteName={isLoggedIn ? 'main' : 'login'}>
-        <Stack.Screen
-          name="main"
-          component={HomeTabs}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          options={{title: '扫描二维码'}}
-          name="scan"
-          component={ScanQRCodeScreen}
-        />
-        <Stack.Screen
-          options={{title: I18n.t('nav.onlineRepair')}}
-          name="onlineRepair"
-          component={OnlineRepair}
-        />
-        <Stack.Screen
-          options={{title: I18n.t('myService.customerService')}}
-          name="onlineService"
-          component={OnlineService}
-        />
-        <Stack.Screen
-          options={{title: I18n.t('nav.manual')}}
-          name="manual"
-          component={Manual}
-        />
-        <Stack.Screen
-          name="settings"
-          component={Settings}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="login"
-          component={Login}
-          options={{headerShown: false}}
-        />
+        {navList.map((v, i) => (
+          <Stack.Screen
+            key={i}
+            name={v.name}
+            component={v.component}
+            options={{headerShown: v.headShown, title: v.title}}
+          />
+        ))}
       </Stack.Navigator>
     </NavigationContainer>
   );

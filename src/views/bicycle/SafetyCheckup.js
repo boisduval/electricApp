@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
 
-import baseStyles from '../assets/baseStyles';
+import baseStyles from '../../assets/baseStyles';
 import {Button, ListItem} from 'react-native-elements';
-import UserAvatar from '../components/UserAvatar';
-import * as baseConstant from '../assets/baseConstant';
+import UserAvatar from '../../components/UserAvatar';
+import * as baseConstant from '../../assets/baseConstant';
 
 export default class SafetyCheckup extends React.Component {
   render() {

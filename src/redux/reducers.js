@@ -19,6 +19,9 @@ const initialState = {
     uid: '123456',
   },
   loggedStatus: false,
+  userId: '4954804876516686611',
+  vehicleId: '637423527883000005',
+  batteryId: '636963862212534194',
 };
 
 const publicReducer = (store = initialState, action) => {
@@ -57,6 +60,12 @@ const publicReducer = (store = initialState, action) => {
       return {
         ...store,
         userId: userId,
+      };
+    case actionType.BATTERY_ID:
+      const {batteryId} = payload;
+      return {
+        ...store,
+        batteryId,
       };
     default:
       return store;
