@@ -35,22 +35,105 @@ class Home extends Component {
       })
       .then((res) => {
         console.log(res);
+        const {
+          data: {data},
+        } = res;
+        let temp = this.state.list;
+        temp[2].value = data.ASingleMileage;
+        temp[3].value = data.ATotalMileage;
+        temp[4].value = data.StopSOC;
+        temp[5].value = data.SOH;
+        let temp1 = this.state.list1;
+        temp1[1].subtitle =
+          data.ASingleMileage + 'Km/' + data.TravelTime + 'min';
+        temp1[2].subtitle = data.StopSOC + '%/' + data.SOH + '%';
+        temp1[3].subtitle = data.ATotalMileage + 'Km';
+        temp1[5].subtitle = data.Health + I18n.t('motorcycle.info.unit');
+        this.setState({list: temp, list1: temp1});
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [
+        {
+          label: 'GPS',
+          value: '',
+        },
+        {
+          label: I18n.t('motorcycle.info.beidou'),
+          value: '',
+        },
+        {
+          label: I18n.t('motorcycle.info.singleBatteryLife'),
+          value: '',
+        },
+        {
+          label: I18n.t('motorcycle.info.totalMileage'),
+          value: '',
+        },
+        {
+          label: I18n.t('motorcycle.info.remainBattery'),
+          value: '',
+        },
+        {
+          label: I18n.t('motorcycle.info.batteryHealth'),
+          value: '',
+        },
+      ],
+      list1: [
+        {
+          title: I18n.t('nav.purchaseHistory'),
+          subtitle: '',
+          icon: 'document-text-outline',
+          type: 'ionicon',
+          path: 'purchaseHistory',
+        },
+        {
+          title: I18n.t('nav.historicalTrack'),
+          subtitle: '456',
+          icon: 'walk-outline',
+          type: 'ionicon',
+          path: 'historicalTrack',
+        },
+        {
+          title: I18n.t('nav.batteryOverview'),
+          subtitle: '456',
+          type: 'ionicon',
+          icon: 'battery-dead-outline',
+          path: 'batteryOverview',
+        },
+        {
+          title: I18n.t('nav.drivingSituation'),
+          subtitle: '456',
+          icon: 'bicycle-outline',
+          type: 'ionicon',
+          path: 'drivingSituation',
+        },
+        {
+          title: I18n.t('nav.safetyCheckup'),
+          subtitle: '',
+          icon: 'shield-checkmark-outline',
+          type: 'ionicon',
+          path: 'safetyCheckup',
+        },
+        {
+          title: I18n.t('nav.vehicleHealth'),
+          subtitle: '456',
+          icon: 'fitness-outline',
+          type: 'ionicon',
+          path: 'vehicleHealth',
+        },
+      ],
+    };
+  }
+
   render() {
     const img = require('../assets/img/bicycle.png');
-    const list = [
-      'GPS *****',
-      '北斗 *******',
-      '单次续航 88KM',
-      '总共里程 8124 KM',
-      '剩余电量 56 %',
-      '电池健康 99.9 %',
-    ];
     return (
       <View style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
@@ -73,9 +156,9 @@ class Home extends Component {
                 </View>
               </View>
               <View style={{marginTop: 10}}>
-                {list.map((v, i) => (
+                {this.state.list.map((v, i) => (
                   <Text key={i} style={{marginTop: 4, fontSize: 14}}>
-                    {v}
+                    {v.label} {v.value}
                   </Text>
                 ))}
               </View>
@@ -89,7 +172,10 @@ class Home extends Component {
               <Image source={img} style={{flex: 1, resizeMode: 'center'}} />
             </View>
           </View>
-          <Options navigate={this.props.navigation.navigate} />
+          <Options
+            navigate={this.props.navigation.navigate}
+            list={this.state.list1}
+          />
         </View>
       </View>
     );
@@ -98,54 +184,10 @@ class Home extends Component {
 
 function Options(props) {
   useLanguageUpdate();
-  const list = [
-    {
-      title: I18n.t('nav.purchaseHistory'),
-      subtitle: '456',
-      icon: 'document-text-outline',
-      type: 'ionicon',
-      path: 'purchaseHistory',
-    },
-    {
-      title: I18n.t('nav.historicalTrack'),
-      subtitle: '456',
-      icon: 'walk-outline',
-      type: 'ionicon',
-      path: 'historicalTrack',
-    },
-    {
-      title: I18n.t('nav.batteryOverview'),
-      subtitle: '456',
-      type: 'ionicon',
-      icon: 'battery-dead-outline',
-      path: 'batteryOverview',
-    },
-    {
-      title: I18n.t('nav.drivingSituation'),
-      subtitle: '456',
-      icon: 'bicycle-outline',
-      type: 'ionicon',
-      path: 'drivingSituation',
-    },
-    {
-      title: I18n.t('nav.safetyCheckup'),
-      subtitle: '456',
-      icon: 'shield-checkmark-outline',
-      type: 'ionicon',
-      path: 'safetyCheckup',
-    },
-    {
-      title: I18n.t('nav.vehicleHealth'),
-      subtitle: '456',
-      icon: 'fitness-outline',
-      type: 'ionicon',
-      path: 'vehicleHealth',
-    },
-  ];
   return (
     <View>
       <View style={styles.optionsRow}>
-        {list.map((v, i) => (
+        {props.list.map((v, i) => (
           <View style={styles.optionSize} key={i}>
             <CubeItem
               title={v.title}

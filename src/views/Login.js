@@ -26,9 +26,12 @@ class Login extends React.Component {
           const data = res.data.data;
           console.log(res.data.data);
           AsyncStorage.setItem('AutoSystemID', data.AtuoSystemID);
-          this.props.setUserId(actionCreator.setUserId(data.AtuoSystemID));
-          this.props.setCurrentVehicle(
+          this.props.setStoreState(actionCreator.setUserId(data.AtuoSystemID));
+          this.props.setStoreState(
             actionCreator.setCurrentVehicle(data.CurrentVehicle),
+          );
+          this.props.setStoreState(
+            actionCreator.setBatteryId(data.BatterySystemID),
           );
           Toast.show(res.data.msg, {
             duration: Toast.durations.SHORT,
@@ -136,14 +139,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const {userId, currentVehicle} = state;
-  return {userId, currentVehicle};
+  const {userId, currentVehicle, batteryId} = state;
+  return {userId, currentVehicle, batteryId};
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  setUserId: (setUserIdAction) => dispatch(setUserIdAction),
-  setCurrentVehicle: (setCurrentVehicleAction) =>
-    dispatch(setCurrentVehicleAction),
+  setStoreState: (setUserIdAction) => dispatch(setUserIdAction),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

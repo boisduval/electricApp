@@ -62,4 +62,18 @@ export default {
     system: '系统通知',
     active: '活动',
   },
+  motorcycle: {
+    info: {
+      beidou: '北斗',
+      singleBatteryLife: '单次续航',
+      totalMileage: '总共里程',
+      remainBattery: '剩余电量',
+      batteryHealth: '电池健康',
+      unit: '条',
+    },
+  },
+  battery: {
+    remainBattery: '剩余电量',
+    estimatedMileage: '预计里程',
+  },
 };

@@ -4,68 +4,81 @@ import baseStyles from '../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
 import UserAvatar from '../components/UserAvatar';
 import * as baseConstant from '../assets/baseConstant';
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
+import store from '../redux';
+import I18n from '../../locales';
 
 export default class BatteryOverview extends React.Component {
+  componentDidMount() {
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetBatterySummary`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          BatterySystemID: store.getState().batteryId,
+        },
+      })
+      .then((res) => {
+        // res
+        const {
+          data: {data},
+        } = res;
+        this.setState({
+          list: data.Status,
+          DumpEnergy: data.DumpEnergy,
+          ExpectsMileage: data.ExpectsMileage,
+          SOC: data.SOC,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [],
+      DumpEnergy: '',
+      ExpectsMileage: '',
+      SOC: '',
+    };
+  }
   render() {
-    const list = [
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-    ];
     return (
       <ScrollView style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
           <ListItem containerStyle={styles.list}>
-            <UserAvatar size="medium" />
+            {/*<UserAvatar size="medium" />*/}
             <ListItem.Content>
-              <ListItem.Title>123</ListItem.Title>
-              <ListItem.Subtitle>456</ListItem.Subtitle>
+              <ListItem.Title style={[styles.listItem]}>
+                {I18n.t('battery.remainBattery')}&emsp;{this.state.DumpEnergy}
+                Kwh
+              </ListItem.Title>
+              <ListItem.Title style={[styles.listItem]}>
+                {I18n.t('battery.estimatedMileage')}&emsp;
+                {this.state.ExpectsMileage}Km
+              </ListItem.Title>
             </ListItem.Content>
             <View>
-              <Text>1234</Text>
-              <Text>km</Text>
+              <Text style={{color: '#fff', fontSize: 24, fontWeight: 'bold'}}>
+                {this.state.SOC + '%'}
+              </Text>
             </View>
           </ListItem>
 
-          <View style={{marginTop: 20}}>
-            {list.map((v, i) => (
+          <View>
+            {this.state.list.map((v, i) => (
               <ListItem key={i} bottomDivider>
-                <UserAvatar size="small" />
+                {/*<UserAvatar size="small" />*/}
                 <ListItem.Content>
-                  <ListItem.Title>{v.time}</ListItem.Title>
-                  <ListItem.Subtitle>{v.name}</ListItem.Subtitle>
+                  <ListItem.Title>{v.name}</ListItem.Title>
+                  {/*<ListItem.Subtitle>{v.name}</ListItem.Subtitle>*/}
                 </ListItem.Content>
                 <View>
-                  <Text>{v.number}</Text>
+                  <Text>{v.value + v.unit}</Text>
                 </View>
-                <ListItem.Chevron />
+                {/*<ListItem.Chevron />*/}
               </ListItem>
             ))}
           </View>
@@ -77,9 +90,15 @@ export default class BatteryOverview extends React.Component {
 
 const styles = StyleSheet.create({
   list: {
-    backgroundColor: baseConstant.blue,
+    backgroundColor: baseConstant.darkBlue,
     borderWidth: 0,
     borderRadius: 4,
     marginTop: 10,
+    paddingVertical: 20,
+  },
+  listItem: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });

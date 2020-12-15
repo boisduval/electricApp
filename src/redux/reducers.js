@@ -58,6 +58,12 @@ const publicReducer = (store = initialState, action) => {
         ...store,
         userId: userId,
       };
+    case actionType.BATTERY_ID:
+      const {batteryId} = payload;
+      return {
+        ...store,
+        batteryId,
+      };
     default:
       return store;
   }
