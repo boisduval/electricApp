@@ -100,7 +100,7 @@ class Login extends React.Component {
             </View>
           </View>
           <Form style={{marginTop: 40}}>
-            <Item floatingLabel>
+            <Item>
               <Label>{I18n.t('login.placeholder')[0]}</Label>
               <Input
                 onChangeText={(text) => {
@@ -108,7 +108,7 @@ class Login extends React.Component {
                 }}
               />
             </Item>
-            <Item floatingLabel last>
+            <Item last>
               <Label>{I18n.t('login.placeholder')[1]}</Label>
               <Input
                 secureTextEntry

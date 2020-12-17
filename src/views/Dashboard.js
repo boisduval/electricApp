@@ -88,6 +88,7 @@ export default class EventsExample extends Component {
       series: [
         {
           type: 'gauge',
+          radius: '90%',
           splitNumber: 8,
           min: 0,
           max: 80,
@@ -119,10 +120,13 @@ export default class EventsExample extends Component {
           anchor: {
             show: true,
             showAbove: true,
-            size: 2,
+            size: 10,
             itemStyle: {
               borderWidth: 4,
             },
+          },
+          pointer: {
+            length: '50%',
           },
           title: {
             show: false,

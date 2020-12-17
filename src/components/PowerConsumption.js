@@ -1,14 +1,17 @@
 import React from 'react';
-import {Text, View, StyleSheet, ScrollView, Dimensions} from 'react-native';
+import {Text, View, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import Echarts from '../../lib/rn-echarts';
 import {ListItem} from 'react-native-elements';
+import {Spinner} from 'native-base';
+import Toast from 'react-native-root-toast';
 
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
+import Loading from './Loading';
 
 class PowerConsumption extends React.Component {
-  getData() {
+  getData(toast) {
     axios
       .get(`${baseUrl.url1}/Vehicle/GetConsumption`, {
         params: {
@@ -32,6 +35,14 @@ class PowerConsumption extends React.Component {
           option: temp,
         });
         this.setOption();
+        this.setState({
+          refreshing: false,
+        });
+        if (toast) {
+          setTimeout(() => {
+            Toast.hide(toast);
+          }, 200);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -106,6 +117,18 @@ class PowerConsumption extends React.Component {
     };
   }
 
+  onRefresh() {
+    if (this.state.refreshing === false) {
+      this.setState({
+        refreshing: true,
+      });
+      let toast = Toast.show(Loading(), {
+        position: Toast.positions.CENTER, // toast位置
+      });
+      this.getData(toast);
+    }
+  }
+
   componentDidMount() {
     this.getData();
   }
@@ -113,6 +136,7 @@ class PowerConsumption extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: false,
       list: [],
       circleProgressList: [
         {
@@ -173,12 +197,18 @@ class PowerConsumption extends React.Component {
   render() {
     return (
       <View>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh.bind(this)}
+            />
+          }>
           {/* 圆环进度条*/}
 
           <View style={styles.circleProgressBox}>
             {this.state.circleProgressList.map((v, i) => (
-              <View style={{flex: 1}}>
+              <View style={{flex: 1}} key={i}>
                 <Echarts
                   option={this.setOption(v.name, v.value, v.unit)}
                   height={150}
