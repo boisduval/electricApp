@@ -6,8 +6,9 @@ export default function Loading() {
     <View
       style={{
         borderRadius: 3,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
         width: 100,
+        padding: 0,
+        margin: 0,
       }}>
       <Spinner color="#fff" />
     </View>

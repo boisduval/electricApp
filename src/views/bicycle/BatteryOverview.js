@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, Text, View, StyleSheet} from 'react-native';
+import {ScrollView, Text, View, StyleSheet, RefreshControl} from 'react-native';
 import baseStyles from '../../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
 import * as baseConstant from '../../assets/baseConstant';
@@ -7,9 +7,11 @@ import axios from '../../assets/util/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
 import I18n from '../../../locales';
+import Loading from '../../components/Loading';
+import Toast from 'react-native-root-toast';
 
 export default class BatteryOverview extends React.Component {
-  getData() {
+  getData(toast) {
     axios
       .get(`${baseUrl.url1}/Vehicle/GetBatterySummary`, {
         params: {
@@ -28,11 +30,32 @@ export default class BatteryOverview extends React.Component {
           ExpectsMileage: data.ExpectsMileage,
           SOC: data.SOC,
         });
+        this.setState({
+          refreshing: false,
+        });
+        if (toast) {
+          setTimeout(() => {
+            Toast.hide(toast);
+          }, 200);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   }
+
+  onRefresh() {
+    if (this.state.refreshing === false) {
+      this.setState({
+        refreshing: true,
+      });
+      let toast = Toast.show(Loading(), {
+        position: Toast.positions.CENTER, // toast位置
+      });
+      this.getData(toast);
+    }
+  }
+
   componentDidMount() {
     this.getData();
   }
@@ -44,11 +67,19 @@ export default class BatteryOverview extends React.Component {
       DumpEnergy: '',
       ExpectsMileage: '',
       SOC: '',
+      refreshing: false,
     };
   }
   render() {
     return (
-      <ScrollView style={baseStyles.tabViewBox}>
+      <ScrollView
+        style={baseStyles.tabViewBox}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh.bind(this)}
+          />
+        }>
         <View style={baseStyles.contentBox}>
           <ListItem containerStyle={styles.list}>
             {/*<UserAvatar size="medium" />*/}

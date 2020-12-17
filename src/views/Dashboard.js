@@ -10,14 +10,157 @@ import {
 import {MapView} from 'react-native-amap3d';
 import {Card} from 'react-native-elements';
 import Echarts from '../../lib/rn-echarts';
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
+import store from '../redux';
 
 export default class EventsExample extends Component {
+  getData() {
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetInstrument`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          VehicleSystemID: store.getState().vehicleId,
+        },
+      })
+      .then((res) => {
+        // res
+        console.log(res);
+        const {
+          data: {data},
+        } = res;
+        this.setState({
+          leftList: [
+            data.BatterySOC,
+            data.SingleMileage,
+            data.BatteryTemperature,
+          ],
+          rightList: [
+            data.DumpEnergy,
+            data.TotalMileage,
+            data.EstimatedMileage,
+          ],
+          centerText: data.RunningTime,
+          value: data.CurrentSpeed.value,
+          unit: data.CurrentSpeed.unit,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  setOption(value, unit) {
+    return {
+      series: [
+        {
+          type: 'gauge',
+          min: 0,
+          max: 60,
+          splitNumber: 6,
+          radius: '100%',
+          startAngle: 210,
+          endAngle: -30,
+          axisLine: {
+            lineStyle: {
+              width: 10,
+              color: [
+                [0.3, '#67e0e3'],
+                [0.7, '#37a2da'],
+                [1, '#fd666d'],
+              ],
+            },
+          },
+          pointer: {
+            itemStyle: {
+              color: 'auto',
+            },
+          },
+          axisTick: {
+            distance: -10,
+            length: 5,
+            lineStyle: {
+              color: '#fff',
+              width: 2,
+            },
+          },
+          splitLine: {
+            distance: -30,
+            length: 10,
+            lineStyle: {
+              color: '#fff',
+              width: 1,
+            },
+          },
+          axisLabel: {
+            color: 'auto',
+            distance: 34,
+            fontSize: 14,
+          },
+          detail: {
+            valueAnimation: true,
+            formatter: `${value}${unit}`,
+            color: 'auto',
+            fontSize: 20,
+            offsetCenter: ['0', '70%'],
+          },
+          data: [
+            {
+              value: value,
+            },
+          ],
+        },
+      ],
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       lat: 30.2722931,
       log: 120.136559,
       points: [],
+      leftList: [
+        {
+          name: '',
+          value: '0',
+          unit: '',
+        },
+        {
+          name: '',
+          value: '0',
+          unit: '',
+        },
+        {
+          name: '',
+          value: '0',
+          unit: '',
+        },
+      ],
+      rightList: [
+        {
+          name: '',
+          value: '0',
+          unit: '',
+        },
+        {
+          name: '',
+          value: '0',
+          unit: '',
+        },
+        {
+          name: '',
+          value: '0',
+          unit: '',
+        },
+      ],
+      centerText: {
+        name: '',
+        value: '0',
+        unit: '',
+      },
+      unit: '',
+      value: '0',
     };
   }
 
@@ -38,6 +181,7 @@ export default class EventsExample extends Component {
       .catch((error) => {
         console.error(error);
       });
+    this.getData();
   }
 
   _logLocationEvent = (data) => {
@@ -52,98 +196,6 @@ export default class EventsExample extends Component {
   };
 
   render() {
-    const leftList = [
-      {
-        name: '电池健康·%',
-        value: '99.9',
-      },
-      {
-        name: '电池健康·%',
-        value: '99.9',
-      },
-      {
-        name: '电池健康·%',
-        value: '99.9',
-      },
-    ];
-    const rightList = [
-      {
-        name: '电池健康·%',
-        value: '99.9',
-      },
-      {
-        name: '电池健康·%',
-        value: '99.9',
-      },
-      {
-        name: '电池健康·%',
-        value: '99.9',
-      },
-    ];
-    const centerText = {
-      name: '电池健康·%',
-      value: '99.9',
-    };
-    const option = {
-      series: [
-        {
-          type: 'gauge',
-          radius: '90%',
-          splitNumber: 8,
-          min: 0,
-          max: 80,
-          progress: {
-            show: true,
-            width: 8,
-          },
-          axisLine: {
-            lineStyle: {
-              width: 8,
-            },
-          },
-          axisTick: {
-            show: false,
-          },
-          splitLine: {
-            length: 4,
-            lineStyle: {
-              width: 2,
-              color: '#999',
-            },
-            distance: 2,
-          },
-          axisLabel: {
-            distance: 10,
-            color: '#999',
-            fontSize: 10,
-          },
-          anchor: {
-            show: true,
-            showAbove: true,
-            size: 10,
-            itemStyle: {
-              borderWidth: 4,
-            },
-          },
-          pointer: {
-            length: '50%',
-          },
-          title: {
-            show: false,
-          },
-          detail: {
-            valueAnimation: true,
-            fontSize: 20,
-            offsetCenter: [0, '70%'],
-          },
-          data: [
-            {
-              value: 70,
-            },
-          ],
-        },
-      ],
-    };
     return (
       <View style={{flex: 1}}>
         {/*<MapView*/}
@@ -168,16 +220,20 @@ export default class EventsExample extends Component {
           <Card>
             <View style={styles.boardBox}>
               <View style={styles.textBox}>
-                {leftList.map((v, i) => (
+                {this.state.leftList.map((v, i) => (
                   <TextBox item={v} key={i} />
                 ))}
               </View>
               <View style={{justifyContent: 'space-between'}}>
-                <Echarts option={option} height={130} width={130} />
-                <TextBox item={centerText} />
+                <Echarts
+                  option={this.setOption(this.state.value, this.state.unit)}
+                  height={130}
+                  width={130}
+                />
+                <TextBox item={this.state.centerText} />
               </View>
               <View style={styles.textBox}>
-                {rightList.map((v, i) => (
+                {this.state.rightList.map((v, i) => (
                   <TextBox item={v} key={i} />
                 ))}
               </View>
@@ -194,7 +250,9 @@ class TextBox extends React.Component {
     return (
       <View style={{alignItems: 'center'}}>
         <Text style={styles.fontMedium}>{this.props.item.value}</Text>
-        <Text style={styles.fontSmall}>{this.props.item.name}</Text>
+        <Text style={styles.fontSmall}>
+          {this.props.item.name + '·' + this.props.item.unit}
+        </Text>
       </View>
     );
   }

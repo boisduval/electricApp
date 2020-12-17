@@ -14,7 +14,7 @@ export default class PurchaseHistory extends React.Component {
       .get(`${baseUrl.url1}/Vehicle/GetVehiclePurchasing`, {
         params: {
           AutoSystemID: store.getState().userId,
-          VehicleSystemID: store.getState().currentVehicle,
+          VehicleSystemID: store.getState().vehicleId,
         },
       })
       .then((res) => {
