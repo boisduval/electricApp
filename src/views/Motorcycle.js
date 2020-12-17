@@ -56,23 +56,23 @@ export default class Motorcycle extends Component {
         },
         {
           label: I18n.t('motorcycle.info.beidou'),
-          value: '',
+          value: '0',
         },
         {
           label: I18n.t('motorcycle.info.singleBatteryLife'),
-          value: '',
+          value: '0',
         },
         {
           label: I18n.t('motorcycle.info.totalMileage'),
-          value: '',
+          value: '0',
         },
         {
           label: I18n.t('motorcycle.info.remainBattery'),
-          value: '',
+          value: '0',
         },
         {
           label: I18n.t('motorcycle.info.batteryHealth'),
-          value: '',
+          value: '0',
         },
       ],
       list1: [
@@ -85,21 +85,21 @@ export default class Motorcycle extends Component {
         },
         {
           title: I18n.t('nav.historicalTrack'),
-          subtitle: '456',
+          subtitle: '',
           icon: 'walk-outline',
           type: 'ionicon',
           path: 'historicalTrack',
         },
         {
           title: I18n.t('nav.batteryOverview'),
-          subtitle: '456',
+          subtitle: '',
           type: 'ionicon',
           icon: 'battery-dead-outline',
           path: 'batteryOverview',
         },
         {
           title: I18n.t('nav.drivingSituation'),
-          subtitle: '456',
+          subtitle: '',
           icon: 'bicycle-outline',
           type: 'ionicon',
           path: 'drivingSituation',
@@ -113,7 +113,7 @@ export default class Motorcycle extends Component {
         },
         {
           title: I18n.t('nav.vehicleHealth'),
-          subtitle: '456',
+          subtitle: '',
           icon: 'fitness-outline',
           type: 'ionicon',
           path: 'vehicleHealth',

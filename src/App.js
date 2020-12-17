@@ -47,8 +47,8 @@ function Home() {
   let isLoggedIn = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        let id = await AsyncStorage.getItem('AutoSystemID');
-        resolve(id);
+        let status = await AsyncStorage.getItem('isLoggedIn');
+        resolve(status);
       } catch (error) {
         reject(
           new Error('Error getting items from AsyncStorage: ' + error.message),
@@ -56,10 +56,6 @@ function Home() {
       }
     });
   };
-  AsyncStorage.getItem('AutoSystemID').then((res) => {
-    isLoggedIn = res;
-    console.log(isLoggedIn);
-  });
   let navList = [
     {
       name: 'main',

@@ -6,44 +6,42 @@ import {ListItem} from 'react-native-elements';
 import baseStyles from '../../assets/baseStyles';
 import * as baseConstant from '../../assets/baseConstant';
 import I18n from '../../../locales';
-import UserAvatar from '../../components/UserAvatar';
+import axios from '../../assets/util/http';
+import baseUrl from '../../assets/baseUrl';
+import store from '../../redux';
 
 const Tab = createMaterialTopTabNavigator();
 
 class Week extends React.Component {
+  getData() {
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetConsumption`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          VehicleSystemID: store.getState().vehicleId,
+        },
+      })
+      .then((res) => {
+        // res
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [],
+    };
+  }
+
   render() {
-    const list = [
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-      {
-        time: '2020-06-12 08:06:12',
-        name: '我的V2神车',
-        number: '34km',
-      },
-    ];
     return (
       <ScrollView style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
@@ -60,7 +58,7 @@ class Week extends React.Component {
           </ListItem>
 
           <View style={{marginTop: 20}}>
-            {list.map((v, i) => (
+            {this.state.list.map((v, i) => (
               <ListItem key={i} bottomDivider>
                 {/*<UserAvatar size="small" />*/}
                 <ListItem.Content>

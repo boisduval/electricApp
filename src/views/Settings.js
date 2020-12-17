@@ -42,9 +42,10 @@ function SettingsComponent(props) {
     },
   ];
   const logout = () => {
-    AsyncStorage.removeItem('AutoSystemID');
-    props.navigation.reset({
-      routes: [{name: 'login'}],
+    AsyncStorage.removeItem('isLoggedIn').then(() => {
+      props.navigation.reset({
+        routes: [{name: 'login'}],
+      });
     });
   };
   return (

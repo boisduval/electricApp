@@ -11,107 +11,120 @@ import {
   VictoryPie,
   VictoryAnimation,
 } from 'victory-native';
-
+import Echarts from '../../lib/rn-echarts';
+// import Echarts from 'react-native-charting';
 import baseStyles from '../assets/baseStyles';
 import * as baseConstant from '../assets/baseConstant';
 import {ListItem} from 'react-native-elements';
 
 import UserAvatar from './UserAvatar';
-
-const data = [
-  {quarter: '1h', earnings: 0.8},
-  {quarter: '2h', earnings: 1.2},
-  {quarter: '3h', earnings: 0.6},
-  {quarter: '4h', earnings: 1.5},
-  {quarter: '5h', earnings: 1.2},
-  {quarter: '6h', earnings: 0.4},
-  {quarter: '7h', earnings: 0.2},
-  {quarter: '8h', earnings: 0},
-  {quarter: '9h', earnings: 1},
-  {quarter: '10h', earnings: 0.9},
-  {quarter: '11h', earnings: 1.3},
-  {quarter: '12h', earnings: 2},
-];
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
+import store from '../redux';
+const dataset = {
+  labels: ['january', 'february', 'may'],
+  datasets: [
+    {
+      data: [100, 500, 300],
+      colors: [
+        (opacity = 1) => `red`,
+        (opacity = 1) => `#ff00ff`,
+        (opacity = 1) => `rgba(255, 0, 50, ${opacity})`,
+      ],
+    },
+  ],
+};
 
 class PowerConsumption extends React.Component {
   getData() {
-    const circleProgressList = [
-      {
-        fill: 40,
-        value: '40%',
-        name: 'SOC',
-      },
-      {
-        fill: 60,
-        value: '60%',
-        name: 'SOH',
-      },
-      {
-        fill: 30,
-        value: '50',
-        name: '循环次数',
-      },
-    ];
-    this.setState({
-      data: circleProgressList,
-    });
-    this.setState({
-      list: [
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetConsumption`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          VehicleSystemID: store.getState().vehicleId,
         },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-      ],
-    });
+      })
+      .then((res) => {
+        // res
+        console.log(res);
+        const {
+          data: {data},
+        } = res;
+        let temp = this.state.option;
+        temp.title.text = data.DumpEnergy.Name;
+        temp.xAxis.data = data.DumpEnergy.XAxisData;
+        temp.series[0].data = data.DumpEnergy.SeriesData[0].data;
+        temp.series[0].name = data.DumpEnergy.SeriesData[0].name;
+        this.setState({
+          circleProgressList: [data.TopSOH, data.TopSOC, data.TopCycle],
+          list: data.ChargeList,
+          option: temp,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  componentDidMount() {
+    this.getData();
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       list: [],
+      circleProgressList: [
+        {
+          name: '',
+          value: 0,
+          unit: '%',
+        },
+        {
+          name: '',
+          value: 0,
+          unit: '%',
+        },
+        {
+          name: '',
+          value: 0,
+          unit: '',
+        },
+      ],
+      option: {
+        title: {
+          text: '123456',
+          left: 10,
+          top: 10,
+        },
+        grid: {
+          top: 60,
+          left: 60,
+          right: 40,
+          bottom: 40,
+        },
+        tooltip: {},
+        xAxis: {
+          type: 'category',
+          data: [],
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: {
+            show: false,
+          },
+        },
+        series: [
+          {
+            data: [],
+            type: 'bar',
+            name: '',
+          },
+        ],
+        color: [baseConstant.blue],
+      },
     };
   }
-  componentDidMount() {
-    this.getData();
-  }
-
   render() {
     return (
       <View>
@@ -125,64 +138,66 @@ class PowerConsumption extends React.Component {
                   flexDirection: 'row',
                   flex: 1,
                 }}>
-                {this.state.data.map((v, i) => (
+                {this.state.circleProgressList.map((v, i) => (
                   <SvgItem
-                    percent={v.fill}
+                    percent={Number(v.value)}
                     size={100}
                     key={1000 + i}
                     name={v.name}
+                    unit={v.unit}
                   />
                 ))}
               </View>
             </CardItem>
           </Card>
           {/* 图表 */}
-          <View style={{alignItems: 'center'}}>
-            <VictoryChart
-              height={300}
-              width={Dimensions.get('window').width - 40}
-              domainPadding={{x: 20}}
-              padding={{right: 10, left: 40, top: 60, bottom: 40}}
-              containerComponent={
-                <VictoryVoronoiContainer
-                  labels={({datum}) => `剩余电量 ${datum.earnings}`}
-                  labelComponent={
-                    <VictoryTooltip
-                      flyoutPadding={{
-                        top: 10,
-                        bottom: 10,
-                        left: 20,
-                        right: 20,
-                      }}
-                    />
-                  }
-                />
-              }>
-              <VictoryLabel
-                x={5}
-                y={20}
-                text={'剩余电量统计'}
-                style={{fontSize: 16, fontWeight: 'bold'}}
-              />
-              <VictoryBar
-                data={data}
-                x="quarter"
-                y="earnings"
-                barRatio={0.6}
-                style={{data: {fill: baseConstant.blue}}}
-              />
-            </VictoryChart>
-          </View>
+          {/*<View style={{alignItems: 'center'}}>*/}
+          {/*  <VictoryChart*/}
+          {/*    height={300}*/}
+          {/*    width={Dimensions.get('window').width - 40}*/}
+          {/*    domainPadding={{x: 20}}*/}
+          {/*    padding={{right: 10, left: 40, top: 60, bottom: 40}}*/}
+          {/*    containerComponent={*/}
+          {/*      <VictoryVoronoiContainer*/}
+          {/*        labels={({datum}) => `剩余电量 ${datum.earnings}`}*/}
+          {/*        labelComponent={*/}
+          {/*          <VictoryTooltip*/}
+          {/*            flyoutPadding={{*/}
+          {/*              top: 10,*/}
+          {/*              bottom: 10,*/}
+          {/*              left: 20,*/}
+          {/*              right: 20,*/}
+          {/*            }}*/}
+          {/*          />*/}
+          {/*        }*/}
+          {/*      />*/}
+          {/*    }>*/}
+          {/*    <VictoryLabel*/}
+          {/*      x={5}*/}
+          {/*      y={20}*/}
+          {/*      text={'剩余电量统计'}*/}
+          {/*      style={{fontSize: 16, fontWeight: 'bold'}}*/}
+          {/*    />*/}
+          {/*    <VictoryBar*/}
+          {/*      data={data}*/}
+          {/*      x="quarter"*/}
+          {/*      y="earnings"*/}
+          {/*      barRatio={0.6}*/}
+          {/*      style={{data: {fill: baseConstant.blue}}}*/}
+          {/*    />*/}
+          {/*  </VictoryChart>*/}
+          {/*</View>*/}
+          <Echarts option={this.state.option} height={300} />
           {/* 列表 */}
           <View>
             {this.state.list.map((v, i) => (
               <ListItem key={2000 + i} bottomDivider>
-                <UserAvatar size="small" />
+                {/*<UserAvatar size="small" />*/}
                 <ListItem.Content>
-                  <ListItem.Title>{v.title}</ListItem.Title>
-                  <ListItem.Subtitle>{v.content}</ListItem.Subtitle>
+                  <ListItem.Title>{v.WriteTime}</ListItem.Title>
+                  <ListItem.Subtitle>{v.Discharge}</ListItem.Subtitle>
                 </ListItem.Content>
-                <Text>{v.time}</Text>
+                <Text>{v.Mileage}</Text>
               </ListItem>
             ))}
           </View>
@@ -199,20 +214,24 @@ class SvgItem extends React.Component {
       {x: 2, y: 100 - percent},
     ];
   }
+  setData() {
+    this.setState({
+      data: this.getData(this.props.percent),
+      percent: this.props.percent,
+      unit: this.props.unit,
+    });
+  }
   constructor() {
     super();
     this.state = {
       percent: 0,
       data: this.getData(0),
+      unit: '',
     };
   }
   componentDidMount() {
-    // this.getData();
     setTimeout(() => {
-      this.setState({
-        data: this.getData(this.props.percent),
-        percent: this.props.percent,
-      });
+      this.setData();
     }, 200);
   }
 
@@ -246,7 +265,7 @@ class SvgItem extends React.Component {
                   verticalAnchor="middle"
                   x={200}
                   y={200}
-                  text={`${Math.round(newProps.percent)}%`}
+                  text={`${Math.round(newProps.percent)}${newProps.unit}`}
                   style={{fontSize: 45}}
                 />
               );

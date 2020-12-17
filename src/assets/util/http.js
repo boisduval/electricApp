@@ -4,6 +4,7 @@
 import axios from 'axios';
 import * as RootNavigation from '../../RootNavigation';
 import Toast from 'react-native-root-toast';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // axios默认配置
 axios.defaults.timeout = 10000; // 超时时间
@@ -35,9 +36,12 @@ axios.interceptors.response.use(
       return response;
     } else {
       if (response.data.code === 2) {
-        // 跳转登录页
-        // RootNavigation.navigate('login');
-        // localStorage.removeItem('AutoSystemID')
+        AsyncStorage.setItem('isLoggedIn', '').then((res) => {
+          // 跳转登录页
+          RootNavigation.reset({
+            routes: [{name: 'login'}],
+          });
+        });
       } else if (response.data.code === 1) {
         Toast.show(response.data.msg, {
           duration: Toast.durations.SHORT,

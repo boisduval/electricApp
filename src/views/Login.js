@@ -26,7 +26,7 @@ class Login extends React.Component {
           //  登录成功
           const data = res.data.data;
           console.log(res.data.data);
-          AsyncStorage.setItem('AutoSystemID', data.AtuoSystemID);
+          AsyncStorage.setItem('isLoggedIn', '1');
           this.props.setStoreState(actionCreator.setUserId(data.AtuoSystemID));
           this.props.setStoreState(
             actionCreator.setCurrentVehicle(data.CurrentVehicle),

@@ -18,8 +18,7 @@ const initialState = {
     signature: '洁净能源 情节世界',
     uid: '123456',
   },
-  loggedStatus: false,
-  userId: '4723265381156014680',
+  userId: '5234719261296934118',
   vehicleId: '637423527883000005',
   batteryId: '636963862212534194',
 };
@@ -56,10 +55,10 @@ const publicReducer = (store = initialState, action) => {
         currentVehicle: vehicleId,
       };
     case actionType.USER_ID:
-      const {userId} = payload;
+      const {AutoSystemID} = payload;
       return {
         ...store,
-        userId: userId,
+        userId: AutoSystemID,
       };
     case actionType.BATTERY_ID:
       const {batteryId} = payload;

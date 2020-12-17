@@ -87,10 +87,6 @@ class Box extends React.Component {
             {this.props.HealthExamination.unit}
           </ListItem.Title>
         </ListItem.Content>
-        {/*<View>*/}
-        {/*  <Text>1234</Text>*/}
-        {/*  <Text>km</Text>*/}
-        {/*</View>*/}
       </ListItem>
     );
   }

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {MapView} from 'react-native-amap3d';
 import {Card} from 'react-native-elements';
-import {Echarts, echarts} from 'react-native-secharts';
+import Echarts from '../../lib/rn-echarts';
 
 export default class EventsExample extends Component {
   constructor(props) {
