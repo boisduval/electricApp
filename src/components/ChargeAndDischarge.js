@@ -1,188 +1,232 @@
 import React from 'react';
 import {Text, View, StyleSheet, ScrollView, Dimensions} from 'react-native';
-import {Card, CardItem} from 'native-base';
-import {Svg} from 'react-native-svg';
-import {
-  VictoryBar,
-  VictoryChart,
-  VictoryLabel,
-  VictoryTooltip,
-  VictoryVoronoiContainer,
-  VictoryPie,
-  VictoryAnimation,
-} from 'victory-native';
-
-import baseStyles from '../assets/baseStyles';
-import * as baseConstant from '../assets/baseConstant';
+import Echarts from '../../lib/rn-echarts';
 import {ListItem} from 'react-native-elements';
 
-import UserAvatar from './UserAvatar';
-
-const data = [
-  {quarter: '1h', earnings: 0.8},
-  {quarter: '2h', earnings: 1.2},
-  {quarter: '3h', earnings: 0.6},
-  {quarter: '4h', earnings: 1.5},
-  {quarter: '5h', earnings: 1.2},
-  {quarter: '6h', earnings: 0.4},
-  {quarter: '7h', earnings: 0.2},
-  {quarter: '8h', earnings: 0},
-  {quarter: '9h', earnings: 1},
-  {quarter: '10h', earnings: 0.9},
-  {quarter: '11h', earnings: 1.3},
-  {quarter: '12h', earnings: 2},
-];
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
+import store from '../redux';
 
 class ChargeAndDischarge extends React.Component {
   getData() {
-    const circleProgressList = [
-      {
-        fill: 40,
-        value: '40%',
-        name: 'SOC',
-      },
-      {
-        fill: 60,
-        value: '60%',
-        name: 'SOH',
-      },
-      {
-        fill: 30,
-        value: '50',
-        name: '循环次数',
-      },
-    ];
-    this.setState({
-      data: circleProgressList,
-    });
-    this.setState({
-      list: [
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetChargeDischarge`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          VehicleSystemID: store.getState().vehicleId,
         },
+      })
+      .then((res) => {
+        // res
+        const {
+          data: {data},
+        } = res;
+        console.log(data);
+        let temp = this.state.option;
+        temp.title.text = data.ChargeDischargeEnergy.Name;
+        temp.xAxis.data = data.ChargeDischargeEnergy.XAxisData;
+        temp.series[0].data = data.ChargeDischargeEnergy.SeriesData[0].data;
+        temp.series[0].name = data.ChargeDischargeEnergy.SeriesData[0].name;
+        temp.series[0].stack = data.ChargeDischargeEnergy.SeriesData[0].stack;
+        temp.series[1].data = data.ChargeDischargeEnergy.SeriesData[1].data;
+        temp.series[1].name = data.ChargeDischargeEnergy.SeriesData[1].name;
+        temp.series[1].stack = data.ChargeDischargeEnergy.SeriesData[1].stack;
+        this.setState(
+          {
+            circleProgressList: [
+              data.TopCharge,
+              data.TopDischarge,
+              data.TopTemperature,
+            ],
+            list: data.ChargeDischargeList,
+            option: temp,
+          },
+          () => {
+            console.log(this.state);
+          },
+        );
+        this.setOption();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  setOption(name, value, unit, percent) {
+    return {
+      series: [
         {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
-        },
-        {
-          title: '2020-09-01 12:16:18',
-          content: '本次放电：0.26 Kw/h',
-          time: '本次里程 4.3Km',
+          type: 'gauge',
+          startAngle: 90,
+          endAngle: -270,
+          pointer: {
+            show: false,
+          },
+          progress: {
+            show: true,
+            overlap: false,
+            roundCap: true,
+            clip: false,
+            itemStyle: {
+              borderWidth: 1,
+              borderColor: '#464646',
+            },
+          },
+          axisLine: {
+            lineStyle: {
+              width: 10,
+            },
+          },
+          splitLine: {
+            show: false,
+            distance: 0,
+            length: 10,
+          },
+          axisTick: {
+            show: false,
+          },
+          axisLabel: {
+            show: false,
+            distance: 50,
+          },
+          data: [
+            {
+              value: percent,
+              name: name,
+              title: {
+                offsetCenter: ['0%', '130%'],
+              },
+              detail: {
+                offsetCenter: ['0%', '0%'],
+              },
+            },
+          ],
+          title: {
+            fontSize: 14,
+          },
+          detail: {
+            width: 40,
+            lineHeight: 16,
+            overflow: 'break',
+            fontSize: 14,
+            color: 'auto',
+            borderWidth: 0,
+            formatter: `${value} ${unit}`,
+          },
         },
       ],
-    });
+      backgroundColor: '#193085',
+    };
+  }
+
+  componentDidMount() {
+    this.getData();
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       list: [],
+      circleProgressList: [
+        {
+          name: '',
+          value: 0,
+          unit: '%',
+        },
+        {
+          name: '',
+          value: 0,
+          unit: '%',
+        },
+        {
+          name: '',
+          value: 0,
+          unit: '',
+        },
+      ],
+      option: {
+        title: {
+          text: '123456',
+          left: 10,
+          top: 10,
+          textStyle: {
+            fontSize: 14,
+          },
+        },
+        grid: {
+          top: 50,
+          left: 50,
+          right: 40,
+          bottom: 40,
+        },
+        tooltip: {
+          trigger: 'axis',
+          confine: true,
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: {
+            show: false,
+          },
+        },
+        series: [
+          {
+            data: [],
+            type: 'bar',
+            name: '',
+            stack: '',
+          },
+          {
+            data: [],
+            type: 'bar',
+            name: '',
+            stack: '',
+          },
+        ],
+        backgroundColor: '#193085',
+      },
     };
   }
-  componentDidMount() {
-    this.getData();
-  }
-
   render() {
     return (
       <View>
         <ScrollView>
           {/* 圆环进度条*/}
-          <Card>
-            <CardItem header>
-              <View
-                style={{
-                  justifyContent: 'space-around',
-                  flexDirection: 'row',
-                  flex: 1,
-                }}>
-                {this.state.data.map((v, i) => (
-                  <SvgItem
-                    percent={v.fill}
-                    size={100}
-                    key={1000 + i}
-                    name={v.name}
-                  />
-                ))}
-              </View>
-            </CardItem>
-          </Card>
-          {/* 图表 */}
-          <View style={{alignItems: 'center'}}>
-            <VictoryChart
-              height={300}
-              width={Dimensions.get('window').width - 40}
-              domainPadding={{x: 20}}
-              padding={{right: 10, left: 40, top: 60, bottom: 40}}
-              containerComponent={
-                <VictoryVoronoiContainer
-                  labels={({datum}) => `剩余电量 ${datum.earnings}`}
-                  labelComponent={
-                    <VictoryTooltip
-                      flyoutPadding={{
-                        top: 10,
-                        bottom: 10,
-                        left: 20,
-                        right: 20,
-                      }}
-                    />
-                  }
+
+          <View style={styles.circleProgressBox}>
+            {this.state.circleProgressList.map((v, i) => (
+              <View style={{flex: 1}}>
+                <Echarts
+                  option={this.setOption(v.name, v.value, v.unit, v.percent)}
+                  height={150}
+                  theme="dark"
                 />
-              }>
-              <VictoryLabel
-                x={5}
-                y={20}
-                text={'剩余电量统计'}
-                style={{fontSize: 16, fontWeight: 'bold'}}
-              />
-              <VictoryBar
-                data={data}
-                x="quarter"
-                y="earnings"
-                barRatio={0.6}
-                style={{data: {fill: baseConstant.blue}}}
-              />
-            </VictoryChart>
+              </View>
+            ))}
+          </View>
+
+          {/* 图表 */}
+          <View style={styles.barChartBox}>
+            <Echarts option={this.state.option} height={260} theme="dark" />
           </View>
           {/* 列表 */}
           <View>
             {this.state.list.map((v, i) => (
-              <ListItem key={2000 + i} bottomDivider>
-                <UserAvatar size="small" />
+              <ListItem
+                key={i + ''}
+                bottomDivider
+                style={{paddingHorizontal: 6}}>
+                {/*<UserAvatar size="small" />*/}
                 <ListItem.Content>
-                  <ListItem.Title>{v.title}</ListItem.Title>
-                  <ListItem.Subtitle>{v.content}</ListItem.Subtitle>
+                  <ListItem.Title>{v.WriteTime}</ListItem.Title>
+                  <ListItem.Subtitle>{v.Charge}</ListItem.Subtitle>
+                  <ListItem.Subtitle>{v.Discharge}</ListItem.Subtitle>
                 </ListItem.Content>
-                <Text>{v.time}</Text>
+                <Text>{v.Mileage}</Text>
               </ListItem>
             ))}
           </View>
@@ -192,83 +236,21 @@ class ChargeAndDischarge extends React.Component {
   }
 }
 
-class SvgItem extends React.Component {
-  getData(percent) {
-    return [
-      {x: 1, y: percent},
-      {x: 2, y: 100 - percent},
-    ];
-  }
-  constructor() {
-    super();
-    this.state = {
-      percent: 0,
-      data: this.getData(0),
-    };
-  }
-  componentDidMount() {
-    // this.getData();
-    setTimeout(() => {
-      this.setState({
-        data: this.getData(this.props.percent),
-        percent: this.props.percent,
-      });
-    }, 200);
-  }
-
-  render() {
-    const size = this.props.size;
-    return (
-      <View>
-        <Svg viewBox="0 0 400 400" width={size} height={size}>
-          <VictoryPie
-            standalone={false}
-            animate={{duration: 1000}}
-            width={400}
-            height={400}
-            data={this.state.data}
-            innerRadius={120}
-            cornerRadius={25}
-            labels={() => null}
-            style={{
-              data: {
-                fill: ({datum}) => {
-                  return datum.x === 1 ? baseConstant.blue : '#eee';
-                },
-              },
-            }}
-          />
-          <VictoryAnimation duration={1000} data={this.state}>
-            {(newProps) => {
-              return (
-                <VictoryLabel
-                  textAnchor="middle"
-                  verticalAnchor="middle"
-                  x={200}
-                  y={200}
-                  text={`${Math.round(newProps.percent)}%`}
-                  style={{fontSize: 45}}
-                />
-              );
-            }}
-          </VictoryAnimation>
-        </Svg>
-        <View style={[styles.circleTextItem]}>
-          <Text style={[styles.circleText]}>{this.props.name}</Text>
-        </View>
-      </View>
-    );
-  }
-}
-
 const styles = StyleSheet.create({
-  circleTextItem: {
-    marginTop: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
+  circleProgressBox: {
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    flex: 1,
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
-  circleText: {
-    color: '#666',
+  barChartBox: {
+    marginHorizontal: 10,
+    marginBottom: 10,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
 });
 

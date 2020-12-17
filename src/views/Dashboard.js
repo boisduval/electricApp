@@ -87,42 +87,56 @@ export default class EventsExample extends Component {
     const option = {
       series: [
         {
-          name: '业务指标',
           type: 'gauge',
-          detail: {
-            formatter: '{value}Km/h',
-            fontSize: 20,
-            offsetCenter: ['0', '70%'],
-          },
-          data: [{value: 50, name: '完成率'}],
-          radius: '100%',
           splitNumber: 8,
           min: 0,
           max: 80,
-          startAngle: 220,
-          endAngle: -40,
-          title: {
-            show: false,
-          },
-          splitLine: {
-            length: 6,
-            show: false,
+          progress: {
+            show: true,
+            width: 8,
           },
           axisLine: {
-            // 坐标轴线
             lineStyle: {
-              // 属性lineStyle控制线条样式
-              width: 5, //半径
+              width: 8,
             },
           },
           axisTick: {
-            length: 30,
             show: false,
           },
-          pointer: {
-            length: '60%',
-            width: 6,
+          splitLine: {
+            length: 4,
+            lineStyle: {
+              width: 2,
+              color: '#999',
+            },
+            distance: 2,
           },
+          axisLabel: {
+            distance: 10,
+            color: '#999',
+            fontSize: 10,
+          },
+          anchor: {
+            show: true,
+            showAbove: true,
+            size: 2,
+            itemStyle: {
+              borderWidth: 4,
+            },
+          },
+          title: {
+            show: false,
+          },
+          detail: {
+            valueAnimation: true,
+            fontSize: 20,
+            offsetCenter: [0, '70%'],
+          },
+          data: [
+            {
+              value: 70,
+            },
+          ],
         },
       ],
     };
