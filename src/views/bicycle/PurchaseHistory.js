@@ -71,7 +71,8 @@ export default class PurchaseHistory extends React.Component {
             ))}
           </View>
           <View style={styles.bicycle}>
-            <Image source={img} style={styles.img} />
+            {/*<Image source={img} resizeMode="contain" style={styles.img} />*/}
+            <Image resizeMode="contain" source={img} style={styles.image} />
           </View>
         </View>
       </View>
@@ -93,11 +94,10 @@ const styles = StyleSheet.create({
   },
   bicycle: {
     flex: 1,
-    alignItems: 'center',
-    padding: 20,
   },
-  img: {
+  image: {
     flex: 1,
-    resizeMode: 'contain',
+    width: undefined,
+    height: undefined,
   },
 });

@@ -13,7 +13,8 @@ import Echarts from '../../lib/rn-echarts';
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
-
+import I18n from '../../locales';
+let timer;
 export default class EventsExample extends Component {
   getData() {
     axios
@@ -43,6 +44,8 @@ export default class EventsExample extends Component {
           centerText: data.RunningTime,
           value: data.CurrentSpeed.value,
           unit: data.CurrentSpeed.unit,
+          lat: data.Latitude.value,
+          log: data.Longitude.value,
         });
       })
       .catch((err) => {
@@ -65,8 +68,8 @@ export default class EventsExample extends Component {
             lineStyle: {
               width: 10,
               color: [
-                [0.3, '#67e0e3'],
-                [0.7, '#37a2da'],
+                [1 / 3, '#67e0e3'],
+                [2 / 3, '#37a2da'],
                 [1, '#fd666d'],
               ],
             },
@@ -85,16 +88,16 @@ export default class EventsExample extends Component {
             },
           },
           splitLine: {
-            distance: -30,
+            distance: -10,
             length: 10,
             lineStyle: {
               color: '#fff',
-              width: 1,
+              width: 2,
             },
           },
           axisLabel: {
             color: 'auto',
-            distance: 34,
+            distance: 16,
             fontSize: 14,
           },
           detail: {
@@ -117,8 +120,8 @@ export default class EventsExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lat: 30.2722931,
-      log: 120.136559,
+      lat: 39.91095,
+      log: 116.37296,
       points: [],
       leftList: [
         {
@@ -169,19 +172,14 @@ export default class EventsExample extends Component {
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
     ]);
-    await fetch(
-      'http://192.168.0.162:8086/conn/api/Vehicle/GetPositionings?AutoSystemID=1&VehicleSystemID=1&TravelAutoID=1',
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          points: responseJson.data,
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
     this.getData();
+    timer = setInterval(() => {
+      this.getData();
+    }, 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(timer);
   }
 
   _logLocationEvent = (data) => {
@@ -198,26 +196,29 @@ export default class EventsExample extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        {/*<MapView*/}
-        {/*  center={{*/}
-        {/*    latitude: this.state.lat,*/}
-        {/*    longitude: this.state.log,*/}
-        {/*  }}*/}
-        {/*  locationEnabled*/}
-        {/*  locationInterval={10000}*/}
-        {/*  distanceFilter={10}*/}
-        {/*  zoomLevel={16}*/}
-        {/*  onLocation={this._logLocationEvent.bind(this)}*/}
-        {/*  style={{flex: 1}}>*/}
-        {/*  <MapView.Polyline*/}
-        {/*    width={5}*/}
-        {/*    color="rgba(255, 0, 0, 0.5)"*/}
-        {/*    coordinates={this.state.points}*/}
-        {/*  />*/}
-        {/*</MapView>*/}
+        <MapView
+          center={{
+            latitude: Number(this.state.lat),
+            longitude: Number(this.state.log),
+          }}
+          zoomLevel={16}
+          style={{flex: 1}}>
+          {/*<MapView.Polyline*/}
+          {/*  width={5}*/}
+          {/*  color="rgba(255, 0, 0, 0.5)"*/}
+          {/*  coordinates={this.state.points}*/}
+          {/*/>*/}
+          <MapView.Marker
+            title={I18n.t('dashboard.markText')}
+            coordinate={{
+              latitude: Number(this.state.lat),
+              longitude: Number(this.state.log),
+            }}
+          />
+        </MapView>
 
         <View style={styles.board}>
-          <Card>
+          <Card containerStyle={{marginHorizontal: 10}}>
             <View style={styles.boardBox}>
               <View style={styles.textBox}>
                 {this.state.leftList.map((v, i) => (

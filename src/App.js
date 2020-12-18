@@ -117,11 +117,11 @@ function Home() {
       title: I18n.t('nav.safetyCheckup'),
       component: SafetyCheckup,
     },
-    // {
-    //   name: 'historicalTrack',
-    //   title: I18n.t('nav.historicalTrack'),
-    //   component: HistoricalTrack,
-    // },
+    {
+      name: 'historicalTrack',
+      title: I18n.t('nav.historicalTrack'),
+      component: HistoricalTrack,
+    },
     {
       name: 'vehicleHealth',
       title: I18n.t('nav.vehicleHealth'),

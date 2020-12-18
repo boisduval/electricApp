@@ -34,6 +34,10 @@ class ChargeAndDischarge extends React.Component {
         let temp = this.state.option;
         temp.title.text = data.ChargeDischargeEnergy.Name;
         temp.xAxis.data = data.ChargeDischargeEnergy.XAxisData;
+        temp.xAxis.axisPointer.value =
+          data.ChargeDischargeEnergy.XAxisData[
+            Math.floor(data.ChargeDischargeEnergy.XAxisData.length / 2)
+          ];
         temp.series[0].data = data.ChargeDischargeEnergy.SeriesData[0].data;
         temp.series[0].name = data.ChargeDischargeEnergy.SeriesData[0].name;
         temp.series[0].stack = data.ChargeDischargeEnergy.SeriesData[0].stack;
@@ -187,15 +191,36 @@ class ChargeAndDischarge extends React.Component {
           top: 50,
           left: 50,
           right: 40,
-          bottom: 40,
+          bottom: 70,
         },
         tooltip: {
-          trigger: 'axis',
           confine: true,
+          triggerOn: 'none',
         },
         xAxis: {
           type: 'category',
           data: [],
+          axisPointer: {
+            value: '1h',
+            snap: true,
+            lineStyle: {
+              color: 'auto',
+              width: 2,
+            },
+            label: {
+              show: true,
+              formatter: function (params) {
+                return params.value;
+              },
+              backgroundColor: 'auto',
+            },
+            handle: {
+              show: true,
+              color: 'auto',
+              size: 30,
+              margin: 40,
+            },
+          },
         },
         yAxis: {
           type: 'value',

@@ -32,6 +32,7 @@ export default class Motorcycle extends Component {
         let temp1 = this.state.list1;
         temp1[1].subtitle =
           data.ASingleMileage + 'Km/' + data.TravelTime + 'min';
+        temp1[1].param = data.TrackSystemID;
         temp1[2].subtitle = data.StopSOC + '%/' + data.SOH + '%';
         temp1[3].subtitle = data.ATotalMileage + 'Km';
         temp1[5].subtitle = data.Health + I18n.t('motorcycle.info.unit');
@@ -156,10 +157,12 @@ export default class Motorcycle extends Component {
             <View
               style={{
                 flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
               }}>
-              <Image source={img} style={{flex: 1, resizeMode: 'center'}} />
+              <Image
+                source={img}
+                resizeMode="contain"
+                style={{flex: 1, width: undefined, height: undefined}}
+              />
             </View>
           </View>
           <Options
@@ -185,6 +188,7 @@ function Options(props) {
               icon={v.icon}
               type={v.type}
               path={v.path}
+              param={v.param}
               navigate={props.navigate}
             />
           </View>

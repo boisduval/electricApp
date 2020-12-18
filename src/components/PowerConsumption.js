@@ -27,6 +27,10 @@ class PowerConsumption extends React.Component {
         let temp = this.state.option;
         temp.title.text = data.DumpEnergy.Name;
         temp.xAxis.data = data.DumpEnergy.XAxisData;
+        temp.xAxis.axisPointer.value =
+          data.DumpEnergy.XAxisData[
+            Math.floor(data.DumpEnergy.XAxisData.length / 2)
+          ];
         temp.series[0].data = data.DumpEnergy.SeriesData[0].data;
         temp.series[0].name = data.DumpEnergy.SeriesData[0].name;
         this.setState({
@@ -157,7 +161,7 @@ class PowerConsumption extends React.Component {
       ],
       option: {
         title: {
-          text: '123456',
+          text: '',
           left: 10,
           top: 10,
           textStyle: {
@@ -168,14 +172,42 @@ class PowerConsumption extends React.Component {
           top: 50,
           left: 50,
           right: 40,
-          bottom: 40,
+          bottom: 70,
         },
+        dataZoom: [
+          {
+            type: 'inside',
+            throttle: 50,
+          },
+        ],
         tooltip: {
           confine: true,
+          triggerOn: 'none',
         },
         xAxis: {
           type: 'category',
           data: [],
+          axisPointer: {
+            value: '1h',
+            snap: true,
+            lineStyle: {
+              color: 'auto',
+              width: 2,
+            },
+            label: {
+              show: true,
+              formatter: function (params) {
+                return params.value;
+              },
+              backgroundColor: 'auto',
+            },
+            handle: {
+              show: true,
+              color: 'auto',
+              size: 30,
+              margin: 40,
+            },
+          },
         },
         yAxis: {
           type: 'value',

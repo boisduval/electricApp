@@ -88,4 +88,10 @@ export default {
     placeholder: ['账号', '密码'],
   },
   vehicleHealth: ['购车时间', '质保时间'],
+  dashboard: {
+    markText: '车辆当前定位',
+  },
+  historicalTrack: {
+    text: '车辆最新轨迹信息',
+  },
 };

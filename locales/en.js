@@ -86,4 +86,10 @@ export default {
     placeholder: ['账号', '密码'],
   },
   vehicleHealth: ['购车时间', '质保时间'],
+  dashboard: {
+    markText: 'Vehicle current location',
+  },
+  historicalTrack: {
+    text: 'Latest vehicle trajectory information',
+  },
 };

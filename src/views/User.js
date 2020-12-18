@@ -24,13 +24,6 @@ import * as baseConstant from '../assets/baseConstant';
 import I18n from '../../locales';
 import useLanguageUpdate from '../hooks/userLanguageUpdate';
 
-import Push from './settings/Push';
-import Language from './settings/Language';
-import Password from './settings/Password';
-import Storage from './settings/Storage';
-import About from './settings/About';
-import OnlineRepair from './service/OnlineRepair';
-import OnlineService from './service/OnlineService';
 import MyMessages from './MyMessages';
 import UserAvatar from '../components/UserAvatar';
 import PurchaseHistory from './bicycle/PurchaseHistory';
@@ -58,20 +51,22 @@ class Home extends React.Component {
             <HeaderRight navigate={this.props.navigation.navigate} />
           </Right>
         </Header>
-        <View
-          style={[baseStyles.contentBox, {justifyContent: 'space-between'}]}>
-          <View>
-            <UserInfo information={this.props.userInformation} />
-            <MyService navigate={this.props.navigation.navigate} />
-            <MyBicycle navigate={this.props.navigation.navigate} />
+        <ScrollView>
+          <View style={[baseStyles.contentBox]}>
+            <View>
+              <UserInfo information={this.props.userInformation} />
+              <MyService navigate={this.props.navigation.navigate} />
+              <MyBicycle navigate={this.props.navigation.navigate} />
+            </View>
+            <View
+              style={{
+                alignItems: 'center',
+                marginTop: 20,
+              }}>
+              <Agreements navigate={this.props.navigation.navigate} />
+            </View>
           </View>
-          <View
-            style={{
-              alignItems: 'center',
-            }}>
-            <Agreements navigate={this.props.navigation.navigate} />
-          </View>
-        </View>
+        </ScrollView>
       </View>
     );
   }
