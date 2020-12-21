@@ -86,6 +86,10 @@ export default {
   login: {
     tab: ['账号密码登录', '验证码登录'],
     placeholder: ['账号', '密码'],
+    button: '登录',
+    register: '注册',
+    retrievePassword: '忘记密码?',
+    tip: ['登录即表明同意', '及'],
   },
   vehicleHealth: ['购车时间', '质保时间'],
   dashboard: {

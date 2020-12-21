@@ -1,7 +1,12 @@
 import React from 'react';
 import {Container, Content, Form, Item, Label, Input} from 'native-base';
 import {Button, Text} from 'react-native-elements';
-import {View, StyleSheet, TouchableNativeFeedback} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import axios from '../assets/util/http';
 import Toast from 'react-native-root-toast';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -47,6 +52,7 @@ class Login extends React.Component {
         console.log(err);
       });
   }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -58,70 +64,101 @@ class Login extends React.Component {
   render() {
     return (
       <Container>
-        <Content style={baseStyles.contentBox}>
-          <View style={{alignItems: 'center'}}>
-            <View style={{marginTop: 80, flexDirection: 'row'}}>
-              <TouchableNativeFeedback
-                onPress={() => {
-                  this.setState({activeItem: 'password'});
-                }}>
-                <View
-                  style={
-                    this.state.activeItem === 'password'
-                      ? [styles.titleBox, styles.activeTitleBox]
-                      : styles.titleBox
-                  }>
-                  <Text
-                    style={{color: '#666', fontSize: 20, fontWeight: 'bold'}}>
-                    {I18n.t('login.tab')[0]}
-                  </Text>
-                </View>
-              </TouchableNativeFeedback>
-              <TouchableNativeFeedback
-                onPress={() => {
-                  this.setState({activeItem: 'verificationCode'});
-                }}>
-                <View
-                  style={
-                    this.state.activeItem === 'verificationCode'
-                      ? [
-                          styles.activeTitleBox,
-                          styles.titleBox,
-                          {marginLeft: 30},
-                        ]
-                      : [styles.titleBox, {marginLeft: 30}]
-                  }>
-                  <Text
-                    style={{color: '#666', fontSize: 20, fontWeight: 'bold'}}>
-                    {I18n.t('login.tab')[1]}
-                  </Text>
-                </View>
-              </TouchableNativeFeedback>
+        <Content
+          contentContainerStyle={{justifyContent: 'space-between', flex: 1}}
+          style={[baseStyles.contentBox]}>
+          <View>
+            <View style={{alignItems: 'center'}}>
+              <View style={{marginTop: 80, flexDirection: 'row'}}>
+                <TouchableNativeFeedback
+                  onPress={() => {
+                    this.setState({activeItem: 'password'});
+                  }}>
+                  <View
+                    style={
+                      this.state.activeItem === 'password'
+                        ? [styles.titleBox, styles.activeTitleBox]
+                        : styles.titleBox
+                    }>
+                    <Text
+                      style={{color: '#666', fontSize: 20, fontWeight: 'bold'}}>
+                      {I18n.t('login.tab')[0]}
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>
+                <TouchableNativeFeedback
+                  onPress={() => {
+                    this.setState({activeItem: 'verificationCode'});
+                  }}>
+                  <View
+                    style={
+                      this.state.activeItem === 'verificationCode'
+                        ? [
+                            styles.activeTitleBox,
+                            styles.titleBox,
+                            {marginLeft: 30},
+                          ]
+                        : [styles.titleBox, {marginLeft: 30}]
+                    }>
+                    <Text
+                      style={{color: '#666', fontSize: 20, fontWeight: 'bold'}}>
+                      {I18n.t('login.tab')[1]}
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
+            </View>
+            <Form style={{marginTop: 40}}>
+              <Item>
+                <Label>{I18n.t('login.placeholder')[0]}</Label>
+                <Input
+                  onChangeText={(text) => {
+                    this.setState({name: text});
+                  }}
+                />
+              </Item>
+              <Item last>
+                <Label>{I18n.t('login.placeholder')[1]}</Label>
+                <Input
+                  secureTextEntry
+                  onChangeText={(text) => {
+                    this.setState({password: text});
+                  }}
+                />
+              </Item>
+            </Form>
+            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+              <Button title={I18n.t('login.register')} type="clear" />
+              <Button title={I18n.t('login.retrievePassword')} type="clear" />
+            </View>
+            <View style={{marginHorizontal: 20, marginTop: 40}}>
+              <Button
+                title={I18n.t('login.button')}
+                onPress={this.login.bind(this)}
+              />
             </View>
           </View>
-          <Form style={{marginTop: 40}}>
-            <Item>
-              <Label>{I18n.t('login.placeholder')[0]}</Label>
-              <Input
-                onChangeText={(text) => {
-                  this.setState({name: text});
-                }}
-              />
-            </Item>
-            <Item last>
-              <Label>{I18n.t('login.placeholder')[1]}</Label>
-              <Input
-                secureTextEntry
-                onChangeText={(text) => {
-                  this.setState({password: text});
-                }}
-              />
-            </Item>
-          </Form>
-          <View style={{marginHorizontal: 20, marginTop: 40}}>
-            <Button title="登录" onPress={this.login.bind(this)} />
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <Text style={styles.textStyle}>{I18n.t('login.tip')[0]}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('agreement');
+              }}>
+              <Text style={[styles.textStyle, styles.linkStyle]}>
+                {I18n.t('nav.agreement')}
+              </Text>
+            </TouchableOpacity>
+
+            <Text style={styles.textStyle}>{I18n.t('login.tip')[1]}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('privacy');
+              }}>
+              <Text style={[styles.textStyle, styles.linkStyle]}>
+                {I18n.t('nav.privacy')}
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View></View>
         </Content>
       </Container>
     );
@@ -136,6 +173,11 @@ const styles = StyleSheet.create({
   activeTitleBox: {
     borderBottomColor: baseConstant.blue,
     borderBottomWidth: 4,
+  },
+  textStyle: {fontSize: 12, lineHeight: 19},
+  linkStyle: {
+    marginHorizontal: 4,
+    color: baseConstant.blue,
   },
 });
 

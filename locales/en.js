@@ -83,7 +83,11 @@ export default {
   },
   login: {
     tab: ['账号密码登录', '验证码登录'],
-    placeholder: ['账号', '密码'],
+    placeholder: ['Account', 'Password'],
+    button: 'Sign in',
+    register: 'Sign up',
+    retrievePassword: 'forget password?',
+    tip: ['Sign in means consent', 'and'],
   },
   vehicleHealth: ['购车时间', '质保时间'],
   dashboard: {

@@ -39,23 +39,21 @@ import SafetyCheckup from './views/bicycle/SafetyCheckup';
 import VehiclePositioning from './views/VehiclePositioning';
 import HistoricalTrack from './views/bicycle/HistoricalTrack';
 import VehicleHealth from './views/bicycle/VehicleHealth';
+import Agreement from './views/Agreement';
+import Privacy from './views/Privacy';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function Home() {
-  let isLoggedIn = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let status = await AsyncStorage.getItem('isLoggedIn');
-        resolve(status);
-      } catch (error) {
-        reject(
-          new Error('Error getting items from AsyncStorage: ' + error.message),
-        );
-      }
+  let isLoggedIn;
+  AsyncStorage.getItem('isLoggedIn')
+    .then((res) => {
+      isLoggedIn = res;
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  };
   let navList = [
     {
       name: 'main',
@@ -126,6 +124,17 @@ function Home() {
       name: 'vehicleHealth',
       title: I18n.t('nav.vehicleHealth'),
       component: VehicleHealth,
+    },
+    //  协议
+    {
+      name: 'agreement',
+      title: I18n.t('nav.agreement'),
+      component: Agreement,
+    },
+    {
+      name: 'privacy',
+      title: I18n.t('nav.privacy'),
+      component: Privacy,
     },
   ];
   return (

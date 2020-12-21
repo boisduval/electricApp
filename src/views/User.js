@@ -374,20 +374,6 @@ function Agreements(props) {
   );
 }
 
-// 用户协议
-class UserAgreement extends React.Component {
-  render() {
-    return <Text>用户协议</Text>;
-  }
-}
-
-// 隐私政策
-class Privacy extends React.Component {
-  render() {
-    return <Text>隐私政策</Text>;
-  }
-}
-
 // 导航
 function User() {
   useLanguageUpdate();
@@ -408,16 +394,16 @@ function User() {
         name="serviceLog"
         component={ServiceLog}
       />
-      <Stack.Screen
-        options={{title: I18n.t('nav.agreement')}}
-        name="agreement"
-        component={UserAgreement}
-      />
-      <Stack.Screen
-        options={{title: I18n.t('nav.privacy')}}
-        name="privacy"
-        component={Privacy}
-      />
+      {/*<Stack.Screen*/}
+      {/*  options={{title: I18n.t('nav.agreement')}}*/}
+      {/*  name="agreement"*/}
+      {/*  component={UserAgreement}*/}
+      {/*/>*/}
+      {/*<Stack.Screen*/}
+      {/*  options={{title: I18n.t('nav.privacy')}}*/}
+      {/*  name="privacy"*/}
+      {/*  component={Privacy}*/}
+      {/*/>*/}
       <Stack.Screen
         options={{title: I18n.t('nav.message')}}
         name="message"
