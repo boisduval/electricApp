@@ -8,7 +8,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {Provider} from 'react-redux';
+import {connect, Provider} from 'react-redux';
 import store from './redux';
 import {persistor} from './redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
@@ -41,121 +41,173 @@ import HistoricalTrack from './views/bicycle/HistoricalTrack';
 import VehicleHealth from './views/bicycle/VehicleHealth';
 import Agreement from './views/Agreement';
 import Privacy from './views/Privacy';
+import RetrievePassword from './views/RetrievePassword';
+import Countries from './views/Countries';
+import SplashScreen from './views/SplashScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-function Home() {
-  let isLoggedIn;
-  AsyncStorage.getItem('isLoggedIn')
-    .then((res) => {
-      isLoggedIn = res;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  let navList = [
-    {
-      name: 'main',
-      title: '',
-      component: HomeTabs,
-      headShown: false,
-    },
-    {
-      name: 'scan',
-      title: I18n.t('nav.scan'),
-      component: ScanQRCodeScreen,
-    },
-    {
-      name: 'onlineRepair',
-      title: I18n.t('nav.onlineRepair'),
-      component: OnlineRepair,
-    },
-    {
-      name: 'onlineService',
-      title: I18n.t('myService.customerService'),
-      component: OnlineService,
-    },
-    {
-      name: 'manual',
-      title: I18n.t('nav.manual'),
-      component: Manual,
-    },
-    {
-      name: 'settings',
-      title: '',
-      component: Settings,
-      headShown: false,
-    },
-    {
-      name: 'login',
-      title: '',
-      component: Login,
-      headShown: false,
-    },
-    //  车况子页面
-    {
-      name: 'purchaseHistory',
-      title: I18n.t('nav.purchaseHistory'),
-      component: PurchaseHistory,
-    },
-    {
-      name: 'drivingSituation',
-      title: I18n.t('nav.drivingSituation'),
-      component: DrivingSituation,
-      headShown: true,
-    },
-    {
-      name: 'batteryOverview',
-      title: I18n.t('nav.batteryOverview'),
-      component: BatteryOverview,
-    },
-    {
-      name: 'safetyCheckup',
-      title: I18n.t('nav.safetyCheckup'),
-      component: SafetyCheckup,
-    },
-    {
-      name: 'historicalTrack',
-      title: I18n.t('nav.historicalTrack'),
-      component: HistoricalTrack,
-    },
-    {
-      name: 'vehicleHealth',
-      title: I18n.t('nav.vehicleHealth'),
-      component: VehicleHealth,
-    },
-    //  协议
-    {
-      name: 'agreement',
-      title: I18n.t('nav.agreement'),
-      component: Agreement,
-    },
-    {
-      name: 'privacy',
-      title: I18n.t('nav.privacy'),
-      component: Privacy,
-    },
-  ];
-  return (
-    <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator
-        screenOptions={{
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-        initialRouteName={isLoggedIn ? 'main' : 'login'}>
-        {navList.map((v, i) => (
-          <Stack.Screen
-            key={i}
-            name={v.name}
-            component={v.component}
-            options={{headerShown: v.headShown, title: v.title}}
-          />
-        ))}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+// let isLoggedIn;
+// async function getData() {
+//   return await AsyncStorage.getItem('isLoggedIn');
+// }
+class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: null,
+      isLoading: true,
+    };
+  }
+  componentDidMount() {
+    AsyncStorage.getItem('userId')
+      .then((res) => {
+        this.setState({
+          isLoggedIn: res,
+          isLoading: false,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  render() {
+    let navList = [
+      {
+        name: 'main',
+        title: '',
+        component: HomeTabs,
+        headShown: false,
+      },
+      {
+        name: 'scan',
+        title: I18n.t('nav.scan'),
+        component: ScanQRCodeScreen,
+      },
+      {
+        name: 'onlineRepair',
+        title: I18n.t('nav.onlineRepair'),
+        component: OnlineRepair,
+      },
+      {
+        name: 'onlineService',
+        title: I18n.t('myService.customerService'),
+        component: OnlineService,
+      },
+      {
+        name: 'manual',
+        title: I18n.t('nav.manual'),
+        component: Manual,
+      },
+      {
+        name: 'settings',
+        title: '',
+        component: Settings,
+        headShown: false,
+      },
+      //  车况子页面
+      {
+        name: 'purchaseHistory',
+        title: I18n.t('nav.purchaseHistory'),
+        component: PurchaseHistory,
+      },
+      {
+        name: 'drivingSituation',
+        title: I18n.t('nav.drivingSituation'),
+        component: DrivingSituation,
+        headShown: true,
+      },
+      {
+        name: 'batteryOverview',
+        title: I18n.t('nav.batteryOverview'),
+        component: BatteryOverview,
+      },
+      {
+        name: 'safetyCheckup',
+        title: I18n.t('nav.safetyCheckup'),
+        component: SafetyCheckup,
+      },
+      {
+        name: 'historicalTrack',
+        title: I18n.t('nav.historicalTrack'),
+        component: HistoricalTrack,
+      },
+      {
+        name: 'vehicleHealth',
+        title: I18n.t('nav.vehicleHealth'),
+        component: VehicleHealth,
+      },
+      //  协议
+      {
+        name: 'agreement',
+        title: I18n.t('nav.agreement'),
+        component: Agreement,
+      },
+      {
+        name: 'privacy',
+        title: I18n.t('nav.privacy'),
+        component: Privacy,
+      },
+      {
+        name: 'retrievePassword',
+        title: I18n.t('nav.retrievePassword'),
+        component: RetrievePassword,
+      },
+      {
+        name: 'countries',
+        title: '',
+        component: Countries,
+        headShown: false,
+      },
+    ];
+    return (
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator
+          screenOptions={{
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          }}>
+          {this.state.isLoading ? (
+            <Stack.Screen
+              name="splash"
+              component={SplashScreen}
+              options={{headerShown: false}}
+            />
+          ) : this.props.userId !== '' ? (
+            <>
+              {navList.map((v, i) => (
+                <Stack.Screen
+                  key={i}
+                  name={v.name}
+                  component={v.component}
+                  options={{headerShown: v.headShown, title: v.title}}
+                />
+              ))}
+            </>
+          ) : (
+            <Stack.Screen
+              name="login"
+              component={Login}
+              options={{headerShown: false}}
+            />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
 }
+
+const mapStateToProps = (state) => {
+  const {userId, currentVehicle, batteryId} = state;
+  return {userId, currentVehicle, batteryId};
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  setStoreState: (setUserIdAction) => dispatch(setUserIdAction),
+});
+
+const HomePage = connect(mapStateToProps, mapDispatchToProps)(Home);
 
 function HomeTabs() {
   useLanguageUpdate();
@@ -237,7 +289,7 @@ export default class App extends React.Component {
           <Provider store={store}>
             <StatusBar barStyle="dark-content" backgroundColor="#fff" />
             <PersistGate loading={null} persistor={persistor}>
-              <Home />
+              <HomePage />
             </PersistGate>
           </Provider>
         </Root>

@@ -18,9 +18,9 @@ const initialState = {
     signature: '洁净能源 情节世界',
     uid: '123456',
   },
-  userId: '5234719261296934118',
-  vehicleId: '637423527883000005',
-  batteryId: '636963862212534194',
+  userId: '',
+  vehicleId: '',
+  batteryId: '',
 };
 
 const publicReducer = (store = initialState, action) => {

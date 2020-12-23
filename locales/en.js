@@ -23,6 +23,7 @@ export default {
     vehiclePositioning: 'Vehicle Positioning',
     historicalTrack: 'Historical Track',
     vehicleHealth: 'Vehicle Health',
+    retrievePassword: 'Retrieve Password',
   },
   tab: {
     bicycle: 'bicycle',
@@ -95,5 +96,14 @@ export default {
   },
   historicalTrack: {
     text: 'Latest vehicle trajectory information',
+  },
+  retrievePassword: {
+    tip: 'Please use the mobile number you filled in during registration',
+    placeholder: [
+      '请输入手机号',
+      '请输入验证码',
+      '请设置登录密码',
+      '请确认登录密码',
+    ],
   },
 };

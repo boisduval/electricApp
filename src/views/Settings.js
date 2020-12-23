@@ -1,7 +1,6 @@
 // 设置
 import useLanguageUpdate from '../hooks/userLanguageUpdate';
 import I18n from '../../locales';
-import AsyncStorage from '@react-native-community/async-storage';
 import {View} from 'react-native';
 import {Button, ListItem} from 'react-native-elements';
 import * as React from 'react';
@@ -9,11 +8,13 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
+import * as actionCreators from '../redux/actionCreators';
 import Push from './settings/Push';
 import Language from './settings/Language';
 import Password from './settings/Password';
 import Storage from './settings/Storage';
 import About from './settings/About';
+import {connect} from 'react-redux';
 
 const Stack = createStackNavigator();
 
@@ -42,11 +43,7 @@ function SettingsComponent(props) {
     },
   ];
   const logout = () => {
-    AsyncStorage.removeItem('isLoggedIn').then(() => {
-      props.navigation.reset({
-        routes: [{name: 'login'}],
-      });
-    });
+    props.setStoreState(actionCreators.setUserId(''));
   };
   return (
     <View style={{marginTop: 20, justifyContent: 'space-between', flex: 1}}>
@@ -73,6 +70,19 @@ function SettingsComponent(props) {
     </View>
   );
 }
+const mapStateToProps = (state) => {
+  const {userId, currentVehicle, batteryId} = state;
+  return {userId, currentVehicle, batteryId};
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  setStoreState: (setUserIdAction) => dispatch(setUserIdAction),
+});
+
+const SettingsComponentConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SettingsComponent);
 
 export default function Settings() {
   useLanguageUpdate();
@@ -84,7 +94,7 @@ export default function Settings() {
       <Stack.Screen
         options={{title: I18n.t('nav.settings')}}
         name="settings"
-        component={SettingsComponent}
+        component={SettingsComponentConnect}
       />
       <Stack.Screen
         options={{title: I18n.t('nav.push')}}

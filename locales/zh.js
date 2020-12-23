@@ -23,6 +23,7 @@ export default {
     vehiclePositioning: '车辆定位',
     historicalTrack: '历史轨迹',
     vehicleHealth: '车辆健康',
+    retrievePassword: '找回密码',
   },
   tab: {
     bicycle: '车况',
@@ -97,5 +98,14 @@ export default {
   },
   historicalTrack: {
     text: '车辆最新轨迹信息',
+  },
+  retrievePassword: {
+    tip: '请使用您注册时所填的手机号码',
+    placeholder: [
+      '请输入手机号',
+      '请输入验证码',
+      '请重置登录密码',
+      '请确认登录密码',
+    ],
   },
 };

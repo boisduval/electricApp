@@ -1,6 +1,6 @@
 import React from 'react';
-import {Container, Content, Form, Item, Label, Input} from 'native-base';
-import {Button, Text} from 'react-native-elements';
+import {Container, Content, Button as ButtonBase} from 'native-base';
+import {Button, Icon, Text, Input} from 'react-native-elements';
 import {
   View,
   StyleSheet,
@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import axios from '../assets/util/http';
 import Toast from 'react-native-root-toast';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import baseStyles from '../assets/baseStyles';
 import * as baseConstant from '../assets/baseConstant';
@@ -17,6 +16,8 @@ import baseUrl from '../assets/baseUrl';
 import {connect} from 'react-redux';
 import * as actionCreator from '../redux/actionCreators';
 import I18n from '../../locales';
+import Link from '../components/Link';
+import store from '../redux';
 
 class Login extends React.Component {
   login() {
@@ -27,11 +28,12 @@ class Login extends React.Component {
     axios
       .post(`${baseUrl.url1}/VehicleOwner/Login`, obj)
       .then((res) => {
+        console.log(res);
         if (res.data.code === 0) {
           //  登录成功
           const data = res.data.data;
-          console.log(res.data.data);
-          AsyncStorage.setItem('isLoggedIn', '1');
+
+          // AsyncStorage.setItem('isLoggedIn', '1');
           this.props.setStoreState(actionCreator.setUserId(data.AtuoSystemID));
           this.props.setStoreState(
             actionCreator.setCurrentVehicle(data.CurrentVehicle),
@@ -43,9 +45,9 @@ class Login extends React.Component {
             duration: Toast.durations.SHORT,
             position: Toast.positions.CENTER,
           });
-          this.props.navigation.reset({
-            routes: [{name: 'main'}],
-          });
+          // this.props.navigation.reset({
+          //   routes: [{name: 'main'}],
+          // });
         }
       })
       .catch((err) => {
@@ -108,61 +110,117 @@ class Login extends React.Component {
                 </TouchableNativeFeedback>
               </View>
             </View>
-            <Form style={{marginTop: 40}}>
-              <Item>
-                <Label>{I18n.t('login.placeholder')[0]}</Label>
-                <Input
-                  onChangeText={(text) => {
-                    this.setState({name: text});
-                  }}
-                />
-              </Item>
-              <Item last>
-                <Label>{I18n.t('login.placeholder')[1]}</Label>
-                <Input
-                  secureTextEntry
-                  onChangeText={(text) => {
-                    this.setState({password: text});
-                  }}
-                />
-              </Item>
-            </Form>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-              <Button title={I18n.t('login.register')} type="clear" />
-              <Button title={I18n.t('login.retrievePassword')} type="clear" />
+            {(() => {
+              if (this.state.activeItem === 'password') {
+                // 账号密码登录
+                return (
+                  <View style={{marginTop: 40}}>
+                    <Input
+                      placeholder={I18n.t('login.placeholder')[0]}
+                      onChangeText={(text) => {
+                        this.setState({name: text});
+                      }}
+                    />
+                    <Input
+                      secureTextEntry
+                      placeholder={I18n.t('login.placeholder')[1]}
+                      onChangeText={(text) => {
+                        this.setState({password: text});
+                      }}
+                    />
+                  </View>
+                );
+              } else {
+                // 验证码登录
+                return (
+                  <View style={{marginTop: 40}}>
+                    <Input
+                      placeholder={I18n.t('login.placeholder')[0]}
+                      leftIcon={LeftComponent}
+                      onChangeText={(text) => {
+                        this.setState({name: text});
+                      }}
+                    />
+                    <Input
+                      placeholder={I18n.t('login.placeholder')[1]}
+                      leftIcon={{type: 'font-awesome-5', name: 'shield-alt'}}
+                      rightIcon={RightComponent}
+                      onChangeText={(text) => {
+                        this.setState({password: text});
+                      }}
+                    />
+                  </View>
+                );
+              }
+            })()}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                marginTop: 20,
+              }}>
+              <Link text={I18n.t('login.register')} size={16} path="register" />
+              <Link
+                text={I18n.t('login.retrievePassword')}
+                size={16}
+                path="retrievePassword"
+              />
             </View>
             <View style={{marginHorizontal: 20, marginTop: 40}}>
               <Button
                 title={I18n.t('login.button')}
                 onPress={this.login.bind(this)}
               />
+              <Text>{store.getState().userId}</Text>
             </View>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Text style={styles.textStyle}>{I18n.t('login.tip')[0]}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('agreement');
-              }}>
-              <Text style={[styles.textStyle, styles.linkStyle]}>
-                {I18n.t('nav.agreement')}
-              </Text>
-            </TouchableOpacity>
+            <Link path="agreement" text={I18n.t('nav.agreement')} />
 
             <Text style={styles.textStyle}>{I18n.t('login.tip')[1]}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('privacy');
-              }}>
-              <Text style={[styles.textStyle, styles.linkStyle]}>
-                {I18n.t('nav.privacy')}
-              </Text>
-            </TouchableOpacity>
+            <Link path="privacy" text={I18n.t('nav.privacy')} />
           </View>
         </Content>
       </Container>
     );
   }
+}
+
+function LeftComponent() {
+  return (
+    <TouchableOpacity>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderRightWidth: 1,
+          borderColor: '#ccc',
+          paddingRight: 4,
+          paddingVertical: 3,
+          marginLeft: 4,
+        }}>
+        <Icon name="mobile-alt" type="font-awesome-5" />
+        <Text style={{marginLeft: 10, marginRight: 4, fontSize: 16}}>+86</Text>
+        <Icon name="caret-down-outline" type="ionicon" size={16} />
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+function RightComponent() {
+  return (
+    <View>
+      <ButtonBase
+        rounded
+        small
+        style={{padding: 10, backgroundColor: baseConstant.blue}}>
+        <Text style={{color: '#fff', fontSize: 12, fontWeight: 'bold'}}>
+          获取验证码
+        </Text>
+      </ButtonBase>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -174,11 +232,7 @@ const styles = StyleSheet.create({
     borderBottomColor: baseConstant.blue,
     borderBottomWidth: 4,
   },
-  textStyle: {fontSize: 12, lineHeight: 19},
-  linkStyle: {
-    marginHorizontal: 4,
-    color: baseConstant.blue,
-  },
+  textStyle: {fontSize: 12},
 });
 
 const mapStateToProps = (state) => {
