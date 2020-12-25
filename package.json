@@ -18,7 +18,7 @@
     "axios": "^0.21.0",
     "i18n-js": "^3.7.1",
     "native-base": "^2.13.14",
-    "react": "16.13.1",
+    "react": "^17.0.1",
     "react-native": "0.63.2",
     "react-native-amap-geolocation": "^1.1.2",
     "react-native-amap3d": "^2.0.3",

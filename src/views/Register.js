@@ -1,12 +1,17 @@
-import {Text, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import baseStyles from '../assets/baseStyles';
-import React from 'react';
+import React, {useEffect} from 'react';
 import I18n from '../../locales';
-import {Input} from 'react-native-elements';
+import {Icon, Input, Button} from 'react-native-elements';
+import Countries from './Countries';
+// import {Button} from 'native-base';
+import * as baseConstant from '../assets/baseConstant';
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
 import CountriesSelector from '../components/CountriesSelector';
 import SendVerificationCodeButton from '../components/SendVerificationCodeButton';
 
-export default class RetrievePassword extends React.Component {
+export default class Register extends React.Component {
   setCountryNumber(countryNumber) {
     let temp = this.state.postObj;
     temp.countryNumber = countryNumber;
@@ -26,19 +31,14 @@ export default class RetrievePassword extends React.Component {
     };
   }
   render() {
-    const value = this.props.route.params
-      ? this.props.route.params.hasOwnProperty('value')
-        ? this.props.route.params.value
-        : '86'
-      : '86';
     return (
       <View style={baseStyles.tabViewBox}>
-        <View style={baseStyles.contentBox}>
-          <Text style={{marginVertical: 20}}>
-            {I18n.t('retrievePassword.tip')}
-          </Text>
+        <View style={[baseStyles.contentBox, {marginTop: 20}]}>
+          {/*<Text style={{marginVertical: 20}}>*/}
+          {/*  {I18n.t('retrievePassword.tip')}*/}
+          {/*</Text>*/}
           <Input
-            placeholder={I18n.t('retrievePassword.placeholder')[0]}
+            placeholder={I18n.t('register.placeholder')[0]}
             leftIcon={
               <CountriesSelector
                 navigation={this.props.navigation}
@@ -48,16 +48,16 @@ export default class RetrievePassword extends React.Component {
             }
           />
           <Input
-            placeholder={I18n.t('retrievePassword.placeholder')[1]}
+            placeholder={I18n.t('register.placeholder')[1]}
             leftIcon={{type: 'font-awesome-5', name: 'shield-alt'}}
             rightIcon={<SendVerificationCodeButton />}
           />
           <Input
-            placeholder={I18n.t('retrievePassword.placeholder')[2]}
+            placeholder={I18n.t('register.placeholder')[2]}
             leftIcon={{type: 'font-awesome-5', name: 'unlock-alt'}}
           />
           <Input
-            placeholder={I18n.t('retrievePassword.placeholder')[3]}
+            placeholder={I18n.t('register.placeholder')[3]}
             leftIcon={{type: 'font-awesome-5', name: 'unlock'}}
           />
         </View>

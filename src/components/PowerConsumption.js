@@ -24,7 +24,7 @@ class PowerConsumption extends React.Component {
         const {
           data: {data},
         } = res;
-        let temp = this.state.option;
+        let temp = {...this.state.option};
         temp.title.text = data.DumpEnergy.Name;
         temp.xAxis.data = data.DumpEnergy.XAxisData;
         temp.xAxis.axisPointer.value =

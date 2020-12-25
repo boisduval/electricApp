@@ -18,6 +18,8 @@ import * as actionCreator from '../redux/actionCreators';
 import I18n from '../../locales';
 import Link from '../components/Link';
 import store from '../redux';
+import CountriesSelector from '../components/CountriesSelector';
+import SendVerificationCodeButton from '../components/SendVerificationCodeButton';
 
 class Login extends React.Component {
   login() {
@@ -34,13 +36,13 @@ class Login extends React.Component {
           const data = res.data.data;
 
           // AsyncStorage.setItem('isLoggedIn', '1');
-          this.props.setStoreState(actionCreator.setUserId(data.AtuoSystemID));
           this.props.setStoreState(
             actionCreator.setCurrentVehicle(data.CurrentVehicle),
           );
           this.props.setStoreState(
             actionCreator.setBatteryId(data.BatterySystemID),
           );
+          this.props.setStoreState(actionCreator.setUserId(data.AtuoSystemID));
           Toast.show(res.data.msg, {
             duration: Toast.durations.SHORT,
             position: Toast.positions.CENTER,
@@ -55,12 +57,27 @@ class Login extends React.Component {
       });
   }
 
+  setCountryNumber(countryNumber) {
+    let temp = this.state.postObj;
+    temp.countryNumber = countryNumber;
+    this.setState({
+      postObj: temp,
+    });
+  }
+  register() {
+    //  注册http
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       activeItem: 'password',
       name: '',
       password: '',
+      verificationCode: '',
+      postObj: {
+        countryNumber: '86',
+      },
     };
   }
   render() {
@@ -135,18 +152,24 @@ class Login extends React.Component {
                 return (
                   <View style={{marginTop: 40}}>
                     <Input
-                      placeholder={I18n.t('login.placeholder')[0]}
-                      leftIcon={LeftComponent}
+                      placeholder={I18n.t('login.placeholder')[2]}
+                      leftIcon={
+                        <CountriesSelector
+                          navigation={this.props.navigation}
+                          countryNumber={this.state.postObj.countryNumber}
+                          setCountryNumber={this.setCountryNumber.bind(this)}
+                        />
+                      }
                       onChangeText={(text) => {
                         this.setState({name: text});
                       }}
                     />
                     <Input
-                      placeholder={I18n.t('login.placeholder')[1]}
+                      placeholder={I18n.t('login.placeholder')[3]}
                       leftIcon={{type: 'font-awesome-5', name: 'shield-alt'}}
-                      rightIcon={RightComponent}
+                      rightIcon={<SendVerificationCodeButton />}
                       onChangeText={(text) => {
-                        this.setState({password: text});
+                        this.setState({verificationCode: text});
                       }}
                     />
                   </View>
@@ -185,42 +208,6 @@ class Login extends React.Component {
       </Container>
     );
   }
-}
-
-function LeftComponent() {
-  return (
-    <TouchableOpacity>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderRightWidth: 1,
-          borderColor: '#ccc',
-          paddingRight: 4,
-          paddingVertical: 3,
-          marginLeft: 4,
-        }}>
-        <Icon name="mobile-alt" type="font-awesome-5" />
-        <Text style={{marginLeft: 10, marginRight: 4, fontSize: 16}}>+86</Text>
-        <Icon name="caret-down-outline" type="ionicon" size={16} />
-      </View>
-    </TouchableOpacity>
-  );
-}
-
-function RightComponent() {
-  return (
-    <View>
-      <ButtonBase
-        rounded
-        small
-        style={{padding: 10, backgroundColor: baseConstant.blue}}>
-        <Text style={{color: '#fff', fontSize: 12, fontWeight: 'bold'}}>
-          获取验证码
-        </Text>
-      </ButtonBase>
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({

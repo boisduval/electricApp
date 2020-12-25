@@ -15,6 +15,20 @@ axios.defaults.timeout = 10000; // 超时时间
 // axios.defaults.headers.common['Language'] = val
 // axios.defaults.baseURL = 'http://60.186.197.171:8081'
 
+// 添加请求拦截器
+axios.interceptors.request.use(
+  function (config) {
+    // 在发送请求之前做些什么
+    console.log(config);
+    return config;
+  },
+  function (error) {
+    // 对请求错误做些什么
+    console.log(error);
+    return Promise.reject(error);
+  },
+);
+
 // 路由响应拦截
 // http response 拦截器
 axios.interceptors.response.use(

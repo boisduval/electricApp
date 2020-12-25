@@ -105,28 +105,28 @@ export default class HistoricalTrack extends Component {
           />
         </MapView>
 
-        <View style={styles.board}>
-          <Card>
-            <ListItem containerStyle={styles.boardBox}>
-              <ListItem.Content>
-                <ListItem.Title>
-                  {I18n.t('historicalTrack.text')}
-                </ListItem.Title>
-                <ListItem.Subtitle>
-                  {this.state.points.length !== 0
-                    ? this.state.points[this.state.points.length - 1].writetime
-                    : ''}
-                </ListItem.Subtitle>
-              </ListItem.Content>
-              <TouchableOpacity
-                onPress={() => {
-                  this.getData();
-                }}>
-                <Icon name={'refresh'} size={50} color={baseConstant.blue} />
-              </TouchableOpacity>
-            </ListItem>
-          </Card>
-        </View>
+        {/*  <View style={styles.board}>*/}
+        {/*    <Card>*/}
+        {/*      <ListItem containerStyle={styles.boardBox}>*/}
+        {/*        <ListItem.Content>*/}
+        {/*          <ListItem.Title>*/}
+        {/*            {I18n.t('historicalTrack.text')}*/}
+        {/*          </ListItem.Title>*/}
+        {/*          <ListItem.Subtitle>*/}
+        {/*            {this.state.points.length !== 0*/}
+        {/*              ? this.state.points[this.state.points.length - 1].writetime*/}
+        {/*              : ''}*/}
+        {/*          </ListItem.Subtitle>*/}
+        {/*        </ListItem.Content>*/}
+        {/*        <TouchableOpacity*/}
+        {/*          onPress={() => {*/}
+        {/*            this.getData();*/}
+        {/*          }}>*/}
+        {/*          <Icon name={'refresh'} size={50} color={baseConstant.blue} />*/}
+        {/*        </TouchableOpacity>*/}
+        {/*      </ListItem>*/}
+        {/*    </Card>*/}
+        {/*  </View>*/}
       </View>
     );
   }

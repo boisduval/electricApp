@@ -31,7 +31,7 @@ class ChargeAndDischarge extends React.Component {
           data: {data},
         } = res;
         console.log(data);
-        let temp = this.state.option;
+        let temp = {...this.state.option};
         temp.title.text = data.ChargeDischargeEnergy.Name;
         temp.xAxis.data = data.ChargeDischargeEnergy.XAxisData;
         temp.xAxis.axisPointer.value =
@@ -140,6 +140,10 @@ class ChargeAndDischarge extends React.Component {
     };
   }
 
+  setBarOption() {
+    return;
+  }
+
   onRefresh() {
     if (this.state.refreshing === false) {
       this.setState({
@@ -180,7 +184,7 @@ class ChargeAndDischarge extends React.Component {
       ],
       option: {
         title: {
-          text: '123456',
+          text: '',
           left: 10,
           top: 10,
           textStyle: {
@@ -193,6 +197,12 @@ class ChargeAndDischarge extends React.Component {
           right: 40,
           bottom: 70,
         },
+        dataZoom: [
+          {
+            type: 'inside',
+            throttle: 50,
+          },
+        ],
         tooltip: {
           confine: true,
           triggerOn: 'none',

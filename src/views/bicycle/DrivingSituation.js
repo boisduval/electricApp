@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, ScrollView} from 'react-native';
+import {Text, View, StyleSheet, ScrollView, ViewComponent} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ListItem} from 'react-native-elements';
 
@@ -15,15 +15,22 @@ const Tab = createMaterialTopTabNavigator();
 class Week extends React.Component {
   getData() {
     axios
-      .get(`${baseUrl.url1}/Vehicle/GetConsumption`, {
+      .get(`${baseUrl.url1}/Vehicle/GetTravlWeek`, {
         params: {
           AutoSystemID: store.getState().userId,
-          VehicleSystemID: store.getState().vehicleId,
         },
       })
       .then((res) => {
         // res
-        console.log(res);
+        const {
+          data: {data},
+        } = res;
+        this.setState({
+          list: data.details,
+          frequency: data.frequency,
+          duration: data.duration,
+          mileage: data.mileage,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -38,9 +45,77 @@ class Week extends React.Component {
     super(props);
     this.state = {
       list: [],
+      frequency: '',
+      duration: '',
+      mileage: '',
     };
   }
 
+  render() {
+    return (
+      <ViewBox
+        frequency={this.state.frequency}
+        duration={this.state.duration}
+        mileage={this.state.mileage}
+        list={this.state.list}
+        navigate={this.props.navigation.navigate}
+      />
+    );
+  }
+}
+
+class Month extends React.Component {
+  getData() {
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetTravlMonth`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+        },
+      })
+      .then((res) => {
+        // res
+        const {
+          data: {data},
+        } = res;
+        this.setState({
+          list: data.details,
+          frequency: data.frequency,
+          duration: data.duration,
+          mileage: data.mileage,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [],
+      frequency: '',
+      duration: '',
+      mileage: '',
+    };
+  }
+
+  render() {
+    return (
+      <ViewBox
+        frequency={this.state.frequency}
+        duration={this.state.duration}
+        mileage={this.state.mileage}
+        list={this.state.list}
+        navigate={this.props.navigation.navigate}
+      />
+    );
+  }
+}
+class ViewBox extends React.Component {
   render() {
     return (
       <ScrollView style={baseStyles.tabViewBox}>
@@ -48,25 +123,37 @@ class Week extends React.Component {
           <ListItem containerStyle={styles.list}>
             {/*<UserAvatar size="medium" />*/}
             <ListItem.Content style={styles.listContent}>
-              <ListItem.Title style={styles.listItem}>123</ListItem.Title>
-              <ListItem.Title style={styles.listItem}>456</ListItem.Title>
+              <ListItem.Title style={styles.listItem}>
+                {I18n.t('drivingSituation.label')[0]}&emsp;
+                {this.props.frequency}
+              </ListItem.Title>
+              <ListItem.Title style={styles.listItem}>
+                {I18n.t('drivingSituation.label')[1]}&emsp;{this.props.duration}
+              </ListItem.Title>
             </ListItem.Content>
             <View style={{alignItems: 'center'}}>
-              <Text style={[styles.listItem, {fontSize: 24}]}>1234</Text>
-              <Text style={[styles.listItem, {fontSize: 24}]}>km</Text>
+              <Text style={[styles.listItem, {fontSize: 24}]}>
+                {this.props.mileage}
+              </Text>
+              <Text style={[styles.listItem, {fontSize: 20}]}>km</Text>
             </View>
           </ListItem>
 
-          <View style={{marginTop: 20}}>
-            {this.state.list.map((v, i) => (
-              <ListItem key={i} bottomDivider>
+          <View>
+            {this.props.list.map((v, i) => (
+              <ListItem
+                key={i}
+                bottomDivider
+                onPress={() => {
+                  this.props.navigate('historicalTrack', {id: v.VRSystemID});
+                }}>
                 {/*<UserAvatar size="small" />*/}
                 <ListItem.Content>
-                  <ListItem.Title>{v.time}</ListItem.Title>
-                  <ListItem.Subtitle>{v.name}</ListItem.Subtitle>
+                  <ListItem.Title>{v.TraveTime}</ListItem.Title>
+                  <ListItem.Subtitle>{v.VName}</ListItem.Subtitle>
                 </ListItem.Content>
                 <View>
-                  <Text>{v.number}</Text>
+                  <Text>{v.Mileage}Km</Text>
                 </View>
                 <ListItem.Chevron />
               </ListItem>
@@ -74,16 +161,6 @@ class Week extends React.Component {
           </View>
         </View>
       </ScrollView>
-    );
-  }
-}
-
-class Month extends React.Component {
-  render() {
-    return (
-      <View style={baseStyles.tabViewBox}>
-        <Text>123</Text>
-      </View>
     );
   }
 }

@@ -44,6 +44,7 @@ import Privacy from './views/Privacy';
 import RetrievePassword from './views/RetrievePassword';
 import Countries from './views/Countries';
 import SplashScreen from './views/SplashScreen';
+import Register from './views/Register';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -186,11 +187,38 @@ class Home extends React.Component {
               ))}
             </>
           ) : (
-            <Stack.Screen
-              name="login"
-              component={Login}
-              options={{headerShown: false}}
-            />
+            <>
+              <Stack.Screen
+                name="login"
+                component={Login}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="countries"
+                component={Countries}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="agreement"
+                component={Agreement}
+                options={{title: I18n.t('nav.agreement')}}
+              />
+              <Stack.Screen
+                name="privacy"
+                component={Privacy}
+                options={{title: I18n.t('nav.privacy')}}
+              />
+              <Stack.Screen
+                name="retrievePassword"
+                component={RetrievePassword}
+                options={{title: I18n.t('nav.retrievePassword')}}
+              />
+              <Stack.Screen
+                name="register"
+                component={Register}
+                options={{title: I18n.t('nav.register')}}
+              />
+            </>
           )}
         </Stack.Navigator>
       </NavigationContainer>

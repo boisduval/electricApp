@@ -24,6 +24,7 @@ export default {
     historicalTrack: 'Historical Track',
     vehicleHealth: 'Vehicle Health',
     retrievePassword: 'Retrieve Password',
+    register: '注册',
   },
   tab: {
     bicycle: 'bicycle',
@@ -84,7 +85,7 @@ export default {
   },
   login: {
     tab: ['账号密码登录', '验证码登录'],
-    placeholder: ['Account', 'Password'],
+    placeholder: ['账号', '密码', '手机号', '验证码'],
     button: 'Sign in',
     register: 'Sign up',
     retrievePassword: 'forget password?',
@@ -105,5 +106,20 @@ export default {
       '请设置登录密码',
       '请确认登录密码',
     ],
+  },
+  verificationCode: {
+    get: '获取验证码',
+    resend: '重新发送',
+  },
+  register: {
+    placeholder: [
+      '请输入手机号',
+      '请输入验证码',
+      '请设置登录密码',
+      '请确认登录密码',
+    ],
+  },
+  drivingSituation: {
+    label: ['出行次数', '出行时长'],
   },
 };

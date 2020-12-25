@@ -49,10 +49,10 @@ const publicReducer = (store = initialState, action) => {
         userInformation: information,
       };
     case actionType.CURRENT_VEHICLE:
-      const {vehicleId} = payload;
+      const {VehicleSystemID} = payload;
       return {
         ...store,
-        currentVehicle: vehicleId,
+        vehicleId: VehicleSystemID,
       };
     case actionType.USER_ID:
       const {AutoSystemID} = payload;
