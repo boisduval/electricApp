@@ -86,12 +86,13 @@ export default {
     batteryNumber: '电池编号',
   },
   login: {
-    tab: ['账号密码登录', '验证码登录'],
+    tab: ['账号密码登录', '手机号登录'],
     placeholder: ['账号', '密码', '手机号', '验证码'],
     button: '登录',
     register: '注册',
     retrievePassword: '忘记密码?',
-    tip: ['登录即表明同意', '及'],
+    tip: ['登录即表明同意', '及', '新手机号将自动注册'],
+    welcome: '欢迎登录',
   },
   vehicleHealth: ['购车时间', '质保时间'],
   dashboard: {

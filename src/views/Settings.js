@@ -9,12 +9,18 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import * as actionCreators from '../redux/actionCreators';
+
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
+import store from '../redux';
+
 import Push from './settings/Push';
 import Language from './settings/Language';
 import Password from './settings/Password';
 import Storage from './settings/Storage';
 import About from './settings/About';
 import {connect} from 'react-redux';
+import Toast from 'react-native-root-toast';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +49,20 @@ function SettingsComponent(props) {
     },
   ];
   const logout = () => {
+    axios
+      .post(`${baseUrl.url1}/VehicleOwner/LogOutAuto`, {
+        AutoSystemID: store.getState().userId,
+      })
+      .then((res) => {
+        //  do sth
+        Toast.show(res.data.msg, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.CENTER,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     props.setStoreState(actionCreators.setUserId(''));
   };
   return (

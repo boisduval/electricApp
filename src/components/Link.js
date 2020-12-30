@@ -2,8 +2,9 @@ import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import * as baseConstant from '../assets/baseConstant';
 import * as RootNavigation from '../RootNavigation';
+import PropTypes from 'prop-types';
 
-export default class Link extends React.Component {
+class Link extends React.Component {
   render() {
     return (
       <TouchableOpacity
@@ -12,9 +13,9 @@ export default class Link extends React.Component {
         }}>
         <Text
           style={{
-            fontSize: this.props.size || 12,
+            fontSize: this.props.size,
             color: baseConstant.blue,
-            marginHorizontal: 4,
+            marginHorizontal: 2,
           }}>
           {this.props.text}
         </Text>
@@ -22,3 +23,14 @@ export default class Link extends React.Component {
     );
   }
 }
+Link.propTypes = {
+  text: PropTypes.string,
+  path: PropTypes.string,
+  size: PropTypes.number,
+};
+
+Link.defaultProps = {
+  size: 12,
+};
+
+export default Link;

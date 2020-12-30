@@ -17,7 +17,8 @@ import {Root} from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import {RootSiblingParent} from 'react-native-root-siblings';
 
-import Login from './views/Login';
+// import Login from './views/Login';
+import Login from './views/login/Login';
 import Motorcycle from './views/Motorcycle';
 import Battery from './views/Battery';
 import Dashboard from './views/Dashboard';
@@ -27,7 +28,7 @@ import ScanQRCodeScreen from './components/ScanQRCode';
 import * as baseConstant from './assets/baseConstant';
 import I18n from '../locales';
 import useLanguageUpdate from './hooks/userLanguageUpdate';
-import {StatusBar} from 'react-native';
+import {StatusBar, Text, View} from 'react-native';
 import OnlineRepair from './views/service/OnlineRepair';
 import Manual from './views/service/Manual';
 import OnlineService from './views/service/OnlineService';
@@ -44,7 +45,8 @@ import Privacy from './views/Privacy';
 import RetrievePassword from './views/RetrievePassword';
 import Countries from './views/Countries';
 import SplashScreen from './views/SplashScreen';
-import Register from './views/Register';
+import AccountNumber from './views/login/AccountNumber';
+import PhoneNumber from './views/login/PhoneNumber';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -194,6 +196,22 @@ class Home extends React.Component {
                 options={{headerShown: false}}
               />
               <Stack.Screen
+                name="accountNumber"
+                component={AccountNumber}
+                options={{
+                  title: '',
+                  headerStyle: {elevation: 0},
+                }}
+              />
+              <Stack.Screen
+                name="phoneNumber"
+                component={PhoneNumber}
+                options={{
+                  title: '',
+                  headerStyle: {elevation: 0},
+                }}
+              />
+              <Stack.Screen
                 name="countries"
                 component={Countries}
                 options={{headerShown: false}}
@@ -212,11 +230,6 @@ class Home extends React.Component {
                 name="retrievePassword"
                 component={RetrievePassword}
                 options={{title: I18n.t('nav.retrievePassword')}}
-              />
-              <Stack.Screen
-                name="register"
-                component={Register}
-                options={{title: I18n.t('nav.register')}}
               />
             </>
           )}
