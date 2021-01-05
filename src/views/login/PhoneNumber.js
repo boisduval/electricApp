@@ -12,8 +12,7 @@ import * as actionCreator from '../../redux/actionCreators';
 import Toast from 'react-native-root-toast';
 import {Container, Content} from 'native-base';
 import {connect} from 'react-redux';
-import SendVerificationCodeButton from '../../components/SendVerificationCodeButton';
-import CountriesSelector from '../../components/CountriesSelector';
+import VerificationCodeComponent from '../../components/VerificationCodeComponent';
 
 class PhoneNumber extends React.Component {
   login() {
@@ -59,7 +58,6 @@ class PhoneNumber extends React.Component {
       verificationCode: '',
       countryNumber: '86',
       phoneNumber: '',
-      disabled: false,
       identificationCode: '',
     };
   }
@@ -75,38 +73,16 @@ class PhoneNumber extends React.Component {
               {I18n.t('login.tab')[1]}
             </H1>
             <View style={styles.buttonBox}>
-              <Input
-                autoComplete="off"
-                keyboardType="number-pad"
-                maxLength={11}
-                placeholder={I18n.t('login.placeholder')[2]}
-                leftIcon={
-                  <CountriesSelector
-                    navigation={this.props.navigation}
-                    countryNumber={this.state.countryNumber}
-                    setCountryNumber={this.setCountryNumber.bind(this)}
-                  />
-                }
-                onChangeText={(text) => {
-                  this.setState({phoneNumber: text});
+              <VerificationCodeComponent
+                handleVerificationCode={(value) => {
+                  this.setState({verificationCode: value}, () => {
+                    console.log(this.state);
+                  });
                 }}
-              />
-              <Input
-                placeholder={I18n.t('login.placeholder')[3]}
-                leftIcon={{type: 'font-awesome-5', name: 'shield-alt'}}
-                rightIcon={
-                  <SendVerificationCodeButton
-                    Prefix={this.state.countryNumber}
-                    Phone={this.state.phoneNumber}
-                    disabled={this.state.phoneNumber == ''}
-                    setIdentificationCode={(identificationCode) =>
-                      this.setState({identificationCode: identificationCode})
-                    }
-                  />
-                }
-                onChangeText={(text) => {
-                  this.setState({verificationCode: text});
+                handleIdentificationCode={(value) => {
+                  this.setState({identificationCode: value});
                 }}
+                type="GetLoseVerificationCode"
               />
               <Button
                 title={I18n.t('login.button')}

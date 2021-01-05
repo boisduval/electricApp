@@ -7,7 +7,7 @@ import {
   Dimensions,
   RefreshControl,
 } from 'react-native';
-import Echarts from '../../lib/rn-echarts';
+import {Echarts, echarts} from '../../lib/rn-echarts';
 import {ListItem} from 'react-native-elements';
 
 import axios from '../assets/util/http';
@@ -30,7 +30,6 @@ class ChargeAndDischarge extends React.Component {
         const {
           data: {data},
         } = res;
-        console.log(data);
         let temp = {...this.state.option};
         temp.title.text = data.ChargeDischargeEnergy.Name;
         temp.xAxis.data = data.ChargeDischargeEnergy.XAxisData;
@@ -44,20 +43,15 @@ class ChargeAndDischarge extends React.Component {
         temp.series[1].data = data.ChargeDischargeEnergy.SeriesData[1].data;
         temp.series[1].name = data.ChargeDischargeEnergy.SeriesData[1].name;
         temp.series[1].stack = data.ChargeDischargeEnergy.SeriesData[1].stack;
-        this.setState(
-          {
-            circleProgressList: [
-              data.TopCharge,
-              data.TopDischarge,
-              data.TopTemperature,
-            ],
-            list: data.ChargeDischargeList,
-            option: temp,
-          },
-          () => {
-            console.log(this.state);
-          },
-        );
+        this.setState({
+          circleProgressList: [
+            data.TopCharge,
+            data.TopDischarge,
+            data.TopTemperature,
+          ],
+          list: data.ChargeDischargeList,
+          option: temp,
+        });
         this.setOption();
         this.setState({
           refreshing: false,
@@ -91,6 +85,10 @@ class ChargeAndDischarge extends React.Component {
             itemStyle: {
               borderWidth: 1,
               borderColor: '#464646',
+              // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              //   {offset: 0, color: '#146ad4'},
+              //   {offset: 1, color: '#4396ee'},
+              // ]),
             },
           },
           axisLine: {
@@ -136,12 +134,8 @@ class ChargeAndDischarge extends React.Component {
           },
         },
       ],
-      backgroundColor: '#193085',
+      backgroundColor: '#0f375f',
     };
-  }
-
-  setBarOption() {
-    return;
   }
 
   onRefresh() {
@@ -244,15 +238,33 @@ class ChargeAndDischarge extends React.Component {
             type: 'bar',
             name: '',
             stack: '',
+            barWidth: 10,
+            itemStyle: {
+              // barBorderRadius: 5,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {offset: 0, color: '#146ad4'},
+                {offset: 1, color: '#43b8ee'},
+              ]),
+            },
           },
           {
             data: [],
             type: 'bar',
             name: '',
             stack: '',
+            barWidth: 10,
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {offset: 0, color: 'rgb(20,151,212)'},
+                {offset: 0.2, color: 'rgb(20,158,212)'},
+                {offset: 1, color: 'rgb(20,151,212,0)'},
+              ]),
+            },
+            barGap: '-100%',
+            z: -12,
           },
         ],
-        backgroundColor: '#193085',
+        backgroundColor: '#0f375f',
       },
     };
   }

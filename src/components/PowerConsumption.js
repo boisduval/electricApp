@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View, StyleSheet, ScrollView, RefreshControl} from 'react-native';
-import Echarts from '../../lib/rn-echarts';
+import {Echarts, echarts} from '../../lib/rn-echarts';
 import {ListItem} from 'react-native-elements';
 import {Spinner} from 'native-base';
 import Toast from 'react-native-root-toast';
@@ -117,7 +117,7 @@ class PowerConsumption extends React.Component {
           },
         },
       ],
-      backgroundColor: '#193085',
+      backgroundColor: '#0f375f',
     };
   }
 
@@ -220,9 +220,18 @@ class PowerConsumption extends React.Component {
             data: [],
             type: 'bar',
             name: '',
+            // barWidth: 10,
+            barCategoryGap: '40%',
+            itemStyle: {
+              barBorderRadius: 5,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {offset: 0, color: '#146ad4'},
+                {offset: 1, color: '#43b8ee'},
+              ]),
+            },
           },
         ],
-        backgroundColor: '#193085',
+        backgroundColor: '#0f375f',
       },
     };
   }

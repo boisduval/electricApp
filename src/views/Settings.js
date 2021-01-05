@@ -16,11 +16,11 @@ import store from '../redux';
 
 import Push from './settings/Push';
 import Language from './settings/Language';
-import Password from './settings/Password';
 import Storage from './settings/Storage';
 import About from './settings/About';
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
+import RetrievePassword from './RetrievePassword';
 
 const Stack = createStackNavigator();
 
@@ -36,8 +36,8 @@ function SettingsComponent(props) {
       route: 'lang',
     },
     {
-      name: I18n.t('nav.password'),
-      route: 'password',
+      name: I18n.t('nav.retrievePassword'),
+      route: 'retrievePassword',
     },
     {
       name: I18n.t('nav.storage'),
@@ -127,9 +127,9 @@ export default function Settings() {
         component={Language}
       />
       <Stack.Screen
-        options={{title: I18n.t('nav.password')}}
-        name="password"
-        component={Password}
+        options={{title: I18n.t('nav.retrievePassword')}}
+        name="retrievePassword"
+        component={RetrievePassword}
       />
       <Stack.Screen
         options={{title: I18n.t('nav.storage')}}

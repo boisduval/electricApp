@@ -109,6 +109,7 @@ export default {
       '请重置登录密码',
       '请确认登录密码',
     ],
+    confirm: '确定',
   },
   verificationCode: {
     get: '获取验证码',

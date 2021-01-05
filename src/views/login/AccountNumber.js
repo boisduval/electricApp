@@ -84,10 +84,14 @@ class AccountNumber extends React.Component {
                 titleStyle={{fontWeight: 'bold'}}
                 onPress={this.login.bind(this)}
               />
-              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+              <View
+                style={{
+                  marginTop: 20,
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                }}>
                 <Link
-                  size={14}
-                  title={I18n.t('login.retrievePassword')}
+                  text={I18n.t('login.retrievePassword')}
                   path="retrievePassword"
                 />
               </View>
