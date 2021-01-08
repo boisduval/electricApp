@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import I18n from '../../locales';
 import baseStyles from '../assets/baseStyles';
 
@@ -9,6 +9,7 @@ import useLanguageUpdate from '../hooks/userLanguageUpdate';
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
+import Toast from 'react-native-root-toast';
 
 export default class Motorcycle extends Component {
   getData() {
@@ -25,10 +26,10 @@ export default class Motorcycle extends Component {
           data: {data},
         } = res;
         let temp = this.state.list;
-        temp[2].value = data.ASingleMileage;
-        temp[3].value = data.ATotalMileage;
-        temp[4].value = data.StopSOC;
-        temp[5].value = data.SOH;
+        temp[0].value = data.ASingleMileage;
+        temp[1].value = data.ATotalMileage;
+        temp[2].value = data.StopSOC;
+        temp[3].value = data.SOH;
         let temp1 = this.state.list1;
         temp1[1].subtitle =
           data.ASingleMileage + 'Km/' + data.TravelTime + 'min';
@@ -37,6 +38,61 @@ export default class Motorcycle extends Component {
         temp1[3].subtitle = data.ATotalMileage + 'Km';
         temp1[5].subtitle = data.Health + I18n.t('motorcycle.info.unit');
         this.setState({list: temp, list1: temp1});
+        this.getSignalIntensity();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  getSignalIntensity() {
+    axios
+      .get(`${baseUrl.url1}/Vehicle/GetSignalIntensity`, {
+        params: {
+          AutoSystemID: store.getState().userId,
+          VehicleSystemID: store.getState().vehicleId,
+        },
+      })
+      .then((res) => {
+        // res
+        console.log(res);
+        const {
+          data: {data},
+        } = res;
+        let temp = [];
+        const setArr = (name) => {
+          return {
+            label: data[name].name,
+            value: data[name].value,
+            unit: data[name].unit,
+          };
+        };
+        temp.push(setArr('GPS'));
+        temp.push(setArr('Beidou'));
+        temp.push(setArr('RF'));
+        this.setState((prevState) => ({list: [...temp, ...prevState.list]}));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  handleLock() {
+    axios
+      .post(`${baseUrl.url1}/Vehicle/OpePadlock`, {
+        AutoSystemID: store.getState().userId,
+        VehicleSystemID: store.getState().vehicleId,
+      })
+      .then((res) => {
+        //  do sth
+        Toast.show(res.data.msg, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.CENTER,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -51,29 +107,33 @@ export default class Motorcycle extends Component {
     super(props);
     this.state = {
       list: [
-        {
-          label: 'GPS',
-          value: '',
-        },
-        {
-          label: I18n.t('motorcycle.info.beidou'),
-          value: '0',
-        },
+        // {
+        //   label: 'GPS',
+        //   value: '',
+        // },
+        // {
+        //   label: I18n.t('motorcycle.info.beidou'),
+        //   value: '0',
+        // },
         {
           label: I18n.t('motorcycle.info.singleBatteryLife'),
           value: '0',
+          unit: 'KM',
         },
         {
           label: I18n.t('motorcycle.info.totalMileage'),
           value: '0',
+          unit: 'KM',
         },
         {
           label: I18n.t('motorcycle.info.remainBattery'),
           value: '0',
+          unit: '%',
         },
         {
           label: I18n.t('motorcycle.info.batteryHealth'),
           value: '0',
+          unit: '%',
         },
       ],
       list1: [
@@ -142,14 +202,25 @@ export default class Motorcycle extends Component {
                 <View style={styles.button}>
                   <Icon name="close" />
                 </View>
-                <View style={styles.button}>
-                  <Icon name="close" />
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.handleLock();
+                  }}>
+                  <View style={[styles.button, {backgroundColor: '#0EDB00'}]}>
+                    <Icon
+                      name="power-sharp"
+                      type="ionicon"
+                      color="#fff"
+                      size={36}
+                    />
+                  </View>
+                </TouchableOpacity>
               </View>
               <View style={{marginTop: 10}}>
                 {this.state.list.map((v, i) => (
                   <Text key={i} style={{marginTop: 4, fontSize: 14}}>
                     {v.label} {v.value}
+                    {v.unit}
                   </Text>
                 ))}
               </View>

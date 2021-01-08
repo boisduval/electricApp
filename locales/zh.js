@@ -126,4 +126,11 @@ export default {
   drivingSituation: {
     label: ['出行次数', '出行时长'],
   },
+  community: {
+    recommend: '推荐',
+    ridingRecords: '骑记',
+    remould: '改造',
+    classRoom: '课堂',
+    announcement: '公告',
+  },
 };
