@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Dimensions, View} from 'react-native';
+import {Dimensions, View, StyleSheet} from 'react-native';
 import {Image} from 'react-native-elements';
 import {CardItem} from 'native-base';
 import FastImage from 'react-native-fast-image';
+import Item from './community/Item';
 
 const width = Dimensions.get('window').width - 65;
 const imgWidth = (Dimensions.get('window').width - 100) / 3;
@@ -27,15 +28,7 @@ class ImageList extends React.Component {
             case 0:
               return undefined;
             case 1:
-              return (
-                <Image
-                  containerStyle={{marginTop: 10, marginHorizontal: 5}}
-                  source={{
-                    uri: imgArr[0].Thumbnail,
-                  }}
-                  style={{height: width, width: width}}
-                />
-              );
+              return <ImageItem key={i} uri={imgArr[0].Thumbnail} />;
             case 2:
             case 4:
             case 6:
@@ -49,31 +42,7 @@ class ImageList extends React.Component {
                       flexWrap: 'wrap',
                     }}>
                     {imgArr.map((v, i) => (
-                      // <Image
-                      //   key={i}
-                      //   containerStyle={{marginTop: 10, marginHorizontal: 5}}
-                      //   source={{
-                      //     uri: v.Thumbnail,
-                      //   }}
-                      //   style={{height: imgWidth, width: imgWidth}}
-                      // />
-                      <FastImage
-                        style={{
-                          width: imgWidth,
-                          height: imgWidth,
-                          marginTop: 10,
-                          marginHorizontal: 5,
-                        }}
-                        key={i}
-                        onLoadStart={()=>{}}
-                        source={{
-                          uri:
-                            'https://pic4.zhimg.com/v2-40dabfb2839565c7b3843f21695f5b9e_1440w.jpg?source=172ae18b',
-                          // uri: v.Thumbnail,
-                          priority: FastImage.priority.normal,
-                        }}
-                        resizeMode={FastImage.resizeMode.cover}
-                      />
+                      <ImageItem key={i} uri={v.Thumbnail} />
                     ))}
                   </View>
                   <View
@@ -89,14 +58,7 @@ class ImageList extends React.Component {
             case 8:
             case 9:
               return imgArr.map((v, i) => (
-                <Image
-                  key={i}
-                  containerStyle={{marginTop: 10, marginHorizontal: 5}}
-                  source={{
-                    uri: v.Thumbnail,
-                  }}
-                  style={{height: imgWidth, width: imgWidth}}
-                />
+                <ImageItem key={i} uri={v.Thumbnail} />
               ));
           }
         })()}
@@ -104,6 +66,54 @@ class ImageList extends React.Component {
     );
   }
 }
+
+class ImageItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+    };
+  }
+  render() {
+    return (
+      <View
+        style={[
+          this.state.isLoading
+            ? styles.onLoadBackground
+            : styles.loadedBackground,
+          {marginTop: 10, marginHorizontal: 5},
+        ]}>
+        <FastImage
+          style={{
+            width: imgWidth,
+            height: imgWidth,
+          }}
+          onLoadStart={() => {
+            this.setState({isLoading: true});
+          }}
+          onLoadEnd={() => {
+            this.setState({isLoading: false});
+          }}
+          source={{
+            uri: this.props.uri,
+            // uri: v.Thumbnail,
+            priority: FastImage.priority.normal,
+          }}
+          resizeMode={FastImage.resizeMode.contain}
+        />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  onLoadBackground: {
+    backgroundColor: '#ccc',
+  },
+  loadedBackground: {
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+});
 
 ImageList.propTypes = {
   imgArr: PropTypes.array.isRequired,
