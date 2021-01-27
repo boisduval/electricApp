@@ -38,7 +38,7 @@ export default class Community extends Component {
     return (
       <Container>
         <View style={{flex: 1}}>
-          <HeaderComponent />
+          <HeaderComponent navigate={this.props.navigation.navigate} />
           <Tabs tabBarUnderlineStyle={{backgroundColor: baseConstant.blue}}>
             {headerList.map((v, i) => (
               <Tab
@@ -73,8 +73,11 @@ class HeaderComponent extends React.Component {
             name="search"
             type="ionicon"
             color="#666"
+            iconStyle={{marginRight: 10}}
             size={24}
-            style={{marginRight: 6}}
+            onPress={() => {
+              this.props.navigate('search');
+            }}
           />
           <Icon
             name="add-circle-outline"

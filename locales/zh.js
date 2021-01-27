@@ -25,6 +25,7 @@ export default {
     vehicleHealth: '车辆健康',
     retrievePassword: '找回密码',
     register: '注册',
+    blogDetail: '详情',
   },
   tab: {
     bicycle: '车况',
@@ -34,6 +35,11 @@ export default {
     mine: '我的',
     powerConsumption: '耗电量概况',
     chargeAndDischarge: '充放电概况',
+  },
+  button: {
+    cancel: '取消',
+    confirm: '确定',
+    submit: '提交',
   },
   myService: {
     title: '我的服务',

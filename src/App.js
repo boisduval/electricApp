@@ -47,6 +47,8 @@ import Countries from './views/Countries';
 import SplashScreen from './views/SplashScreen';
 import AccountNumber from './views/login/AccountNumber';
 import PhoneNumber from './views/login/PhoneNumber';
+import Search from './views/Search';
+import BlogDetail from './views/BlogDetail';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -163,6 +165,17 @@ class Home extends React.Component {
         title: '',
         component: Countries,
         headShown: false,
+      },
+      {
+        name: 'search',
+        title: '',
+        component: Search,
+        headShown: false,
+      },
+      {
+        name: 'blogDetail',
+        title: I18n.t('nav.blogDetail'),
+        component: BlogDetail,
       },
     ];
     return (

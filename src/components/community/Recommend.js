@@ -3,9 +3,7 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import axios from '../../assets/util/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
-import {Card, CardItem, Left, Right, Button, Image, Body} from 'native-base';
-import UserAvatar from '../UserAvatar';
-import {Icon} from 'react-native-elements';
+import Item from './Item';
 
 class Recommend extends React.Component {
   getData() {
@@ -14,13 +12,12 @@ class Recommend extends React.Component {
         .get(`${baseUrl.url1}/Community/GetRecommends`, {
           params: {
             AutoSystemID: store.getState().userId,
-            page: 0,
-            limit: 10,
+            page: this.state.page,
+            limit: this.state.limit,
           },
         })
         .then((res) => {
           // res
-          console.log(res);
           resolve(res);
         })
         .catch((err) => {
@@ -37,6 +34,24 @@ class Recommend extends React.Component {
     });
   }
 
+  setStar(MSystemID, LikeStatus) {
+    axios
+      .post(`${baseUrl.url1}/Community/SetLike`, {
+        AutoSystemID: store.getState().userId,
+        MSystemID,
+        LikeStatus,
+      })
+      .then((res) => {
+        //  do sth
+        if (res.data.code === 0) {
+          this.setData();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   componentDidMount() {
     this.setData();
   }
@@ -45,82 +60,23 @@ class Recommend extends React.Component {
     super(props);
     this.state = {
       list: [],
+      page: 0,
+      limit: 10,
     };
   }
 
   render() {
     return (
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{marginVertical: 10, paddingHorizontal: 10}}>
         {this.state.list.map((v, i) => (
-          <Item key={i} data={v} />
+          <Item
+            key={i}
+            data={v}
+            setStar={this.setStar.bind(this)}
+            path="GetRecommend"
+          />
         ))}
       </ScrollView>
-    );
-  }
-}
-
-class Item extends React.Component {
-  render() {
-    const data = this.props.data;
-    return (
-      <Card style={{borderRadius: 10}}>
-        {/*  header  */}
-        <CardItem>
-          <Left>
-            <UserAvatar size="small" />
-          </Left>
-          <Right>
-            <TouchableOpacity
-              onPress={() => {
-                console.log('ok');
-              }}>
-              <Icon name="ellipsis-horizontal" type="ionicon" size={22} />
-              {/*<Text>123</Text>*/}
-            </TouchableOpacity>
-          </Right>
-        </CardItem>
-        <CardItem>
-          <Body>
-            <Text>{this.props.data.title}</Text>
-          </Body>
-        </CardItem>
-
-        <CardItem cardBody>
-          {data.imgs.map((v, i) => (
-            <Image
-              source={{uri: v}}
-              key={i}
-              style={{height: 200, width: null, flex: 1}}
-            />
-          ))}
-        </CardItem>
-        <CardItem>
-          <Left>
-            <Text style={{color: '#666', fontSize: 12}}>{data.dtime}</Text>
-          </Left>
-          <Right>
-            <View style={{flexDirection: 'row'}}>
-              <Button transparent iconLeft>
-                <Icon
-                  name="chatbubble-ellipses"
-                  type="ionicon"
-                  color="#666"
-                  size={18}
-                />
-                <Text style={{marginLeft: 4, fontSize: 10, color: '#666'}}>
-                  {data.replies}
-                </Text>
-              </Button>
-              <Button transparent iconLeft style={{marginLeft: 10}}>
-                <Icon name="heart" type="ionicon" color="#666" size={18} />
-                <Text style={{marginLeft: 4, fontSize: 10, color: '#666'}}>
-                  {data.thumbup}
-                </Text>
-              </Button>
-            </View>
-          </Right>
-        </CardItem>
-      </Card>
     );
   }
 }
