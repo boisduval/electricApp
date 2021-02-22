@@ -49,6 +49,7 @@ axios.interceptors.response.use(
       //      window.location.href='http://login.com'
       return response;
     } else {
+      //  登录失败或未登录
       if (response.data.code === 2) {
         Toast.show(response.data.msg, {
           duration: Toast.durations.SHORT,

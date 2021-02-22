@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {MapView} from 'react-native-amap3d';
 import {Card} from 'react-native-elements';
-import Echarts from '../../lib/rn-echarts';
+import {Echarts} from '../../lib/rn-echarts';
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';

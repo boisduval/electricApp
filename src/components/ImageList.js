@@ -1,21 +1,62 @@
+/* 九宫格图片展示组件 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Dimensions, View, StyleSheet} from 'react-native';
-import {Image} from 'react-native-elements';
-import {CardItem} from 'native-base';
+import {
+  Dimensions,
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Item from './community/Item';
+import {Overlay} from 'react-native-elements';
+import ImageViewer from 'react-native-image-zoom-viewer';
+import ImageItem from './ImageItem';
 
-const width = Dimensions.get('window').width - 65;
+//  1张图时的宽高
+//  1. 横图16:9
+//  2. 竖图
+//  3. 正方形
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+const width = screenWidth - 65;
+const height = (width * 9) / 16;
 const imgWidth = (Dimensions.get('window').width - 100) / 3;
 
 class ImageList extends React.Component {
+  toggleOverlay() {
+    this.setState({
+      visible: true,
+      index: 0,
+    });
+  }
+  setIndex(index) {
+    this.setState({
+      index: index,
+    });
+    console.log(this.state.index);
+  }
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+    };
+  }
   render() {
     const imgArr = this.props.imgArr;
-    // let temp = imgArr;
-    // temp = 9;
-    // let arr = new Array(9).fill('');
-    // console.log(arr);
+    const images = imgArr.map((v, i) => {
+      return {
+        url: '',
+        props: {
+          uri: v.Original,
+          width: v.Width,
+          height: v.Height,
+        },
+      };
+    });
+
     return (
       <>
         {(() => {
@@ -28,7 +69,46 @@ class ImageList extends React.Component {
             case 0:
               return undefined;
             case 1:
-              return <ImageItem key={i} uri={imgArr[0].Thumbnail} />;
+              return (
+                <TouchableOpacity
+                  style={{marginTop: 10}}
+                  onPress={() => {
+                    this.toggleOverlay();
+                    this.setIndex(0);
+                  }}>
+                  {(() => {
+                    if (imgArr[0].Height > imgArr[0].Width) {
+                      {
+                        /* 竖屏 */
+                      }
+                      return (
+                        <ImageItem
+                          uri={imgArr[0].Thumbnail}
+                          width={height}
+                          height={width}
+                        />
+                      );
+                    } else if (imgArr[0].Height < imgArr[0].Width) {
+                      return (
+                        <ImageItem
+                          uri={imgArr[0].Thumbnail}
+                          width={width}
+                          height={height}
+                        />
+                      );
+                    } else {
+                      return (
+                        <ImageItem
+                          uri={imgArr[0].Thumbnail}
+                          width={height}
+                          height={height}
+                        />
+                      );
+                    }
+                  })()}
+                  {/* 横屏 */}
+                </TouchableOpacity>
+              );
             case 2:
             case 4:
             case 6:
@@ -42,7 +122,20 @@ class ImageList extends React.Component {
                       flexWrap: 'wrap',
                     }}>
                     {imgArr.map((v, i) => (
-                      <ImageItem key={i} uri={v.Thumbnail} />
+                      <TouchableOpacity
+                        key={i}
+                        onPress={() => {
+                          this.toggleOverlay();
+                          this.setIndex(i);
+                        }}>
+                        <View style={{marginTop: 10, marginHorizontal: 4}}>
+                          <ImageItem
+                            uri={v.Thumbnail}
+                            width={imgWidth}
+                            height={imgWidth}
+                          />
+                        </View>
+                      </TouchableOpacity>
                     ))}
                   </View>
                   <View
@@ -58,50 +151,70 @@ class ImageList extends React.Component {
             case 8:
             case 9:
               return imgArr.map((v, i) => (
-                <ImageItem key={i} uri={v.Thumbnail} />
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => {
+                    this.toggleOverlay();
+                    this.setIndex(i);
+                  }}>
+                  <View style={{marginTop: 10, marginHorizontal: 4}}>
+                    <ImageItem
+                      uri={v.Thumbnail}
+                      width={imgWidth}
+                      height={imgWidth}
+                    />
+                  </View>
+                </TouchableOpacity>
               ));
           }
         })()}
+        <ImageOverlay
+          images={images}
+          visible={this.state.visible}
+          toggleOverlay={this.toggleOverlay.bind(this)}
+          index={this.state.index}
+        />
       </>
     );
   }
 }
 
-class ImageItem extends React.Component {
+// 原图遮罩层
+class ImageOverlay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: true,
+      isError: false,
     };
   }
   render() {
+    console.log(this.props.images);
+
     return (
-      <View
-        style={[
-          this.state.isLoading
-            ? styles.onLoadBackground
-            : styles.loadedBackground,
-          {marginTop: 10, marginHorizontal: 5},
-        ]}>
-        <FastImage
-          style={{
-            width: imgWidth,
-            height: imgWidth,
-          }}
-          onLoadStart={() => {
-            this.setState({isLoading: true});
-          }}
-          onLoadEnd={() => {
-            this.setState({isLoading: false});
-          }}
-          source={{
-            uri: this.props.uri,
-            // uri: v.Thumbnail,
-            priority: FastImage.priority.normal,
-          }}
-          resizeMode={FastImage.resizeMode.contain}
+      <Overlay
+        isVisible={this.props.visible}
+        backdropStyle={{backgroundColor: 'black'}}
+        overlayStyle={{backgroundColor: 'black'}}
+        fullScreen={true}
+        onBackdropPress={this.props.toggleOverlay}>
+        <ImageViewer
+          imageUrls={this.props.images}
+          renderImage={(props) => (
+            <Image
+              style={{
+                width: 400,
+                height: 400,
+                alignItems: 'center',
+                alignContent: 'center',
+                justifyContent: 'center',
+              }}
+              resizeMode="contain"
+              source={{uri: props.uri}}
+            />
+          )}
         />
-      </View>
+      </Overlay>
     );
   }
 }

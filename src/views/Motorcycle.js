@@ -10,6 +10,8 @@ import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 import Toast from 'react-native-root-toast';
+import LinearGradient from 'react-native-linear-gradient';
+import ImageItem from '../components/ImageItem';
 
 export default class Motorcycle extends Component {
   getData() {
@@ -37,7 +39,7 @@ export default class Motorcycle extends Component {
         temp1[2].subtitle = data.StopSOC + '%/' + data.SOH + '%';
         temp1[3].subtitle = data.ATotalMileage + 'Km';
         temp1[5].subtitle = data.Health + I18n.t('motorcycle.info.unit');
-        this.setState({list: temp, list1: temp1});
+        this.setState({list: temp, list1: temp1, imgUrl: data.Img});
         this.getSignalIntensity();
       })
       .catch((err) => {
@@ -55,7 +57,6 @@ export default class Motorcycle extends Component {
       })
       .then((res) => {
         // res
-        console.log(res);
         const {
           data: {data},
         } = res;
@@ -77,6 +78,7 @@ export default class Motorcycle extends Component {
       });
   }
 
+  // 落锁
   handleLock() {
     axios
       .post(`${baseUrl.url1}/Vehicle/OpePadlock`, {
@@ -106,6 +108,7 @@ export default class Motorcycle extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      imgUrl: '',
       list: [
         // {
         //   label: 'GPS',
@@ -184,7 +187,6 @@ export default class Motorcycle extends Component {
   }
 
   render() {
-    const img = require('../assets/img/bicycle.png');
     return (
       <View style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
@@ -229,10 +231,11 @@ export default class Motorcycle extends Component {
               style={{
                 flex: 1,
               }}>
-              <Image
-                source={img}
+              <ImageItem
+                uri={this.state.imgUrl}
+                width={undefined}
+                height={undefined}
                 resizeMode="contain"
-                style={{flex: 1, width: undefined, height: undefined}}
               />
             </View>
           </View>
@@ -251,6 +254,18 @@ function Options(props) {
   return (
     <View>
       <View style={styles.optionsRow}>
+        {/*<View*/}
+        {/*  style={{*/}
+        {/*    width: '100%',*/}
+        {/*  }}>*/}
+        {/*  <View*/}
+        {/*    style={{*/}
+        {/*      height: 100,*/}
+        {/*      backgroundColor: '#007DB7',*/}
+        {/*      borderRadius: 6,*/}
+        {/*      marginHorizontal: 8,*/}
+        {/*    }}></View>*/}
+        {/*</View>*/}
         {props.list.map((v, i) => (
           <View style={styles.optionSize} key={i}>
             <CubeItem

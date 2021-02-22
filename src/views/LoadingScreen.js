@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {Spinner} from 'native-base';
 import * as baseConstant from '../assets/baseConstant';
 
-export default class SplashScreen extends React.Component {
+export default class LoadingScreen extends React.Component {
   render() {
     return (
       <View

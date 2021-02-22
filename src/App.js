@@ -16,6 +16,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Root} from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import {RootSiblingParent} from 'react-native-root-siblings';
+import SplashScreen from 'react-native-splash-screen';
 
 // import Login from './views/Login';
 import Login from './views/login/Login';
@@ -29,6 +30,7 @@ import * as baseConstant from './assets/baseConstant';
 import I18n from '../locales';
 import useLanguageUpdate from './hooks/userLanguageUpdate';
 import {StatusBar, Text, View} from 'react-native';
+
 import OnlineRepair from './views/service/OnlineRepair';
 import Manual from './views/service/Manual';
 import OnlineService from './views/service/OnlineService';
@@ -44,7 +46,7 @@ import Agreement from './views/Agreement';
 import Privacy from './views/Privacy';
 import RetrievePassword from './views/RetrievePassword';
 import Countries from './views/Countries';
-import SplashScreen from './views/SplashScreen';
+import LoadingScreen from './views/LoadingScreen';
 import AccountNumber from './views/login/AccountNumber';
 import PhoneNumber from './views/login/PhoneNumber';
 import Search from './views/Search';
@@ -187,7 +189,7 @@ class Home extends React.Component {
           {this.state.isLoading ? (
             <Stack.Screen
               name="splash"
-              component={SplashScreen}
+              component={LoadingScreen}
               options={{headerShown: false}}
             />
           ) : this.props.userId !== '' ? (
@@ -336,17 +338,23 @@ function HomeTabs() {
 }
 
 export default class App extends React.Component {
+  componentDidMount() {
+    SplashScreen.hide();
+    // console.log(Splash);
+  }
+
   render() {
     return (
+      // RootSiblingParent显示Toast
       <RootSiblingParent>
-        <Root>
-          <Provider store={store}>
-            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-            <PersistGate loading={null} persistor={persistor}>
-              <HomePage />
-            </PersistGate>
-          </Provider>
-        </Root>
+        {/*//   <Root>*/}
+        <Provider store={store}>
+          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+          <PersistGate loading={null} persistor={persistor}>
+            <HomePage />
+          </PersistGate>
+        </Provider>
+        {/*//   </Root>*/}
       </RootSiblingParent>
     );
   }

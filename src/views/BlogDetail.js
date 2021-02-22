@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Image, Modal, Text, TouchableOpacity, View} from 'react-native';
 import {
   CardItem,
   Container,
@@ -15,6 +15,22 @@ import store from '../redux';
 import {Avatar, Icon, ListItem} from 'react-native-elements';
 import baseStyles from '../assets/baseStyles';
 import ImageList from '../components/ImageList';
+import ImageViewer from 'react-native-image-zoom-viewer';
+
+const images = [
+  {
+    url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
+    props: {uri: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460'},
+  },
+  {
+    url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
+    props: {uri: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460'},
+  },
+  {
+    url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
+    props: {uri: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460'},
+  },
+];
 
 class BlogDetail extends React.Component {
   getData() {
@@ -29,17 +45,27 @@ class BlogDetail extends React.Component {
       })
       .then((res) => {
         // res
-        if (res.data.code === 0) {
+        if (res.data.code === 0 || 1) {
           const {
             data: {data},
           } = res;
+          let temp = data.Imgs.map((v) => {
+            return {
+              url: v.Original,
+              props: {
+                uri: v.Original,
+              },
+            };
+          });
           this.setState({
             author: data.Master,
             writeTime: data.WriteTime,
             read: data.ReadNum,
             detail: data.Derails,
             imgList: data.Imgs,
+            images: temp,
           });
+          console.log(this.state.images);
         }
       })
       .catch((err) => {
@@ -62,6 +88,7 @@ class BlogDetail extends React.Component {
       read: '',
       detail: '',
       imgList: [],
+      images: [],
     };
   }
 
@@ -69,6 +96,24 @@ class BlogDetail extends React.Component {
     return (
       <Container>
         <Content>
+          <Modal visible={false} transparent={true}>
+            <ImageViewer
+              imageUrls={images}
+              renderImage={(props) => (
+                <Image
+                  style={{
+                    width: 400,
+                    height: 400,
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    justifyContent: 'center',
+                  }}
+                  resizeMode="contain"
+                  source={{uri: props.uri}}
+                />
+              )}
+            />
+          </Modal>
           <ListItem>
             {(() => {
               if (this.state.author.img === '') {
@@ -104,7 +149,7 @@ class BlogDetail extends React.Component {
               {/*<Text>123</Text>*/}
             </TouchableOpacity>
           </ListItem>
-          <Body style={{marginHorizontal: 20}}>
+          <Body style={{marginHorizontal: 20, alignItems: 'flex-start'}}>
             <Text>{this.state.detail}</Text>
             <ImageList imgArr={this.state.imgList} />
           </Body>

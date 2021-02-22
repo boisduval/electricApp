@@ -10,14 +10,6 @@ const width = Dimensions.get('window').width - 65;
 const imgWidth = (Dimensions.get('window').width - 100) / 3;
 
 class Item extends React.Component {
-  componentDidMount() {
-    Image.prefetch(
-      'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3363295869,2467511306&fm=26&gp=0.jpg',
-    ).then((res) => {
-      console.log(res);
-    });
-  }
-
   render() {
     const data = this.props.data;
     const path = this.props.path;
