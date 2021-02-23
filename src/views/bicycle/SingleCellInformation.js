@@ -3,23 +3,22 @@ import {StatusBar, Text, View} from 'react-native';
 import {Tab, Tabs, TabHeading} from 'native-base';
 import {Header} from 'react-native-elements';
 
-import I18n from '../../locales/index';
-import baseStyles from '../assets/baseStyles';
-import * as baseConstant from '../assets/baseConstant';
+import I18n from '../../../locales';
+import CellVoltage from '../../components/CellVoltage';
+import CellTemperature from '../../components/CellTemperature';
+import baseStyles from '../../assets/baseStyles';
+import * as baseConstant from '../../assets/baseConstant';
 
-import PowerConsumption from '../components/PowerConsumption';
-import ChargeAndDischarge from '../components/ChargeAndDischarge';
-
-export default class Battery extends Component {
+export default class SingleCellInformation extends Component {
   render() {
     const headerList = [
       {
-        name: 'powerConsumption',
-        component: <PowerConsumption />,
+        name: 'cellVoltage',
+        component: <CellVoltage />,
       },
       {
-        name: 'chargeAndDischarge',
-        component: <ChargeAndDischarge />,
+        name: 'cellTemperature',
+        component: <CellTemperature />,
       },
     ];
     return (

@@ -9,6 +9,7 @@ import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 import Loading from './Loading';
+import circleProgressBanner from '../assets/styles/circleProgressBanner';
 
 class PowerConsumption extends React.Component {
   getData(toast) {
@@ -247,7 +248,7 @@ class PowerConsumption extends React.Component {
           }>
           {/* 圆环进度条*/}
 
-          <View style={styles.circleProgressBox}>
+          <View style={circleProgressBanner.circleProgressBox}>
             {this.state.circleProgressList.map((v, i) => (
               <View style={{flex: 1}} key={i}>
                 <Echarts
@@ -260,7 +261,7 @@ class PowerConsumption extends React.Component {
           </View>
 
           {/* 图表 */}
-          <View style={styles.barChartBox}>
+          <View style={circleProgressBanner.barChartBox}>
             <Echarts option={this.state.option} height={260} theme="dark" />
           </View>
           {/* 列表 */}
@@ -284,23 +285,4 @@ class PowerConsumption extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  circleProgressBox: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    flex: 1,
-    marginHorizontal: 10,
-    marginVertical: 10,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  barChartBox: {
-    marginHorizontal: 10,
-    marginBottom: 10,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-});
-
 export default PowerConsumption;

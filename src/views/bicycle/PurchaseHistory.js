@@ -7,6 +7,7 @@ import baseUrl from '../../assets/baseUrl';
 import axios from '../../assets/util/http';
 import store from '../../redux';
 import I18n from '../../../locales';
+import ImageItem from '../../components/ImageItem';
 
 export default class PurchaseHistory extends React.Component {
   getData() {
@@ -21,7 +22,7 @@ export default class PurchaseHistory extends React.Component {
         const {
           data: {data},
         } = res;
-        this.setState({data});
+        this.setState({data, img: data.Img});
       })
       .catch((err) => {
         console.log(err);
@@ -34,6 +35,7 @@ export default class PurchaseHistory extends React.Component {
     super(props);
     this.state = {
       data: {},
+      img: '',
     };
   }
   render() {
@@ -59,7 +61,6 @@ export default class PurchaseHistory extends React.Component {
         value: this.state.data.BatteryCode,
       },
     ];
-    const img = require('../../assets/img/bicycle.png');
     return (
       <View style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
@@ -71,8 +72,12 @@ export default class PurchaseHistory extends React.Component {
             ))}
           </View>
           <View style={styles.bicycle}>
-            {/*<Image source={img} resizeMode="contain" style={styles.img} />*/}
-            <Image resizeMode="contain" source={img} style={styles.image} />
+            <ImageItem
+              uri={this.state.img}
+              resizeMode="contain"
+              width={undefined}
+              height={undefined}
+            />
           </View>
         </View>
       </View>

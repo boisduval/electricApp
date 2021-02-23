@@ -26,6 +26,7 @@ export default {
     retrievePassword: '找回密码',
     register: '注册',
     blogDetail: '详情',
+    singleCellInformation: '单体电芯信息',
   },
   tab: {
     bicycle: '车况',
@@ -35,6 +36,8 @@ export default {
     mine: '我的',
     powerConsumption: '耗电量概况',
     chargeAndDischarge: '充放电概况',
+    cellVoltage: '电芯电压',
+    cellTemperature: '电芯温度',
   },
   button: {
     cancel: '取消',

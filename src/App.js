@@ -51,6 +51,7 @@ import AccountNumber from './views/login/AccountNumber';
 import PhoneNumber from './views/login/PhoneNumber';
 import Search from './views/Search';
 import BlogDetail from './views/BlogDetail';
+import SingleCellInformation from './views/bicycle/SingleCellInformation';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -178,6 +179,11 @@ class Home extends React.Component {
         name: 'blogDetail',
         title: I18n.t('nav.blogDetail'),
         component: BlogDetail,
+      },
+      {
+        name: 'singleCellInformation',
+        title: I18n.t('nav.singleCellInformation'),
+        component: SingleCellInformation,
       },
     ];
     return (

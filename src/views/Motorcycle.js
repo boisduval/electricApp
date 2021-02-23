@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import I18n from '../../locales';
 import baseStyles from '../assets/baseStyles';
 
 import CubeItem from '../components/CubeItem';
-import {Icon} from 'react-native-elements';
+import {Icon, ListItem} from 'react-native-elements';
 import useLanguageUpdate from '../hooks/userLanguageUpdate';
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
@@ -12,6 +19,8 @@ import store from '../redux';
 import Toast from 'react-native-root-toast';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageItem from '../components/ImageItem';
+import GradientBoard from '../components/GradientBoard';
+import bicycleInfoList from '../assets/styles/bicycleInfoList';
 
 export default class Motorcycle extends Component {
   getData() {
@@ -39,7 +48,15 @@ export default class Motorcycle extends Component {
         temp1[2].subtitle = data.StopSOC + '%/' + data.SOH + '%';
         temp1[3].subtitle = data.ATotalMileage + 'Km';
         temp1[5].subtitle = data.Health + I18n.t('motorcycle.info.unit');
-        this.setState({list: temp, list1: temp1, imgUrl: data.Img});
+        this.setState({
+          list: temp,
+          list1: temp1,
+          imgUrl: data.Img,
+          topBoard: {
+            title: data.CellTitle,
+            time: data.CellUpTime,
+          },
+        });
         this.getSignalIntensity();
       })
       .catch((err) => {
@@ -69,8 +86,8 @@ export default class Motorcycle extends Component {
           };
         };
         temp.push(setArr('GPS'));
-        temp.push(setArr('Beidou'));
-        temp.push(setArr('RF'));
+        // temp.push(setArr('Beidou'));
+        // temp.push(setArr('RF'));
         this.setState((prevState) => ({list: [...temp, ...prevState.list]}));
       })
       .catch((err) => {
@@ -183,12 +200,16 @@ export default class Motorcycle extends Component {
           path: 'vehicleHealth',
         },
       ],
+      topBoard: {
+        title: '',
+        time: '',
+      },
     };
   }
 
   render() {
     return (
-      <View style={baseStyles.tabViewBox}>
+      <ScrollView style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
           <View
             style={{
@@ -202,7 +223,12 @@ export default class Motorcycle extends Component {
                   flexDirection: 'row',
                 }}>
                 <View style={styles.button}>
-                  <Icon name="close" />
+                  <Icon
+                    name="shield-checkmark-outline"
+                    type="ionicon"
+                    size={36}
+                    color="#666"
+                  />
                 </View>
                 <TouchableOpacity
                   onPress={() => {
@@ -242,9 +268,10 @@ export default class Motorcycle extends Component {
           <Options
             navigate={this.props.navigation.navigate}
             list={this.state.list1}
+            topBoard={this.state.topBoard}
           />
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -254,18 +281,35 @@ function Options(props) {
   return (
     <View>
       <View style={styles.optionsRow}>
-        {/*<View*/}
-        {/*  style={{*/}
-        {/*    width: '100%',*/}
-        {/*  }}>*/}
-        {/*  <View*/}
-        {/*    style={{*/}
-        {/*      height: 100,*/}
-        {/*      backgroundColor: '#007DB7',*/}
-        {/*      borderRadius: 6,*/}
-        {/*      marginHorizontal: 8,*/}
-        {/*    }}></View>*/}
-        {/*</View>*/}
+        <View
+          style={{
+            width: '100%',
+            paddingHorizontal: 8,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigate('singleCellInformation');
+            }}>
+            <GradientBoard>
+              <ListItem containerStyle={bicycleInfoList.list}>
+                {/*<UserAvatar size="medium" />*/}
+                <ListItem.Content style={bicycleInfoList.listContent}>
+                  <ListItem.Title style={[bicycleInfoList.listItem]}>
+                    {props.topBoard.title}
+                  </ListItem.Title>
+                  <ListItem.Title style={[bicycleInfoList.listItem]}>
+                    {props.topBoard.time}
+                  </ListItem.Title>
+                </ListItem.Content>
+                <View>
+                  {/*<Text style={{color: '#fff', fontSize: 24, fontWeight: 'bold'}}>*/}
+                  {/*  {this.state.SOC + '%'}*/}
+                  {/*</Text>*/}
+                </View>
+              </ListItem>
+            </GradientBoard>
+          </TouchableOpacity>
+        </View>
         {props.list.map((v, i) => (
           <View style={styles.optionSize} key={i}>
             <CubeItem

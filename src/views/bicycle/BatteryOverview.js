@@ -1,14 +1,14 @@
 import React from 'react';
-import {ScrollView, Text, View, StyleSheet, RefreshControl} from 'react-native';
+import {Text, View, RefreshControl, FlatList} from 'react-native';
 import baseStyles from '../../assets/baseStyles';
-import {ListItem} from 'react-native-elements';
-import * as baseConstant from '../../assets/baseConstant';
 import axios from '../../assets/util/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
 import I18n from '../../../locales';
 import Loading from '../../components/Loading';
 import Toast from 'react-native-root-toast';
+import BatteryListHeader from '../../components/BatteryListHeader';
+import BatteryListItem from '../../components/BatteryListItem';
 
 export default class BatteryOverview extends React.Component {
   getData(toast) {
@@ -24,12 +24,21 @@ export default class BatteryOverview extends React.Component {
         const {
           data: {data},
         } = res;
-        this.setState({
-          list: data.Status,
-          DumpEnergy: data.DumpEnergy,
-          ExpectsMileage: data.ExpectsMileage,
-          SOC: data.SOC,
-        });
+        if (res.data.code === 0) {
+          this.setState({
+            list: data.Status,
+            DumpEnergy: data.DumpEnergy,
+            ExpectsMileage: data.ExpectsMileage,
+            SOC: data.SOC,
+          });
+        } else {
+          this.setState({
+            list: [],
+            DumpEnergy: '',
+            ExpectsMileage: '',
+            SOC: '',
+          });
+        }
         this.setState({
           refreshing: false,
         });
@@ -71,68 +80,38 @@ export default class BatteryOverview extends React.Component {
     };
   }
   render() {
+    const title =
+      I18n.t('battery.remainBattery') + `    ` + this.state.DumpEnergy + 'Kwh';
+    const subtitle =
+      I18n.t('battery.estimatedMileage') +
+      `    ` +
+      this.state.ExpectsMileage +
+      'Km';
+    const rightComponent = (
+      <Text style={{color: '#fff', fontSize: 24, fontWeight: 'bold'}}>
+        {this.state.SOC + '%'}
+      </Text>
+    );
     return (
-      <ScrollView
-        style={baseStyles.tabViewBox}
+      <FlatList
+        ListHeaderComponent={
+          <BatteryListHeader
+            title={title}
+            subtitle={subtitle}
+            rightComponent={rightComponent}
+          />
+        }
+        ListFooterComponent={<View style={{height: 20}} />}
+        data={this.state.list}
+        renderItem={BatteryListItem}
+        style={[baseStyles.tabViewBox, {paddingHorizontal: 10, marginTop: 10}]}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={this.onRefresh.bind(this)}
           />
-        }>
-        <View style={baseStyles.contentBox}>
-          <ListItem containerStyle={styles.list}>
-            {/*<UserAvatar size="medium" />*/}
-            <ListItem.Content style={styles.listContent}>
-              <ListItem.Title style={[styles.listItem]}>
-                {I18n.t('battery.remainBattery')}&emsp;{this.state.DumpEnergy}
-                Kwh
-              </ListItem.Title>
-              <ListItem.Title style={[styles.listItem]}>
-                {I18n.t('battery.estimatedMileage')}&emsp;
-                {this.state.ExpectsMileage}Km
-              </ListItem.Title>
-            </ListItem.Content>
-            <View>
-              <Text style={{color: '#fff', fontSize: 24, fontWeight: 'bold'}}>
-                {this.state.SOC + '%'}
-              </Text>
-            </View>
-          </ListItem>
-
-          <View>
-            {this.state.list.map((v, i) => (
-              <ListItem key={i} bottomDivider>
-                {/*<UserAvatar size="small" />*/}
-                <ListItem.Content>
-                  <ListItem.Title>{v.name}</ListItem.Title>
-                  {/*<ListItem.Subtitle>{v.name}</ListItem.Subtitle>*/}
-                </ListItem.Content>
-                <View>
-                  <Text>{v.value + v.unit}</Text>
-                </View>
-                {/*<ListItem.Chevron />*/}
-              </ListItem>
-            ))}
-          </View>
-        </View>
-      </ScrollView>
+        }
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  list: {
-    backgroundColor: baseConstant.darkBlue,
-    borderWidth: 0,
-    borderRadius: 4,
-    marginTop: 10,
-    height: 90,
-  },
-  listItem: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  listContent: {justifyContent: 'space-around', height: '100%'},
-});

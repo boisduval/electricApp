@@ -9,6 +9,8 @@ import I18n from '../../../locales';
 import axios from '../../assets/util/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
+import bicycleInfoList from '../../assets/styles/bicycleInfoList';
+import GradientBoard from '../../components/GradientBoard';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -120,25 +122,29 @@ class ViewBox extends React.Component {
     return (
       <ScrollView style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
-          <ListItem containerStyle={styles.list}>
-            {/*<UserAvatar size="medium" />*/}
-            <ListItem.Content style={styles.listContent}>
-              <ListItem.Title style={styles.listItem}>
-                {I18n.t('drivingSituation.label')[0]}&emsp;
-                {this.props.frequency}
-              </ListItem.Title>
-              <ListItem.Title style={styles.listItem}>
-                {I18n.t('drivingSituation.label')[1]}&emsp;{this.props.duration}
-              </ListItem.Title>
-            </ListItem.Content>
-            <View style={{alignItems: 'center'}}>
-              <Text style={[styles.listItem, {fontSize: 24}]}>
-                {this.props.mileage}
-              </Text>
-              <Text style={[styles.listItem, {fontSize: 20}]}>km</Text>
-            </View>
-          </ListItem>
-
+          <GradientBoard>
+            <ListItem containerStyle={bicycleInfoList.list}>
+              {/*<UserAvatar size="medium" />*/}
+              <ListItem.Content style={bicycleInfoList.listContent}>
+                <ListItem.Title style={bicycleInfoList.listItem}>
+                  {I18n.t('drivingSituation.label')[0]}&emsp;
+                  {this.props.frequency}
+                </ListItem.Title>
+                <ListItem.Title style={bicycleInfoList.listItem}>
+                  {I18n.t('drivingSituation.label')[1]}&emsp;
+                  {this.props.duration}
+                </ListItem.Title>
+              </ListItem.Content>
+              <View style={{alignItems: 'center'}}>
+                <Text style={[bicycleInfoList.listItem, {fontSize: 24}]}>
+                  {this.props.mileage}
+                </Text>
+                <Text style={[bicycleInfoList.listItem, {fontSize: 20}]}>
+                  km
+                </Text>
+              </View>
+            </ListItem>
+          </GradientBoard>
           <View>
             {this.props.list.map((v, i) => (
               <ListItem
@@ -183,19 +189,3 @@ export default class DrivingSituation extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  list: {
-    backgroundColor: baseConstant.darkBlue,
-    borderWidth: 0,
-    borderRadius: 4,
-    marginTop: 10,
-    height: 90,
-  },
-  listItem: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  listContent: {justifyContent: 'space-around', height: '100%'},
-});

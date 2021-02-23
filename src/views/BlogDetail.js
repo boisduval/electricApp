@@ -1,5 +1,13 @@
 import React from 'react';
-import {Image, Modal, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
 import {
   CardItem,
   Container,
@@ -8,11 +16,14 @@ import {
   Right,
   Item,
   Body,
+  Footer,
+  FooterTab,
+  Button,
 } from 'native-base';
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
-import {Avatar, Icon, ListItem} from 'react-native-elements';
+import {Avatar, Icon, Input, ListItem} from 'react-native-elements';
 import baseStyles from '../assets/baseStyles';
 import ImageList from '../components/ImageList';
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -89,13 +100,14 @@ class BlogDetail extends React.Component {
       detail: '',
       imgList: [],
       images: [],
+      comment: '',
     };
   }
 
   render() {
     return (
       <Container>
-        <Content>
+        <Content style={{marginBottom: 20}}>
           <Modal visible={false} transparent={true}>
             <ImageViewer
               imageUrls={images}
@@ -149,14 +161,54 @@ class BlogDetail extends React.Component {
               {/*<Text>123</Text>*/}
             </TouchableOpacity>
           </ListItem>
-          <Body style={{marginHorizontal: 20, alignItems: 'flex-start'}}>
+          <Body
+            style={{
+              marginHorizontal: 20,
+              alignItems: 'flex-start',
+            }}>
+            {/* 文章  */}
             <Text>{this.state.detail}</Text>
+            <Text>{this.state.detail}</Text>
+            {/* 图片  */}
             <ImageList imgArr={this.state.imgList} />
           </Body>
+          {/*  阅读数  */}
+          <View style={styles.readBox}>
+            <Text style={styles.readText}>{this.state.read}</Text>
+          </View>
+          <View style={{backgroundColor: '#e2e2e2', height: 10}} />
+          {/*  评论和赞  */}
+          {/*<View style={{}}*/}
         </Content>
+        <Footer style={{backgroundColor: '#ffffff'}}>
+          <Input
+            placeholder="Comment"
+            style={{
+              borderRadius: 14,
+              backgroundColor: '#DCDCE1',
+              flex: 1,
+            }}
+            inputContainerStyle={{borderBottomWidth: 0}}
+            onChangeText={(value) => this.setState({comment: value})}
+          />
+        </Footer>
       </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  readBox: {
+    flex: 1,
+    marginHorizontal: 20,
+    alignItems: 'flex-end',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  readText: {
+    fontSize: 14,
+    color: '#666',
+  },
+});
 
 export default BlogDetail;

@@ -1,37 +1,35 @@
 import React from 'react';
-import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
-import baseStyles from '../../assets/baseStyles';
+import {ScrollView, Text, View, StyleSheet, RefreshControl} from 'react-native';
+import baseStyles from '../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
-import * as baseConstant from '../../assets/baseConstant';
-import I18n from '../../../locales';
-import axios from '../../assets/util/http';
-import baseUrl from '../../assets/baseUrl';
-import store from '../../redux';
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
+import store from '../redux';
+import I18n from '../../locales';
+import Loading from '../components/Loading';
 import Toast from 'react-native-root-toast';
-import Loading from '../../components/Loading';
-import bicycleInfoList from '../../assets/styles/bicycleInfoList';
-import GradientBoard from '../../components/GradientBoard';
+import bicycleInfoList from '../assets/styles/bicycleInfoList';
+import GradientBoard from '../components/GradientBoard';
 
-export default class VehicleHealth extends React.Component {
+export default class CellTemperature extends React.Component {
   getData(toast) {
     axios
-      .get(`${baseUrl.url1}/Vehicle/GetVehicleHealth`, {
+      .get(`${baseUrl.url1}/Vehicle/GetBatterySummary`, {
         params: {
           AutoSystemID: store.getState().userId,
-          VehicleSystemID: store.getState().vehicleId,
+          BatterySystemID: store.getState().batteryId,
         },
       })
       .then((res) => {
         // res
-        console.log(res);
         const {
           data: {data},
         } = res;
         this.setState({
-          list: data.Items,
-          VWarrantyPeriod: data.VWarrantyPeriod,
-          VPurchasingTime: data.VPurchasingTime,
-          Conclusion: data.Conclusion,
+          list: data.Status,
+          DumpEnergy: data.DumpEnergy,
+          ExpectsMileage: data.ExpectsMileage,
+          SOC: data.SOC,
         });
         this.setState({
           refreshing: false,
@@ -67,13 +65,12 @@ export default class VehicleHealth extends React.Component {
     super(props);
     this.state = {
       list: [],
-      VWarrantyPeriod: '',
-      VPurchasingTime: '',
-      Conclusion: '',
+      DumpEnergy: '',
+      ExpectsMileage: '',
+      SOC: '',
       refreshing: false,
     };
   }
-
   render() {
     return (
       <ScrollView
@@ -89,31 +86,33 @@ export default class VehicleHealth extends React.Component {
             <ListItem containerStyle={bicycleInfoList.list}>
               {/*<UserAvatar size="medium" />*/}
               <ListItem.Content style={bicycleInfoList.listContent}>
-                <ListItem.Title style={bicycleInfoList.listItem}>
-                  {I18n.t('vehicleHealth')[0]}&emsp;{this.state.VPurchasingTime}
+                <ListItem.Title style={[bicycleInfoList.listItem]}>
+                  {I18n.t('battery.remainBattery')}&emsp;{this.state.DumpEnergy}
+                  Kwh
                 </ListItem.Title>
-                <ListItem.Title style={bicycleInfoList.listItem}>
-                  {I18n.t('vehicleHealth')[1]}&emsp;{this.state.VWarrantyPeriod}
+                <ListItem.Title style={[bicycleInfoList.listItem]}>
+                  {I18n.t('battery.estimatedMileage')}&emsp;
+                  {this.state.ExpectsMileage}Km
                 </ListItem.Title>
               </ListItem.Content>
-              <View style={{alignItems: 'center'}}>
-                <Text style={[bicycleInfoList.listItem, {fontSize: 24}]}>
-                  {this.state.Conclusion}
+              <View>
+                <Text style={{color: '#fff', fontSize: 24, fontWeight: 'bold'}}>
+                  {this.state.SOC + '%'}
                 </Text>
-                {/*<Text style={[styles.listItem, {fontSize: 24}]}>km</Text>*/}
               </View>
             </ListItem>
           </GradientBoard>
+
           <View>
             {this.state.list.map((v, i) => (
               <ListItem key={i} bottomDivider>
                 {/*<UserAvatar size="small" />*/}
                 <ListItem.Content>
-                  <ListItem.Title>{v.Title}</ListItem.Title>
-                  <ListItem.Subtitle>{v.LastTime}</ListItem.Subtitle>
+                  <ListItem.Title>{v.name}</ListItem.Title>
+                  {/*<ListItem.Subtitle>{v.name}</ListItem.Subtitle>*/}
                 </ListItem.Content>
                 <View>
-                  <Text style={{fontSize: 16}}>{v.Interval}</Text>
+                  <Text>{v.value + v.unit}</Text>
                 </View>
                 {/*<ListItem.Chevron />*/}
               </ListItem>
