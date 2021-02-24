@@ -302,9 +302,12 @@ function Options(props) {
                   </ListItem.Title>
                 </ListItem.Content>
                 <View>
-                  {/*<Text style={{color: '#fff', fontSize: 24, fontWeight: 'bold'}}>*/}
-                  {/*  {this.state.SOC + '%'}*/}
-                  {/*</Text>*/}
+                  <Icon
+                    name="chevron-forward-circle-outline"
+                    type="ionicon"
+                    color="#fff"
+                    size={46}
+                  />
                 </View>
               </ListItem>
             </GradientBoard>

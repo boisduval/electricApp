@@ -1,32 +1,20 @@
+/*
+ * 单体电芯信息组件
+ * */
 import React from 'react';
 import {Text, View, RefreshControl, FlatList} from 'react-native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import baseStyles from '../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
-
-import baseStyles from '../../assets/baseStyles';
-import I18n from '../../../locales';
-import axios from '../../assets/util/http';
-import baseUrl from '../../assets/baseUrl';
-import store from '../../redux';
-import bicycleInfoList from '../../assets/styles/bicycleInfoList';
-import BatteryListHeader from '../../components/BatteryListHeader';
+import axios from '../assets/util/http';
+import baseUrl from '../assets/baseUrl';
+import store from '../redux';
+import Loading from '../components/Loading';
 import Toast from 'react-native-root-toast';
-import Loading from '../../components/Loading';
+import bicycleInfoList from '../assets/styles/bicycleInfoList';
+import BatteryListHeader from './BatteryListHeader';
+import PropType from 'prop-types';
 
-const Tab = createMaterialTopTabNavigator();
-
-class Week extends React.Component {
-  render() {
-    return <ViewBox url="GetTravlWeek" />;
-  }
-}
-
-class Month extends React.Component {
-  render() {
-    return <ViewBox url="GetTravlMonth" />;
-  }
-}
-class ViewBox extends React.Component {
+class CellInfo extends React.Component {
   getData(toast) {
     axios
       .get(`${baseUrl.url1}/Vehicle/${this.props.url}`, {
@@ -41,17 +29,27 @@ class ViewBox extends React.Component {
         } = res;
         if (res.data.code === 0) {
           this.setState({
-            list: data.details,
-            frequency: data.frequency,
-            duration: data.duration,
-            mileage: data.mileage,
+            list: data[this.props.listKey],
+            title:
+              data[this.props.titleKey].name +
+              '    ' +
+              data[this.props.titleKey].value +
+              data[this.props.titleKey].unit,
+            subtitle:
+              data[this.props.subtitleKey].name +
+              '    ' +
+              data[this.props.subtitleKey].value +
+              data[this.props.subtitleKey].unit,
+            value: data[this.props.valueKey].value,
+            unit: data[this.props.valueKey].unit,
           });
         } else {
           this.setState({
             list: [],
-            frequency: '',
-            duration: '',
-            mileage: '',
+            title: '',
+            subtitle: '',
+            value: '',
+            unit: '',
           });
         }
         this.setState({
@@ -79,6 +77,7 @@ class ViewBox extends React.Component {
       this.getData(toast);
     }
   }
+
   componentDidMount() {
     this.getData();
   }
@@ -87,23 +86,24 @@ class ViewBox extends React.Component {
     super(props);
     this.state = {
       list: [],
-      frequency: '',
-      duration: '',
-      mileage: '',
+      title: '',
+      subtitle: '',
+      value: '',
+      unit: '',
       refreshing: false,
     };
   }
   render() {
-    const title =
-      I18n.t('drivingSituation.label')[0] + `    ` + this.state.frequency;
-    const subtitle =
-      I18n.t('drivingSituation.label')[1] + `    ` + this.state.duration;
+    const title = this.state.title;
+    const subtitle = this.state.subtitle;
     const rightComponent = (
       <View style={{alignItems: 'flex-end'}}>
         <Text style={[bicycleInfoList.listItem, {fontSize: 24}]}>
-          {this.state.mileage}
+          {this.state.value}
         </Text>
-        <Text style={[bicycleInfoList.listItem, {fontSize: 20}]}>km</Text>
+        <Text style={[bicycleInfoList.listItem, {fontSize: 20}]}>
+          {this.state.unit}
+        </Text>
       </View>
     );
     return (
@@ -118,19 +118,17 @@ class ViewBox extends React.Component {
         ListFooterComponent={<View style={{height: 20}} />}
         data={this.state.list}
         renderItem={({item}) => (
-          <ListItem
-            bottomDivider
-            onPress={() => {
-              this.props.navigate('historicalTrack', {id: item.VRSystemID});
-            }}>
+          <ListItem bottomDivider>
             <ListItem.Content>
-              <ListItem.Title>{item.TraveTime}</ListItem.Title>
-              <ListItem.Subtitle>{item.VName}</ListItem.Subtitle>
+              <ListItem.Title>{item.title}</ListItem.Title>
+              <ListItem.Subtitle>{item.explain}</ListItem.Subtitle>
             </ListItem.Content>
             <View>
-              <Text>{item.Mileage}Km</Text>
+              <Text>
+                {item.value}
+                {item.unit}
+              </Text>
             </View>
-            <ListItem.Chevron />
           </ListItem>
         )}
         style={[baseStyles.tabViewBox, {paddingHorizontal: 10, marginTop: 10}]}
@@ -144,22 +142,12 @@ class ViewBox extends React.Component {
     );
   }
 }
+CellInfo.propTypes = {
+  url: PropType.string.isRequired,
+  titleKey: PropType.string.isRequired,
+  subtitleKey: PropType.string.isRequired,
+  valueKey: PropType.string.isRequired,
+  listKey: PropType.string.isRequired,
+};
 
-export default class DrivingSituation extends React.Component {
-  render() {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen
-          name="weeklyMileageStatistics"
-          component={Week}
-          options={{title: I18n.t('nav.weeklyMileageStatistics')}}
-        />
-        <Tab.Screen
-          name="monthlyMileageStatistics"
-          component={Month}
-          options={{title: I18n.t('nav.monthlyMileageStatistics')}}
-        />
-      </Tab.Navigator>
-    );
-  }
-}
+export default CellInfo;

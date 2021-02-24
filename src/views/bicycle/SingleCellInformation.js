@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import {StatusBar, Text, View} from 'react-native';
-import {Tab, Tabs, TabHeading} from 'native-base';
-import {Header} from 'react-native-elements';
+import {View} from 'react-native';
+import {Tab, Tabs} from 'native-base';
 
 import I18n from '../../../locales';
-import CellVoltage from '../../components/CellVoltage';
-import CellTemperature from '../../components/CellTemperature';
+import CellInfo from '../../components/CellInfo';
 import baseStyles from '../../assets/baseStyles';
 import * as baseConstant from '../../assets/baseConstant';
 
@@ -14,11 +12,27 @@ export default class SingleCellInformation extends Component {
     const headerList = [
       {
         name: 'cellVoltage',
-        component: <CellVoltage />,
+        component: (
+          <CellInfo
+            url="GetSingleCellVoltageInfo"
+            titleKey="MaxVoltage"
+            subtitleKey="MinVoltage"
+            valueKey="VoltageDifference"
+            listKey="VoltageBuffer"
+          />
+        ),
       },
       {
         name: 'cellTemperature',
-        component: <CellTemperature />,
+        component: (
+          <CellInfo
+            url="GetSingleCellTemperatureInfo"
+            titleKey="MaxTemperature"
+            subtitleKey="MinTemperature"
+            valueKey="MOSTemperature"
+            listKey="TemperatureBuffer"
+          />
+        ),
       },
     ];
     return (

@@ -1,8 +1,7 @@
 import React from 'react';
-import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, RefreshControl, Text, View} from 'react-native';
 import baseStyles from '../../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
-import * as baseConstant from '../../assets/baseConstant';
 import I18n from '../../../locales';
 import axios from '../../assets/util/http';
 import baseUrl from '../../assets/baseUrl';
@@ -10,7 +9,7 @@ import store from '../../redux';
 import Toast from 'react-native-root-toast';
 import Loading from '../../components/Loading';
 import bicycleInfoList from '../../assets/styles/bicycleInfoList';
-import GradientBoard from '../../components/GradientBoard';
+import BatteryListHeader from '../../components/BatteryListHeader';
 
 export default class VehicleHealth extends React.Component {
   getData(toast) {
@@ -75,52 +74,47 @@ export default class VehicleHealth extends React.Component {
   }
 
   render() {
+    const title =
+      I18n.t('vehicleHealth')[0] + `    ` + this.state.VPurchasingTime;
+    const subtitle =
+      I18n.t('vehicleHealth')[1] + `    ` + this.state.VWarrantyPeriod;
+    const rightComponent = (
+      <Text style={[bicycleInfoList.listItem, {fontSize: 24}]}>
+        {this.state.Conclusion}
+      </Text>
+    );
     return (
-      <ScrollView
-        style={baseStyles.tabViewBox}
+      <FlatList
+        ListHeaderComponent={
+          <BatteryListHeader
+            title={title}
+            subtitle={subtitle}
+            rightComponent={rightComponent}
+          />
+        }
+        ListFooterComponent={<View style={{height: 20}} />}
+        data={this.state.list}
+        renderItem={({item}) => (
+          <ListItem bottomDivider>
+            {/*<UserAvatar size="small" />*/}
+            <ListItem.Content>
+              <ListItem.Title>{item.Title}</ListItem.Title>
+              <ListItem.Subtitle>{item.LastTime}</ListItem.Subtitle>
+            </ListItem.Content>
+            <View>
+              <Text style={{fontSize: 16}}>{item.Interval}</Text>
+            </View>
+            {/*<ListItem.Chevron />*/}
+          </ListItem>
+        )}
+        style={[baseStyles.tabViewBox, {paddingHorizontal: 10, marginTop: 10}]}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={this.onRefresh.bind(this)}
           />
-        }>
-        <View style={baseStyles.contentBox}>
-          <GradientBoard>
-            <ListItem containerStyle={bicycleInfoList.list}>
-              {/*<UserAvatar size="medium" />*/}
-              <ListItem.Content style={bicycleInfoList.listContent}>
-                <ListItem.Title style={bicycleInfoList.listItem}>
-                  {I18n.t('vehicleHealth')[0]}&emsp;{this.state.VPurchasingTime}
-                </ListItem.Title>
-                <ListItem.Title style={bicycleInfoList.listItem}>
-                  {I18n.t('vehicleHealth')[1]}&emsp;{this.state.VWarrantyPeriod}
-                </ListItem.Title>
-              </ListItem.Content>
-              <View style={{alignItems: 'center'}}>
-                <Text style={[bicycleInfoList.listItem, {fontSize: 24}]}>
-                  {this.state.Conclusion}
-                </Text>
-                {/*<Text style={[styles.listItem, {fontSize: 24}]}>km</Text>*/}
-              </View>
-            </ListItem>
-          </GradientBoard>
-          <View>
-            {this.state.list.map((v, i) => (
-              <ListItem key={i} bottomDivider>
-                {/*<UserAvatar size="small" />*/}
-                <ListItem.Content>
-                  <ListItem.Title>{v.Title}</ListItem.Title>
-                  <ListItem.Subtitle>{v.LastTime}</ListItem.Subtitle>
-                </ListItem.Content>
-                <View>
-                  <Text style={{fontSize: 16}}>{v.Interval}</Text>
-                </View>
-                {/*<ListItem.Chevron />*/}
-              </ListItem>
-            ))}
-          </View>
-        </View>
-      </ScrollView>
+        }
+      />
     );
   }
 }
