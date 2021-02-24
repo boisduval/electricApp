@@ -1,5 +1,12 @@
 import React from 'react';
-import {Text, View, StyleSheet, ScrollView, RefreshControl} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  FlatList,
+} from 'react-native';
 import {Echarts, echarts} from '../../lib/rn-echarts';
 import {ListItem} from 'react-native-elements';
 import {Spinner} from 'native-base';
@@ -239,48 +246,47 @@ class PowerConsumption extends React.Component {
   render() {
     return (
       <View>
-        <ScrollView
+        <FlatList
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this.onRefresh.bind(this)}
             />
-          }>
-          {/* 圆环进度条*/}
+          }
+          data={this.state.list}
+          renderItem={({item}) => (
+            <ListItem bottomDivider style={{paddingHorizontal: 6}}>
+              {/*<UserAvatar size="small" />*/}
+              <ListItem.Content>
+                <ListItem.Title>{item.WriteTime}</ListItem.Title>
+                <ListItem.Subtitle>{item.Discharge}</ListItem.Subtitle>
+              </ListItem.Content>
+              <Text>{item.Mileage}</Text>
+            </ListItem>
+          )}
+          ListHeaderComponent={
+            <>
+              {/* 圆环进度条*/}
 
-          <View style={circleProgressBanner.circleProgressBox}>
-            {this.state.circleProgressList.map((v, i) => (
-              <View style={{flex: 1}} key={i}>
-                <Echarts
-                  option={this.setOption(v.name, v.value, v.unit)}
-                  height={150}
-                  theme="dark"
-                />
+              <View style={circleProgressBanner.circleProgressBox}>
+                {this.state.circleProgressList.map((v, i) => (
+                  <View style={{flex: 1}} key={i}>
+                    <Echarts
+                      option={this.setOption(v.name, v.value, v.unit)}
+                      height={150}
+                      theme="dark"
+                    />
+                  </View>
+                ))}
               </View>
-            ))}
-          </View>
 
-          {/* 图表 */}
-          <View style={circleProgressBanner.barChartBox}>
-            <Echarts option={this.state.option} height={260} theme="dark" />
-          </View>
-          {/* 列表 */}
-          <View>
-            {this.state.list.map((v, i) => (
-              <ListItem
-                key={i + ''}
-                bottomDivider
-                style={{paddingHorizontal: 6}}>
-                {/*<UserAvatar size="small" />*/}
-                <ListItem.Content>
-                  <ListItem.Title>{v.WriteTime}</ListItem.Title>
-                  <ListItem.Subtitle>{v.Discharge}</ListItem.Subtitle>
-                </ListItem.Content>
-                <Text>{v.Mileage}</Text>
-              </ListItem>
-            ))}
-          </View>
-        </ScrollView>
+              {/* 图表 */}
+              <View style={circleProgressBanner.barChartBox}>
+                <Echarts option={this.state.option} height={260} theme="dark" />
+              </View>
+            </>
+          }
+        />
       </View>
     );
   }

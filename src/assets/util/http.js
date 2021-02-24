@@ -78,7 +78,7 @@ axios.interceptors.response.use(
           hideOnPress: true,
           delay: 0,
         });
-        return response;
+        // return response;
       }
       // else if (response.data.code === 4) {
       //   Message.error(response.data.msg)
