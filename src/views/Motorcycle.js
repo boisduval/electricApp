@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -17,7 +16,6 @@ import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 import Toast from 'react-native-root-toast';
-import LinearGradient from 'react-native-linear-gradient';
 import ImageItem from '../components/ImageItem';
 import GradientBoard from '../components/GradientBoard';
 import bicycleInfoList from '../assets/styles/bicycleInfoList';
@@ -37,10 +35,10 @@ export default class Motorcycle extends Component {
           data: {data},
         } = res;
         let temp = this.state.list;
-        temp[0].value = data.ASingleMileage;
-        temp[1].value = data.ATotalMileage;
-        temp[2].value = data.StopSOC;
-        temp[3].value = data.SOH;
+        temp[1].value = data.ASingleMileage;
+        temp[2].value = data.ATotalMileage;
+        temp[3].value = data.StopSOC;
+        temp[4].value = data.SOH;
         let temp1 = this.state.list1;
         temp1[1].subtitle =
           data.ASingleMileage + 'Km/' + data.TravelTime + 'min';
@@ -77,18 +75,13 @@ export default class Motorcycle extends Component {
         const {
           data: {data},
         } = res;
-        let temp = [];
-        const setArr = (name) => {
-          return {
-            label: data[name].name,
-            value: data[name].value,
-            unit: data[name].unit,
-          };
+        let temp = [...this.state.list];
+        temp[0] = {
+          label: data.GPS.name,
+          value: data.GPS.value,
+          unit: data.GPS.unit,
         };
-        temp.push(setArr('GPS'));
-        // temp.push(setArr('Beidou'));
-        // temp.push(setArr('RF'));
-        this.setState((prevState) => ({list: [...temp, ...prevState.list]}));
+        this.setState({list: temp});
       })
       .catch((err) => {
         console.log(err);
@@ -119,7 +112,12 @@ export default class Motorcycle extends Component {
   }
 
   componentDidMount() {
-    this.getData();
+    this._navListener = this.props.navigation.addListener('focus', () => {
+      this.getData();
+    });
+  }
+  componentWillUnmount() {
+    this._navListener.remove();
   }
 
   constructor(props) {
@@ -127,14 +125,11 @@ export default class Motorcycle extends Component {
     this.state = {
       imgUrl: '',
       list: [
-        // {
-        //   label: 'GPS',
-        //   value: '',
-        // },
-        // {
-        //   label: I18n.t('motorcycle.info.beidou'),
-        //   value: '0',
-        // },
+        {
+          label: '',
+          value: '',
+          unit: '',
+        },
         {
           label: I18n.t('motorcycle.info.singleBatteryLife'),
           value: '0',
