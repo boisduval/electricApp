@@ -1,12 +1,6 @@
 import React from 'react';
 import {Card, Icon, ListItem} from 'react-native-elements';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
 export default class CubeItem extends React.Component {
   render() {

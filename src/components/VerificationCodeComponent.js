@@ -66,63 +66,74 @@ class VerificationCodeComponent extends React.Component {
   }
 }
 
-function SendVerificationCodeButton(props) {
-  const [disabled, setDisabled] = React.useState(false);
-  const [time, setTime] = React.useState(60);
-  useEffect(() => {
-    if (time <= 0) {
-      clearInterval(timer);
-      setDisabled(false);
-      setTime(60);
-    }
-    return () => {
-      clearInterval(timer);
-    };
-  }, [time]);
-  const sendCode = () => {
+class SendVerificationCodeButton extends React.Component {
+  sendCode() {
     //  发送验证码
     axios
-      .get(`${baseUrl.url1}/Verification/${props.type}`, {
+      .get(`${baseUrl.url1}/Verification/${this.props.type}`, {
         params: {
-          Prefix: props.Prefix,
-          Phone: props.Phone,
+          Prefix: this.props.Prefix,
+          Phone: this.props.Phone,
         },
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        props.handleIdentificationCode(data.IdentificationCode);
-        console.log(data);
-        setDisabled(!disabled);
-        timer = setInterval(() => {
-          setTime((v) => {
-            return v - 1;
-          });
-        }, 1000);
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          this.props.handleIdentificationCode(data.IdentificationCode);
+          // console.log(data);
+          // setDisabled(!disabled);
+          this.setState({disabled: true});
+          timer = setInterval(() => {
+            if (this.state.time < 1) {
+              this.setState({disabled: false});
+              clearInterval(timer);
+              this.setState({time: 60});
+            }
+            console.log(this.state.time);
+            this.setState((prevState) => ({time: prevState.time - 1}));
+          }, 1000);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  };
-  return (
-    <View>
-      <Button
-        disabled={disabled || props.disabled}
-        containerStyle={{borderRadius: 50, margin: 0}}
-        titleStyle={{fontSize: 12, fontWeight: 'bold'}}
-        title={
-          disabled
-            ? `${I18n.t('verificationCode.resend')}(${time}S)`
-            : I18n.t('verificationCode.get')
-        }
-        onPress={() => {
-          sendCode();
-        }}
-      />
-    </View>
-  );
+  }
+
+  componentWillUnmount() {
+    if (timer !== null) {
+      clearInterval(timer);
+    }
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      disabled: false,
+      time: 60,
+    };
+  }
+  render() {
+    return (
+      <View>
+        <Button
+          disabled={this.state.disabled || this.props.disabled}
+          containerStyle={{borderRadius: 50, margin: 0}}
+          titleStyle={{fontSize: 12, fontWeight: 'bold'}}
+          title={
+            this.state.disabled
+              ? `${I18n.t('verificationCode.resend')}(${this.state.time}S)`
+              : I18n.t('verificationCode.get')
+          }
+          onPress={() => {
+            this.sendCode();
+          }}
+        />
+      </View>
+    );
+  }
 }
 
 function CountriesSelector(props) {

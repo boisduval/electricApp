@@ -24,10 +24,10 @@ class CellInfo extends React.Component {
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        if (res.data.code === 0) {
+        if (res) {
+          const {
+            data: {data},
+          } = res;
           this.setState({
             list: data[this.props.listKey],
             title:
@@ -108,6 +108,7 @@ class CellInfo extends React.Component {
     );
     return (
       <FlatList
+        keyExtractor={(item, index) => index.toString()}
         ListHeaderComponent={
           <BatteryListHeader
             title={title}

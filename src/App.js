@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-// import {Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from './RootNavigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -13,12 +12,10 @@ import store from './redux';
 import {persistor} from './redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Root} from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import {RootSiblingParent} from 'react-native-root-siblings';
 import SplashScreen from 'react-native-splash-screen';
 
-// import Login from './views/Login';
 import Login from './views/login/Login';
 import Motorcycle from './views/Motorcycle';
 import Battery from './views/Battery';
@@ -39,7 +36,6 @@ import PurchaseHistory from './views/bicycle/PurchaseHistory';
 import DrivingSituation from './views/bicycle/DrivingSituation';
 import BatteryOverview from './views/bicycle/BatteryOverview';
 import SafetyCheckup from './views/bicycle/SafetyCheckup';
-import VehiclePositioning from './views/VehiclePositioning';
 import HistoricalTrack from './views/bicycle/HistoricalTrack';
 import VehicleHealth from './views/bicycle/VehicleHealth';
 import Agreement from './views/Agreement';
@@ -89,11 +85,11 @@ class Home extends React.Component {
         component: HomeTabs,
         headShown: false,
       },
-      {
-        name: 'scan',
-        title: I18n.t('nav.scan'),
-        component: ScanQRCodeScreen,
-      },
+      // {
+      //   name: 'scan',
+      //   title: I18n.t('nav.scan'),
+      //   component: ScanQRCodeScreen,
+      // },
       {
         name: 'onlineRepair',
         title: I18n.t('nav.onlineRepair'),
@@ -208,6 +204,15 @@ class Home extends React.Component {
                   options={{headerShown: v.headShown, title: v.title}}
                 />
               ))}
+              <Stack.Screen
+                name="scan"
+                component={ScanQRCodeScreen}
+                options={{
+                  title: '',
+                  headerTransparent: true,
+                  headerTintColor: '#fff',
+                }}
+              />
             </>
           ) : (
             <>

@@ -10,6 +10,7 @@ const circleProgressBanner = StyleSheet.create({
     flex: 1,
     marginHorizontal: 10,
     marginVertical: 10,
+    paddingBottom: 20,
     borderRadius: 20,
     overflow: 'hidden',
     backgroundColor: '#003762',

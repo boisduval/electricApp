@@ -4,7 +4,6 @@ import {Text, View, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import baseStyles from '../../assets/baseStyles';
 import {Button, ListItem} from 'react-native-elements';
 import UserAvatar from '../../components/UserAvatar';
-import * as baseConstant from '../../assets/baseConstant';
 import axios from '../../assets/util/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
@@ -22,22 +21,24 @@ export default class SafetyCheckup extends React.Component {
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        console.log(data);
-        this.setState({
-          QuestionNumber: data.QuestionNumber,
-          HealthExamination: data.HealthExamination,
-          list: data.Items,
-        });
-        this.setState({
-          refreshing: false,
-        });
-        if (toast) {
-          setTimeout(() => {
-            Toast.hide(toast);
-          }, 200);
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          console.log(data);
+          this.setState({
+            QuestionNumber: data.QuestionNumber,
+            HealthExamination: data.HealthExamination,
+            list: data.Items,
+          });
+          this.setState({
+            refreshing: false,
+          });
+          if (toast) {
+            setTimeout(() => {
+              Toast.hide(toast);
+            }, 200);
+          }
         }
       })
       .catch((err) => {

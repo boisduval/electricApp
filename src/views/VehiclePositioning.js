@@ -1,6 +1,5 @@
 import React from 'react';
 import {PermissionsAndroid, View} from 'react-native';
-import {Card} from 'react-native-elements';
 import {MapView} from 'react-native-amap3d';
 
 export default class VehiclePositioning extends React.Component {

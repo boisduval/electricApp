@@ -22,23 +22,24 @@ export default class VehicleHealth extends React.Component {
       })
       .then((res) => {
         // res
-        console.log(res);
-        const {
-          data: {data},
-        } = res;
-        this.setState({
-          list: data.Items,
-          VWarrantyPeriod: data.VWarrantyPeriod,
-          VPurchasingTime: data.VPurchasingTime,
-          Conclusion: data.Conclusion,
-        });
-        this.setState({
-          refreshing: false,
-        });
-        if (toast) {
-          setTimeout(() => {
-            Toast.hide(toast);
-          }, 200);
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          this.setState({
+            list: data.Items,
+            VWarrantyPeriod: data.VWarrantyPeriod,
+            VPurchasingTime: data.VPurchasingTime,
+            Conclusion: data.Conclusion,
+          });
+          this.setState({
+            refreshing: false,
+          });
+          if (toast) {
+            setTimeout(() => {
+              Toast.hide(toast);
+            }, 200);
+          }
         }
       })
       .catch((err) => {
@@ -85,6 +86,7 @@ export default class VehicleHealth extends React.Component {
     );
     return (
       <FlatList
+        keyExtractor={(item, index) => index.toString()}
         ListHeaderComponent={
           <BatteryListHeader
             title={title}

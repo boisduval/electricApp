@@ -1,21 +1,9 @@
 import React, {Component} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  PermissionsAndroid,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, PermissionsAndroid} from 'react-native';
 import {MapView} from 'react-native-amap3d';
-import {Card, Icon, ListItem} from 'react-native-elements';
-import Echarts from '../../../lib/rn-echarts';
 import axios from '../../assets/util/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
-import I18n from '../../../locales';
-import * as baseConstant from '../../assets/baseConstant';
 
 export default class HistoricalTrack extends Component {
   getData() {
@@ -29,15 +17,16 @@ export default class HistoricalTrack extends Component {
       })
       .then((res) => {
         // res
-        console.log(res);
-        const {
-          data: {data},
-        } = res;
-        this.setState({
-          points: data,
-          lat: Number(data[0].latitude),
-          log: Number(data[0].longitude),
-        });
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          this.setState({
+            points: data,
+            lat: Number(data[0].latitude),
+            log: Number(data[0].longitude),
+          });
+        }
       })
       .catch((err) => {
         console.log(err);

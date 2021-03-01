@@ -8,6 +8,7 @@ import {
   ImageBackground,
   View,
   Text,
+  StatusBar,
 } from 'react-native';
 
 let camera;
@@ -69,6 +70,12 @@ const ScanQRCode = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        barStyle="light-content"
+        translucent={true}
+        backgroundColor="rgba(0,0,0,0)"
+      />
+      {/*<StatusBar translucent={true} />*/}
       <RNCamera
         ref={(ref) => {
           camera = ref;

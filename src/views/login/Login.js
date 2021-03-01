@@ -2,7 +2,6 @@ import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {Container, Content, H1} from 'native-base';
 import baseStyles from '../../assets/baseStyles';
-import Link from '../../components/Link';
 import I18n from '../../../locales';
 import {Button} from 'react-native-elements';
 import NoticeComponent from '../../components/NoticeComponent';

@@ -11,12 +11,14 @@ export default class Privacy extends React.Component {
       .get(`${baseUrl.url1}/VehicleOwner/GetPrivacyPolicy`)
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        this.setState({
-          text: data,
-        });
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          this.setState({
+            text: data,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);

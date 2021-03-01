@@ -5,7 +5,6 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
-  TouchableHighlight,
 } from 'react-native';
 import {ListItem, Text, Button} from 'react-native-elements';
 import {Header, Left, Body, Right} from 'native-base';
@@ -35,7 +34,11 @@ class Home extends React.Component {
     return (
       <View style={[baseStyles.tabViewBox]}>
         <Header style={{backgroundColor: '#fff'}} androidStatusBarColor="#fff">
-          <StatusBar barStyle="dark-content" />
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="#fff"
+            animated={false}
+          />
           <Left>
             <Icon
               name="settings-outline"

@@ -3,6 +3,8 @@ import {Text, View, RefreshControl, FlatList} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ListItem} from 'react-native-elements';
 
+import * as RootNavigation from '../../RootNavigation';
+
 import baseStyles from '../../assets/baseStyles';
 import I18n from '../../../locales';
 import axios from '../../assets/util/http';
@@ -36,31 +38,33 @@ class ViewBox extends React.Component {
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        if (res.data.code === 0) {
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          if (res.data.code === 0) {
+            this.setState({
+              list: data.details,
+              frequency: data.frequency,
+              duration: data.duration,
+              mileage: data.mileage,
+            });
+          } else {
+            this.setState({
+              list: [],
+              frequency: '',
+              duration: '',
+              mileage: '',
+            });
+          }
           this.setState({
-            list: data.details,
-            frequency: data.frequency,
-            duration: data.duration,
-            mileage: data.mileage,
+            refreshing: false,
           });
-        } else {
-          this.setState({
-            list: [],
-            frequency: '',
-            duration: '',
-            mileage: '',
-          });
-        }
-        this.setState({
-          refreshing: false,
-        });
-        if (toast) {
-          setTimeout(() => {
-            Toast.hide(toast);
-          }, 200);
+          if (toast) {
+            setTimeout(() => {
+              Toast.hide(toast);
+            }, 200);
+          }
         }
       })
       .catch((err) => {
@@ -108,6 +112,7 @@ class ViewBox extends React.Component {
     );
     return (
       <FlatList
+        keyExtractor={(item, index) => index.toString()}
         ListHeaderComponent={
           <BatteryListHeader
             title={title}
@@ -121,7 +126,7 @@ class ViewBox extends React.Component {
           <ListItem
             bottomDivider
             onPress={() => {
-              this.props.navigate('historicalTrack', {id: item.VRSystemID});
+              RootNavigation.navigate('historicalTrack', {id: item.VRSystemID});
             }}>
             <ListItem.Content>
               <ListItem.Title>{item.TraveTime}</ListItem.Title>

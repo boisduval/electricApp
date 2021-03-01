@@ -23,11 +23,9 @@ class PhoneNumber extends React.Component {
     axios
       .post(`${baseUrl.url1}/VehicleOwner/LoginSMS`, obj)
       .then((res) => {
-        console.log(res);
-        if (res.data.code === 0) {
+        if (res) {
           //  登录成功
           const data = res.data.data;
-          console.log(data);
           this.props.setStoreState(
             actionCreator.setCurrentVehicle(data.CurrentVehicle),
           );
@@ -75,9 +73,7 @@ class PhoneNumber extends React.Component {
             <View style={styles.buttonBox}>
               <VerificationCodeComponent
                 handleVerificationCode={(value) => {
-                  this.setState({verificationCode: value}, () => {
-                    console.log(this.state);
-                  });
+                  this.setState({verificationCode: value});
                 }}
                 handleIdentificationCode={(value) => {
                   this.setState({identificationCode: value});

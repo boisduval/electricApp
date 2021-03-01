@@ -29,39 +29,41 @@ class ChargeAndDischarge extends React.Component {
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        let temp = {...this.state.option};
-        temp.title.text = data.ChargeDischargeEnergy.Name;
-        temp.xAxis.data = data.ChargeDischargeEnergy.XAxisData;
-        temp.xAxis.axisPointer.value =
-          data.ChargeDischargeEnergy.XAxisData[
-            Math.floor(data.ChargeDischargeEnergy.XAxisData.length / 2)
-          ];
-        temp.series[0].data = data.ChargeDischargeEnergy.SeriesData[0].data;
-        temp.series[0].name = data.ChargeDischargeEnergy.SeriesData[0].name;
-        temp.series[0].stack = data.ChargeDischargeEnergy.SeriesData[0].stack;
-        temp.series[1].data = data.ChargeDischargeEnergy.SeriesData[1].data;
-        temp.series[1].name = data.ChargeDischargeEnergy.SeriesData[1].name;
-        temp.series[1].stack = data.ChargeDischargeEnergy.SeriesData[1].stack;
-        this.setState({
-          circleProgressList: [
-            data.TopCharge,
-            data.TopDischarge,
-            data.TopTemperature,
-          ],
-          list: data.ChargeDischargeList,
-          option: temp,
-        });
-        this.setOption();
-        this.setState({
-          refreshing: false,
-        });
-        if (toast) {
-          setTimeout(() => {
-            Toast.hide(toast);
-          }, 200);
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          let temp = {...this.state.option};
+          temp.title.text = data.ChargeDischargeEnergy.Name;
+          temp.xAxis.data = data.ChargeDischargeEnergy.XAxisData;
+          temp.xAxis.axisPointer.value =
+            data.ChargeDischargeEnergy.XAxisData[
+              Math.floor(data.ChargeDischargeEnergy.XAxisData.length / 2)
+            ];
+          temp.series[0].data = data.ChargeDischargeEnergy.SeriesData[0].data;
+          temp.series[0].name = data.ChargeDischargeEnergy.SeriesData[0].name;
+          temp.series[0].stack = data.ChargeDischargeEnergy.SeriesData[0].stack;
+          temp.series[1].data = data.ChargeDischargeEnergy.SeriesData[1].data;
+          temp.series[1].name = data.ChargeDischargeEnergy.SeriesData[1].name;
+          temp.series[1].stack = data.ChargeDischargeEnergy.SeriesData[1].stack;
+          this.setState({
+            circleProgressList: [
+              data.TopCharge,
+              data.TopDischarge,
+              data.TopTemperature,
+            ],
+            list: data.ChargeDischargeList,
+            option: temp,
+          });
+          this.setOption();
+          this.setState({
+            refreshing: false,
+          });
+          if (toast) {
+            setTimeout(() => {
+              Toast.hide(toast);
+            }, 200);
+          }
         }
       })
       .catch((err) => {
@@ -274,6 +276,7 @@ class ChargeAndDischarge extends React.Component {
     return (
       <View>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}

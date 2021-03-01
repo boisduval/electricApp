@@ -29,31 +29,33 @@ class PowerConsumption extends React.Component {
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        let temp = {...this.state.option};
-        temp.title.text = data.DumpEnergy.Name;
-        temp.xAxis.data = data.DumpEnergy.XAxisData;
-        temp.xAxis.axisPointer.value =
-          data.DumpEnergy.XAxisData[
-            Math.floor(data.DumpEnergy.XAxisData.length / 2)
-          ];
-        temp.series[0].data = data.DumpEnergy.SeriesData[0].data;
-        temp.series[0].name = data.DumpEnergy.SeriesData[0].name;
-        this.setState({
-          circleProgressList: [data.TopSOH, data.TopSOC, data.TopCycle],
-          list: data.ChargeList,
-          option: temp,
-        });
-        this.setOption();
-        this.setState({
-          refreshing: false,
-        });
-        if (toast) {
-          setTimeout(() => {
-            Toast.hide(toast);
-          }, 200);
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          let temp = {...this.state.option};
+          temp.title.text = data.DumpEnergy.Name;
+          temp.xAxis.data = data.DumpEnergy.XAxisData;
+          temp.xAxis.axisPointer.value =
+            data.DumpEnergy.XAxisData[
+              Math.floor(data.DumpEnergy.XAxisData.length / 2)
+            ];
+          temp.series[0].data = data.DumpEnergy.SeriesData[0].data;
+          temp.series[0].name = data.DumpEnergy.SeriesData[0].name;
+          this.setState({
+            circleProgressList: [data.TopSOH, data.TopSOC, data.TopCycle],
+            list: data.ChargeList,
+            option: temp,
+          });
+          this.setOption();
+          this.setState({
+            refreshing: false,
+          });
+          if (toast) {
+            setTimeout(() => {
+              Toast.hide(toast);
+            }, 200);
+          }
         }
       })
       .catch((err) => {
@@ -228,7 +230,6 @@ class PowerConsumption extends React.Component {
             data: [],
             type: 'bar',
             name: '',
-            // barWidth: 10,
             barCategoryGap: '40%',
             itemStyle: {
               barBorderRadius: 5,
@@ -247,6 +248,7 @@ class PowerConsumption extends React.Component {
     return (
       <View>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -267,7 +269,6 @@ class PowerConsumption extends React.Component {
           ListHeaderComponent={
             <>
               {/* 圆环进度条*/}
-
               <View style={circleProgressBanner.circleProgressBox}>
                 {this.state.circleProgressList.map((v, i) => (
                   <View style={{flex: 1}} key={i}>

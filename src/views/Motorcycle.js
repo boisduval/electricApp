@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Button,
 } from 'react-native';
 import I18n from '../../locales';
 import baseStyles from '../assets/baseStyles';
@@ -19,6 +20,7 @@ import Toast from 'react-native-root-toast';
 import ImageItem from '../components/ImageItem';
 import GradientBoard from '../components/GradientBoard';
 import bicycleInfoList from '../assets/styles/bicycleInfoList';
+import RoutePlan from '../assets/util/RoutePlan';
 
 export default class Motorcycle extends Component {
   getData() {
@@ -30,32 +32,33 @@ export default class Motorcycle extends Component {
         },
       })
       .then((res) => {
-        console.log(res);
-        const {
-          data: {data},
-        } = res;
-        let temp = this.state.list;
-        temp[1].value = data.ASingleMileage;
-        temp[2].value = data.ATotalMileage;
-        temp[3].value = data.StopSOC;
-        temp[4].value = data.SOH;
-        let temp1 = this.state.list1;
-        temp1[1].subtitle =
-          data.ASingleMileage + 'Km/' + data.TravelTime + 'min';
-        temp1[1].param = data.TrackSystemID;
-        temp1[2].subtitle = data.StopSOC + '%/' + data.SOH + '%';
-        temp1[3].subtitle = data.ATotalMileage + 'Km';
-        temp1[5].subtitle = data.Health + I18n.t('motorcycle.info.unit');
-        this.setState({
-          list: temp,
-          list1: temp1,
-          imgUrl: data.Img,
-          topBoard: {
-            title: data.CellTitle,
-            time: data.CellUpTime,
-          },
-        });
-        this.getSignalIntensity();
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          let temp = this.state.list;
+          temp[1].value = data.ASingleMileage;
+          temp[2].value = data.ATotalMileage;
+          temp[3].value = data.StopSOC;
+          temp[4].value = data.SOH;
+          let temp1 = this.state.list1;
+          temp1[1].subtitle =
+            data.ASingleMileage + 'Km/' + data.TravelTime + 'min';
+          temp1[1].param = data.TrackSystemID;
+          temp1[2].subtitle = data.StopSOC + '%/' + data.SOH + '%';
+          temp1[3].subtitle = data.ATotalMileage + 'Km';
+          temp1[5].subtitle = data.Health + I18n.t('motorcycle.info.unit');
+          this.setState({
+            list: temp,
+            list1: temp1,
+            imgUrl: data.Img,
+            topBoard: {
+              title: data.CellTitle,
+              time: data.CellUpTime,
+            },
+          });
+          this.getSignalIntensity();
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -72,16 +75,18 @@ export default class Motorcycle extends Component {
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        let temp = [...this.state.list];
-        temp[0] = {
-          label: data.GPS.name,
-          value: data.GPS.value,
-          unit: data.GPS.unit,
-        };
-        this.setState({list: temp});
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          let temp = [...this.state.list];
+          temp[0] = {
+            label: data.GPS.name,
+            value: data.GPS.value,
+            unit: data.GPS.unit,
+          };
+          this.setState({list: temp});
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -97,14 +102,14 @@ export default class Motorcycle extends Component {
       })
       .then((res) => {
         //  do sth
-        Toast.show(res.data.msg, {
-          duration: Toast.durations.SHORT,
-          position: Toast.positions.CENTER,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-        });
+        // Toast.show(res.data.msg, {
+        //   duration: Toast.durations.SHORT,
+        //   position: Toast.positions.CENTER,
+        //   shadow: true,
+        //   animation: true,
+        //   hideOnPress: true,
+        //   delay: 0,
+        // });
       })
       .catch((err) => {
         console.log(err);
@@ -117,7 +122,9 @@ export default class Motorcycle extends Component {
     });
   }
   componentWillUnmount() {
-    this._navListener.remove();
+    if (this._navListener) {
+      this._navListener.remove();
+    }
   }
 
   constructor(props) {
@@ -206,6 +213,31 @@ export default class Motorcycle extends Component {
     return (
       <ScrollView style={baseStyles.tabViewBox}>
         <View style={baseStyles.contentBox}>
+          {/*<Button*/}
+          {/*  onPress={() => {*/}
+          {/*    RoutePlan.isInstallAmap()*/}
+          {/*      .then((res) => alert(res))*/}
+          {/*      .catch((err) => alert(err));*/}
+          {/*  }}*/}
+          {/*  title="是否安装高德地图"*/}
+          {/*/>*/}
+          {/*<Button*/}
+          {/*  style={{marginTop: 30}}*/}
+          {/*  onPress={() => {*/}
+          {/*    RoutePlan.openAmap({*/}
+          {/*      slat: 39.92848272,*/}
+          {/*      slon: 116.39560823,*/}
+          {/*      sname: '我的位置',*/}
+          {/*      dlat: 39.98848272,*/}
+          {/*      dlon: 116.47560823,*/}
+          {/*      dname: '北京',*/}
+          {/*      mode: RoutePlan.Mode.DRIVING,*/}
+          {/*    })*/}
+          {/*      .then((res) => alert(res))*/}
+          {/*      .catch((err) => alert(err));*/}
+          {/*  }}*/}
+          {/*  title="打开高德地图"*/}
+          {/*/>*/}
           <View
             style={{
               flexDirection: 'row',

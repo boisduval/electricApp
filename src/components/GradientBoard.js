@@ -4,7 +4,6 @@
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import * as baseConstant from '../assets/baseConstant';
-import bicycleInfoList from '../assets/styles/bicycleInfoList';
 
 class GradientBoard extends React.Component {
   render() {

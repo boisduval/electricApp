@@ -1,10 +1,8 @@
 import React from 'react';
 
 import baseStyles from '../assets/baseStyles';
-import {ScrollView, Text, View, FlatList, StyleSheet} from 'react-native';
-import {ListItem, Avatar} from 'react-native-elements';
-
-import UserAvatar from '../components/UserAvatar';
+import {Text, View, FlatList, StyleSheet} from 'react-native';
+import {ListItem} from 'react-native-elements';
 
 class MyMessages extends React.Component {
   getMessageList() {

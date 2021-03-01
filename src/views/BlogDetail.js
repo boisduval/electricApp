@@ -2,24 +2,12 @@ import React from 'react';
 import {
   Image,
   Modal,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
   StyleSheet,
 } from 'react-native';
-import {
-  CardItem,
-  Container,
-  Content,
-  Left,
-  Right,
-  Item,
-  Body,
-  Footer,
-  FooterTab,
-  Button,
-} from 'native-base';
+import {Container, Content, Body, Footer} from 'native-base';
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
@@ -56,7 +44,7 @@ class BlogDetail extends React.Component {
       })
       .then((res) => {
         // res
-        if (res.data.code === 0 || 1) {
+        if (res) {
           const {
             data: {data},
           } = res;

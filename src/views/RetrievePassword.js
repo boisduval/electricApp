@@ -9,7 +9,6 @@ import {Container, Content} from 'native-base';
 
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
-import store from '../redux';
 
 import Toast from 'react-native-root-toast';
 import VerificationCodeComponent from '../components/VerificationCodeComponent';
@@ -26,7 +25,7 @@ class RetrievePassword extends React.Component {
       .post(`${baseUrl.url1}/VehicleOwner/ForgotPassword`, obj)
       .then((res) => {
         //  do sth
-        if (res.data.code === 0) {
+        if (res) {
           Toast.show(res.data.msg, {
             duration: Toast.durations.SHORT,
             position: Toast.positions.CENTER,

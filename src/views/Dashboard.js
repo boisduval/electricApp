@@ -26,27 +26,28 @@ export default class EventsExample extends Component {
       })
       .then((res) => {
         // res
-        console.log(res);
-        const {
-          data: {data},
-        } = res;
-        this.setState({
-          leftList: [
-            data.BatterySOC,
-            data.SingleMileage,
-            data.BatteryTemperature,
-          ],
-          rightList: [
-            data.DumpEnergy,
-            data.TotalMileage,
-            data.EstimatedMileage,
-          ],
-          centerText: data.RunningTime,
-          value: data.CurrentSpeed.value,
-          unit: data.CurrentSpeed.unit,
-          lat: data.Latitude.value,
-          log: data.Longitude.value,
-        });
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          this.setState({
+            leftList: [
+              data.BatterySOC,
+              data.SingleMileage,
+              data.BatteryTemperature,
+            ],
+            rightList: [
+              data.DumpEnergy,
+              data.TotalMileage,
+              data.EstimatedMileage,
+            ],
+            centerText: data.RunningTime,
+            value: data.CurrentSpeed.value,
+            unit: data.CurrentSpeed.unit,
+            lat: data.Latitude.value,
+            log: data.Longitude.value,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);

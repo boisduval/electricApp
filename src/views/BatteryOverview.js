@@ -2,7 +2,6 @@ import React from 'react';
 import {ScrollView, Text, View, StyleSheet} from 'react-native';
 import baseStyles from '../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
-import UserAvatar from '../components/UserAvatar';
 import * as baseConstant from '../assets/baseConstant';
 import axios from '../assets/util/http';
 import baseUrl from '../assets/baseUrl';
@@ -20,15 +19,17 @@ export default class BatteryOverview extends React.Component {
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        this.setState({
-          list: data.Status,
-          DumpEnergy: data.DumpEnergy,
-          ExpectsMileage: data.ExpectsMileage,
-          SOC: data.SOC,
-        });
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          this.setState({
+            list: data.Status,
+            DumpEnergy: data.DumpEnergy,
+            ExpectsMileage: data.ExpectsMileage,
+            SOC: data.SOC,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);

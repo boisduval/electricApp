@@ -1,8 +1,7 @@
 import React from 'react';
 import {Container, Content} from 'native-base';
-import {SearchBar, Icon} from 'react-native-elements';
+import {SearchBar} from 'react-native-elements';
 import {Text, TouchableOpacity, View} from 'react-native';
-import baseStyles from '../assets/baseStyles';
 import * as baseConstant from '../assets/baseConstant';
 import I18n from '../../locales';
 

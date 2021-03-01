@@ -21,31 +21,33 @@ export default class BatteryOverview extends React.Component {
       })
       .then((res) => {
         // res
-        const {
-          data: {data},
-        } = res;
-        if (res.data.code === 0) {
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          if (res.data.code === 0) {
+            this.setState({
+              list: data.Status,
+              DumpEnergy: data.DumpEnergy,
+              ExpectsMileage: data.ExpectsMileage,
+              SOC: data.SOC,
+            });
+          } else {
+            this.setState({
+              list: [],
+              DumpEnergy: '',
+              ExpectsMileage: '',
+              SOC: '',
+            });
+          }
           this.setState({
-            list: data.Status,
-            DumpEnergy: data.DumpEnergy,
-            ExpectsMileage: data.ExpectsMileage,
-            SOC: data.SOC,
+            refreshing: false,
           });
-        } else {
-          this.setState({
-            list: [],
-            DumpEnergy: '',
-            ExpectsMileage: '',
-            SOC: '',
-          });
-        }
-        this.setState({
-          refreshing: false,
-        });
-        if (toast) {
-          setTimeout(() => {
-            Toast.hide(toast);
-          }, 200);
+          if (toast) {
+            setTimeout(() => {
+              Toast.hide(toast);
+            }, 200);
+          }
         }
       })
       .catch((err) => {
@@ -94,6 +96,7 @@ export default class BatteryOverview extends React.Component {
     );
     return (
       <FlatList
+        keyExtractor={(item, index) => index.toString()}
         ListHeaderComponent={
           <BatteryListHeader
             title={title}

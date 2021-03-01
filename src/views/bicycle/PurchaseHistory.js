@@ -19,10 +19,12 @@ export default class PurchaseHistory extends React.Component {
         },
       })
       .then((res) => {
-        const {
-          data: {data},
-        } = res;
-        this.setState({data, img: data.Img});
+        if (res) {
+          const {
+            data: {data},
+          } = res;
+          this.setState({data, img: data.Img});
+        }
       })
       .catch((err) => {
         console.log(err);

@@ -22,8 +22,7 @@ class AccountNumber extends React.Component {
     axios
       .post(`${baseUrl.url1}/VehicleOwner/Login`, obj)
       .then((res) => {
-        console.log(res);
-        if (res.data.code === 0) {
+        if (res) {
           //  登录成功
           const data = res.data.data;
           console.log(data);

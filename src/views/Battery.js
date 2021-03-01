@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {StatusBar, Text, View} from 'react-native';
-import {Tab, Tabs, TabHeading} from 'native-base';
-import {Header} from 'react-native-elements';
+import {View} from 'react-native';
+import {Tab, Tabs} from 'native-base';
 
 import I18n from '../../locales/index';
 import baseStyles from '../assets/baseStyles';

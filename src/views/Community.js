@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 
-import baseStyles from '../assets/baseStyles';
-import {Container, Content, Tab, Tabs} from 'native-base';
+import {Container, Tab, Tabs} from 'native-base';
 import {Icon, ListItem} from 'react-native-elements';
 import UserAvatar from '../components/UserAvatar';
 import * as baseConstant from '../assets/baseConstant';
