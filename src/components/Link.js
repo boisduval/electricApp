@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import * as baseConstant from 'assets/baseConstant';
-import * as RootNavigation from 'RootNavigation';
+import * as baseConstant from '../assets/baseConstant';
+import * as RootNavigation from '../RootNavigation';
 import PropTypes from 'prop-types';
 
 class Link extends React.Component {
