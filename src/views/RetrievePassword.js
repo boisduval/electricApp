@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import * as actionCreators from '../redux/actionCreators';
 import {Container, Content} from 'native-base';
 
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 
 import Toast from 'react-native-root-toast';

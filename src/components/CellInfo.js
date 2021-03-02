@@ -5,7 +5,7 @@ import React from 'react';
 import {Text, View, RefreshControl, FlatList} from 'react-native';
 import baseStyles from '../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 import Loading from '../components/Loading';

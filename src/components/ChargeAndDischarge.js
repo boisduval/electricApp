@@ -11,7 +11,7 @@ import {
 import {Echarts, echarts} from '../../lib/rn-echarts';
 import {ListItem} from 'react-native-elements';
 
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 import Loading from './Loading';

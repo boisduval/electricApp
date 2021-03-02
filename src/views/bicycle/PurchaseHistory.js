@@ -4,7 +4,7 @@ import {Text, View, StyleSheet, Image} from 'react-native';
 import baseStyles from '../../assets/baseStyles';
 import * as baseConstant from '../../assets/baseConstant';
 import baseUrl from '../../assets/baseUrl';
-import axios from '../../assets/util/http';
+import axios from '../../assets/utils/http';
 import store from '../../redux';
 import I18n from '../../../locales';
 import ImageItem from '../../components/ImageItem';

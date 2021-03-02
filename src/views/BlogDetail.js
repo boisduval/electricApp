@@ -8,12 +8,11 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Container, Content, Body, Footer} from 'native-base';
-import axios from '../assets/util/http';
-import baseUrl from '../assets/baseUrl';
-import store from '../redux';
+import axios from 'assets/utils/http';
+import baseUrl from 'assets/baseUrl';
+import store from 'src/redux';
 import {Avatar, Icon, Input, ListItem} from 'react-native-elements';
-import baseStyles from '../assets/baseStyles';
-import ImageList from '../components/ImageList';
+import ImageList from 'components/ImageList';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
 const images = [
@@ -63,6 +62,7 @@ class BlogDetail extends React.Component {
             detail: data.Derails,
             imgList: data.Imgs,
             images: temp,
+            replies: data.Repliess,
           });
           console.log(this.state.images);
         }
@@ -89,6 +89,7 @@ class BlogDetail extends React.Component {
       imgList: [],
       images: [],
       comment: '',
+      replies: [],
     };
   }
 
@@ -166,7 +167,24 @@ class BlogDetail extends React.Component {
           </View>
           <View style={{backgroundColor: '#e2e2e2', height: 10}} />
           {/*  评论和赞  */}
-          {/*<View style={{}}*/}
+          <View>
+            {this.state.replies.map((v, i) => (
+              <ListItem bottomDivider key={i}>
+                <Avatar
+                  size="small"
+                  rounded
+                  source={{
+                    uri: v.UserInfo.img,
+                  }}
+                />
+                <ListItem.Content>
+                  <ListItem.Title>{v.UserInfo.name}</ListItem.Title>
+                  <Text>{v.Details}</Text>
+                  <ListItem.Subtitle>{v.WriteTime}</ListItem.Subtitle>
+                </ListItem.Content>
+              </ListItem>
+            ))}
+          </View>
         </Content>
         <Footer style={{backgroundColor: '#ffffff'}}>
           <Input

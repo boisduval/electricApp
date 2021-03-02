@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, PermissionsAndroid} from 'react-native';
 import {MapView} from 'react-native-amap3d';
-import axios from '../../assets/util/http';
-import baseUrl from '../../assets/baseUrl';
-import store from '../../redux';
+import axios from 'assets/utils/http';
+import baseUrl from 'assets/baseUrl';
+import store from 'src/redux';
 
 export default class HistoricalTrack extends Component {
   getData() {

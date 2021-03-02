@@ -6,7 +6,7 @@ import Link from '../../components/Link';
 import I18n from '../../../locales';
 import {Button, Input} from 'react-native-elements';
 import NoticeComponent from '../../components/NoticeComponent';
-import axios from '../../assets/util/http';
+import axios from '../../assets/utils/http';
 import baseUrl from '../../assets/baseUrl';
 import * as actionCreator from '../../redux/actionCreators';
 import Toast from 'react-native-root-toast';

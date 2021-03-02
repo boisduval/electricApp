@@ -3,7 +3,7 @@ import {FlatList, RefreshControl, Text, View} from 'react-native';
 import baseStyles from '../../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
 import I18n from '../../../locales';
-import axios from '../../assets/util/http';
+import axios from '../../assets/utils/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
 import Toast from 'react-native-root-toast';

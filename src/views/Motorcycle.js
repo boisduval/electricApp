@@ -13,14 +13,14 @@ import baseStyles from '../assets/baseStyles';
 import CubeItem from '../components/CubeItem';
 import {Icon, ListItem} from 'react-native-elements';
 import useLanguageUpdate from '../hooks/userLanguageUpdate';
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 import Toast from 'react-native-root-toast';
 import ImageItem from '../components/ImageItem';
 import GradientBoard from '../components/GradientBoard';
 import bicycleInfoList from '../assets/styles/bicycleInfoList';
-import RoutePlan from '../assets/util/RoutePlan';
+import RoutePlan from '../assets/utils/RoutePlan';
 
 export default class Motorcycle extends Component {
   getData() {
@@ -122,9 +122,8 @@ export default class Motorcycle extends Component {
     });
   }
   componentWillUnmount() {
-    if (this._navListener) {
-      this._navListener.remove();
-    }
+    //  退订
+    this._navListener();
   }
 
   constructor(props) {

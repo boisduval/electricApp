@@ -3,7 +3,7 @@ import {ScrollView, Text, View, StyleSheet} from 'react-native';
 import baseStyles from '../assets/baseStyles';
 import {ListItem} from 'react-native-elements';
 import * as baseConstant from '../assets/baseConstant';
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 import I18n from '../../locales';

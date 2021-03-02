@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {Button, Icon, Input} from 'react-native-elements';
 import I18n from '../../locales';
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 import PropTypes from 'prop-types';
 import * as RootNavigation from '../RootNavigation';

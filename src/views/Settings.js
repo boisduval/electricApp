@@ -10,7 +10,7 @@ import {
 } from '@react-navigation/stack';
 import * as actionCreators from '../redux/actionCreators';
 
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 

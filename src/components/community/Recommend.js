@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import axios from '../../assets/util/http';
+import axios from '../../assets/utils/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
 import Item from './Item';

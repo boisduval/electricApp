@@ -12,7 +12,7 @@ import {ListItem} from 'react-native-elements';
 import {Spinner} from 'native-base';
 import Toast from 'react-native-root-toast';
 
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 import store from '../redux';
 import Loading from './Loading';

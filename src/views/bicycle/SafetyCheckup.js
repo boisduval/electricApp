@@ -4,7 +4,7 @@ import {Text, View, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import baseStyles from '../../assets/baseStyles';
 import {Button, ListItem} from 'react-native-elements';
 import UserAvatar from '../../components/UserAvatar';
-import axios from '../../assets/util/http';
+import axios from '../../assets/utils/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
 import Loading from '../../components/Loading';

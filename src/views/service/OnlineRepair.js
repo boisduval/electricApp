@@ -84,7 +84,7 @@ class ImageBox extends React.Component {
           <ImageBackground
             key={'img' + i}
             index={1}
-            source={require('../../assets/img/dashed.png')}
+            source={require('../../assets/imgs/dashed.png')}
             style={styles.image}>
             <ImageBackground source={{uri: url}} style={styles.uploadImage} />
             <TouchableOpacity
@@ -93,7 +93,7 @@ class ImageBox extends React.Component {
               <Image
                 style={{width: 20, height: 20}}
                 // onPress={() => alert(23)}
-                source={require('../../assets/img/delete.png')}
+                source={require('../../assets/imgs/delete.png')}
               />
             </TouchableOpacity>
           </ImageBackground>,
@@ -104,12 +104,12 @@ class ImageBox extends React.Component {
         pages.push(
           <ImageBackground
             key="add"
-            source={require('../../assets/img/dashed.png')}
+            source={require('../../assets/imgs/dashed.png')}
             style={styles.image}>
             <TouchableOpacity onPress={this.addOnClicked.bind(this)}>
               <Image
                 style={{width: 60, height: 60}}
-                source={require('../../assets/img/add.png')}
+                source={require('../../assets/imgs/add.png')}
               />
             </TouchableOpacity>
           </ImageBackground>,
@@ -120,12 +120,12 @@ class ImageBox extends React.Component {
       pages.push(
         <ImageBackground
           key="add"
-          source={require('../../assets/img/dashed.png')}
+          source={require('../../assets/imgs/dashed.png')}
           style={styles.image}>
           <TouchableOpacity onPress={this.addOnClicked.bind(this)}>
             <Image
               style={{width: 60, height: 60}}
-              source={require('../../assets/img/add.png')}
+              source={require('../../assets/imgs/add.png')}
             />
           </TouchableOpacity>
         </ImageBackground>,

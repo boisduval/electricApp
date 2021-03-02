@@ -1,7 +1,7 @@
 // 用户协议
 import * as React from 'react';
 import {Text} from 'react-native-elements';
-import axios from '../assets/util/http';
+import axios from '../assets/utils/http';
 import baseUrl from '../assets/baseUrl';
 import {ScrollView} from 'react-native';
 

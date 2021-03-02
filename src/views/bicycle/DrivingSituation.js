@@ -7,7 +7,7 @@ import * as RootNavigation from '../../RootNavigation';
 
 import baseStyles from '../../assets/baseStyles';
 import I18n from '../../../locales';
-import axios from '../../assets/util/http';
+import axios from '../../assets/utils/http';
 import baseUrl from '../../assets/baseUrl';
 import store from '../../redux';
 import bicycleInfoList from '../../assets/styles/bicycleInfoList';
